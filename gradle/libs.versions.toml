@@ -20,6 +20,9 @@ seancfoley-ipaddress = { module = "com.github.seancfoley:ipaddress", version = "
 jayway-jsonpath= { module = "com.jayway.jsonpath:json-path", version = "2.9.0" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.12" }
 
+oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version = "5.1.4" }
+
+
 ##### Testing libraries
 
 kotest-bom = { module = "io.kotest:kotest-bom", version = "5.8.1" }

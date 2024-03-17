@@ -32,11 +32,13 @@ plugins {
 
 dependencies {
     api(libs.cloudshift.kotlin.cdk.wrapper)
+    api(libs.seancfoley.ipaddress)
+
     implementation(libs.pearx.kasechange)
     implementation(libs.google.guava)
-    api(libs.seancfoley.ipaddress)
-    testFixturesImplementation(libs.kotlinx.serialization)
+    implementation(libs.oshai.kotlin.logging)
 
+    testFixturesImplementation(libs.kotlinx.serialization)
     testFixturesImplementation(platform(libs.kotest.bom))
     testFixturesImplementation(libs.kotest.framework.api)
     testFixturesImplementation(libs.kotest.assertions.core)
