@@ -153,13 +153,43 @@ public class SecureVpc(scope: Construct, id: String, block: (SecureVpcBuilder).(
     }
 }
 
-public data class NetworkDefinition(
-    val maxAzs: Int,
-    val reservedAzs: Int,
-    val cidrBlock: CidrBlock,
-    val naclSpec: NaclSpec,
-    val subnetGroups: List<SubnetGroupSpec>
-)
+public class NetworkDefinition
+internal constructor(
+    public val maxAzs: Int,
+    public val reservedAzs: Int,
+    public val cidrBlock: CidrBlock,
+    internal val naclSpec: NaclSpec,
+    public val subnetGroups: List<SubnetGroupSpec>
+) {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as NetworkDefinition
+
+        if (maxAzs != other.maxAzs) return false
+        if (reservedAzs != other.reservedAzs) return false
+        if (cidrBlock != other.cidrBlock) return false
+        if (naclSpec != other.naclSpec) return false
+        if (subnetGroups != other.subnetGroups) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = maxAzs
+        result = 31 * result + reservedAzs
+        result = 31 * result + cidrBlock.hashCode()
+        result = 31 * result + naclSpec.hashCode()
+        result = 31 * result + subnetGroups.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "NetworkDefinition(maxAzs=$maxAzs, reservedAzs=$reservedAzs, cidrBlock=$cidrBlock, naclSpec=$naclSpec, subnetGroups=$subnetGroups)"
+    }
+}
 
 public fun SecureVpcBuilder.publicPrivateIsolatedNetwork() {
     publicSubnetGroup { cidrMask(26) }

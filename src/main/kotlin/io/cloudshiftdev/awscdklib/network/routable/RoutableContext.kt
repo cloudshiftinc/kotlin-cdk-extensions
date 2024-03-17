@@ -5,10 +5,10 @@ import io.cloudshiftdev.awscdklib.network.securevpc.NetworkDefinition
 import io.cloudshiftdev.awscdklib.network.securevpc.SubnetResolver
 import io.cloudshiftdev.constructs.Construct
 
-public data class RoutableContext(
-    val subnetScope: Construct,
-    val subnetResolver: SubnetResolver,
-    val availabilityZone: String,
-    val vpc: Vpc,
-    val networkDefinition: NetworkDefinition
+public class RoutableContext(
+    public val subnetScope: Construct,
+    public val subnetResolver: SubnetResolver,
+    public val availabilityZone: String,
+    public val vpc: Vpc,
+    public val networkDefinition: NetworkDefinition
 )

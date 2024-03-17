@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets
 import net.pearx.kasechange.splitToWords
 import net.pearx.kasechange.toPascalCase
 
-public data class NetworkAclFlow(
+internal data class NetworkAclFlow(
     val peerName: String,
     val cidrBlocks: List<CidrBlock>,
     val ruleAction: Action,
@@ -30,12 +30,12 @@ public data class NetworkAclFlow(
     val type: String
 )
 
-public data class NaclSpec(
+internal data class NaclSpec(
     val peeredSubnets: List<NaclPeering>,
     val localNetworks: List<CidrBlock>
 )
 
-public data class NaclPeering(val subnet: String, val peeredSubnet: String)
+internal data class NaclPeering(val subnet: String, val peeredSubnet: String)
 
 internal object NetworkAclGenerator {
 
