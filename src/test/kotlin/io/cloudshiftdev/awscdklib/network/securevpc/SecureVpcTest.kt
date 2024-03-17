@@ -10,7 +10,7 @@ import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 
-internal class SecuretVpcTest : FunSpec() {
+internal class SecureVpcTest : FunSpec() {
     init {
         test("Network created successfully") {
             val ctx = testStack { stack ->
