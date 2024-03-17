@@ -1,0 +1,2109 @@
+{
+  "Resources": {
+    "NetworkVpc7FB7348F": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.200.0.0/20",
+        "EnableDnsHostnames": "true",
+        "EnableDnsSupport": "true",
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPublicSubnet1Subnet36933139": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.200.0.0/26",
+        "MapPublicIpOnLaunch": "true",
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PublicSubnet1"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPublicSubnet1RouteTable30235CE2": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PublicSubnet1"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPublicSubnet1RouteTableAssociation643926C7": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcPublicSubnet1RouteTable30235CE2"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcPublicSubnet1Subnet36933139"
+        }
+      }
+    },
+    "NetworkVpcPublicSubnet1DefaultRoute31EC04EC": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcPublicSubnet1RouteTable30235CE2"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "NetworkVpcIGW6BEA7B02"
+        }
+      },
+      "DependsOn": [
+        "NetworkVpcVPCGW8F3799B5"
+      ]
+    },
+    "NetworkVpcPublicSubnet1ReplaceLocalRouteWithVpcEndpointCustomResource6F3E15E7": {
+      "Type": "Custom::ReplaceLocalRouteWithVpcEndpoint",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SingletonLambdaLambdaCustomResourceFunctions40B5B040",
+            "Arn"
+          ]
+        },
+        "RouteTableId": {
+          "Ref": "NetworkVpcPublicSubnet1RouteTable30235CE2"
+        },
+        "DestinationCidrBlock": {
+          "Fn::GetAtt": [
+            "NetworkVpc7FB7348F",
+            "CidrBlock"
+          ]
+        },
+        "VpcEndpointId": {
+          "Fn::GetAtt": [
+            "NetworkVpcNetworkFirewallNFWLookupNetworkFirewallVpcEndpointsCustomResource06F603ED",
+            {
+              "Fn::Select": [
+                "0",
+                {
+                  "Fn::GetAZs": ""
+                }
+              ]
+            }
+          ]
+        },
+        "CustomResourceId": "ReplaceLocalRouteWithVpcEndpoint"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "NetworkVpcPublicSubnet1NATGateway64781A21": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "NetworkVpcPublicSubnet1Subnet36933139"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "NetworkVpcEipPoolEIP1C071D651",
+            "AllocationId"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "DependsOn": [
+        "NetworkVpcPublicSubnet1DefaultRoute31EC04EC",
+        "NetworkVpcPublicSubnet1RouteTableAssociation643926C7"
+      ]
+    },
+    "NetworkVpcPublicSubnet2SubnetC427CCE0": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "1",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.200.0.64/26",
+        "MapPublicIpOnLaunch": "true",
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPublicSubnet2RouteTable0FACEBB2": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPublicSubnet2RouteTableAssociationC662643B": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcPublicSubnet2RouteTable0FACEBB2"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcPublicSubnet2SubnetC427CCE0"
+        }
+      }
+    },
+    "NetworkVpcPublicSubnet2DefaultRoute0CF082AB": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcPublicSubnet2RouteTable0FACEBB2"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "NetworkVpcIGW6BEA7B02"
+        }
+      },
+      "DependsOn": [
+        "NetworkVpcVPCGW8F3799B5"
+      ]
+    },
+    "NetworkVpcPublicSubnet2ReplaceLocalRouteWithVpcEndpointCustomResource2D2FF965": {
+      "Type": "Custom::ReplaceLocalRouteWithVpcEndpoint",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SingletonLambdaLambdaCustomResourceFunctions40B5B040",
+            "Arn"
+          ]
+        },
+        "RouteTableId": {
+          "Ref": "NetworkVpcPublicSubnet2RouteTable0FACEBB2"
+        },
+        "DestinationCidrBlock": {
+          "Fn::GetAtt": [
+            "NetworkVpc7FB7348F",
+            "CidrBlock"
+          ]
+        },
+        "VpcEndpointId": {
+          "Fn::GetAtt": [
+            "NetworkVpcNetworkFirewallNFWLookupNetworkFirewallVpcEndpointsCustomResource06F603ED",
+            {
+              "Fn::Select": [
+                "1",
+                {
+                  "Fn::GetAZs": ""
+                }
+              ]
+            }
+          ]
+        },
+        "CustomResourceId": "ReplaceLocalRouteWithVpcEndpoint"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "NetworkVpcPublicSubnet2NATGateway42CB86F5": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "NetworkVpcPublicSubnet2SubnetC427CCE0"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "NetworkVpcEipPoolEIP2078B42F7",
+            "AllocationId"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "DependsOn": [
+        "NetworkVpcPublicSubnet2DefaultRoute0CF082AB",
+        "NetworkVpcPublicSubnet2RouteTableAssociationC662643B"
+      ]
+    },
+    "NetworkVpcNetworkFirewallSubnet1SubnetF6D63164": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.200.0.192/28",
+        "MapPublicIpOnLaunch": "false",
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "NetworkFirewall"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/NetworkFirewallSubnet1"
+          }
+        ]
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnet1RouteTableF00D9826": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/NetworkFirewallSubnet1"
+          }
+        ]
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnet1RouteTableAssociation676E8BC1": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnet1RouteTableF00D9826"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnet1SubnetF6D63164"
+        }
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnet1InternetRoute6B7F8B9F": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnet1RouteTableF00D9826"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "NetworkVpcPublicSubnet1NATGateway64781A21"
+        }
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnet2Subnet9343FC61": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "1",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.200.0.208/28",
+        "MapPublicIpOnLaunch": "false",
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "NetworkFirewall"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/NetworkFirewallSubnet2"
+          }
+        ]
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnet2RouteTable15881072": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/NetworkFirewallSubnet2"
+          }
+        ]
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnet2RouteTableAssociationD77A8443": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnet2RouteTable15881072"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnet2Subnet9343FC61"
+        }
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnet2InternetRoute7FF22492": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnet2RouteTable15881072"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "NetworkVpcPublicSubnet2NATGateway42CB86F5"
+        }
+      }
+    },
+    "NetworkVpcPrivateSubnet1Subnet6DD86AE6": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.200.2.0/23",
+        "MapPublicIpOnLaunch": "false",
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PrivateSubnet1"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPrivateSubnet1RouteTable7D7AA3CD": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PrivateSubnet1"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPrivateSubnet1RouteTableAssociation327CA62F": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcPrivateSubnet1RouteTable7D7AA3CD"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcPrivateSubnet1Subnet6DD86AE6"
+        }
+      }
+    },
+    "NetworkVpcPrivateSubnet1InternetRoute3B9767D9": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcPrivateSubnet1RouteTable7D7AA3CD"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "VpcEndpointId": {
+          "Fn::GetAtt": [
+            "NetworkVpcNetworkFirewallNFWLookupNetworkFirewallVpcEndpointsCustomResource06F603ED",
+            {
+              "Fn::Select": [
+                "0",
+                {
+                  "Fn::GetAZs": ""
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "NetworkVpcPrivateSubnet2Subnet1BDBE877": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "1",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.200.4.0/23",
+        "MapPublicIpOnLaunch": "false",
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PrivateSubnet2"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPrivateSubnet2RouteTableC48862D1": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PrivateSubnet2"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPrivateSubnet2RouteTableAssociation89A2F1E8": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcPrivateSubnet2RouteTableC48862D1"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcPrivateSubnet2Subnet1BDBE877"
+        }
+      }
+    },
+    "NetworkVpcPrivateSubnet2InternetRoute27BC49DA": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcPrivateSubnet2RouteTableC48862D1"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "VpcEndpointId": {
+          "Fn::GetAtt": [
+            "NetworkVpcNetworkFirewallNFWLookupNetworkFirewallVpcEndpointsCustomResource06F603ED",
+            {
+              "Fn::Select": [
+                "1",
+                {
+                  "Fn::GetAZs": ""
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "NetworkVpcIsolatedSubnet1Subnet0400477E": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.200.8.0/23",
+        "MapPublicIpOnLaunch": "false",
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/IsolatedSubnet1"
+          }
+        ]
+      }
+    },
+    "NetworkVpcIsolatedSubnet1RouteTableC39A3F61": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/IsolatedSubnet1"
+          }
+        ]
+      }
+    },
+    "NetworkVpcIsolatedSubnet1RouteTableAssociation95EB126D": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcIsolatedSubnet1RouteTableC39A3F61"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcIsolatedSubnet1Subnet0400477E"
+        }
+      }
+    },
+    "NetworkVpcIsolatedSubnet2SubnetF65B365A": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "1",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.200.10.0/23",
+        "MapPublicIpOnLaunch": "false",
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated"
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/IsolatedSubnet2"
+          }
+        ]
+      }
+    },
+    "NetworkVpcIsolatedSubnet2RouteTable77E6320E": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/IsolatedSubnet2"
+          }
+        ]
+      }
+    },
+    "NetworkVpcIsolatedSubnet2RouteTableAssociationC53FE45A": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "NetworkVpcIsolatedSubnet2RouteTable77E6320E"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcIsolatedSubnet2SubnetF65B365A"
+        }
+      }
+    },
+    "NetworkVpcIGW6BEA7B02": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      }
+    },
+    "NetworkVpcVPCGW8F3799B5": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "InternetGatewayId": {
+          "Ref": "NetworkVpcIGW6BEA7B02"
+        }
+      }
+    },
+    "NetworkVpcRevokeDefaultSGRulesCustomResource2A8F7566": {
+      "Type": "Custom::RevokeDefaultSecurityGroupEntries",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SingletonLambdaLambdaCustomResourceFunctions40B5B040",
+            "Arn"
+          ]
+        },
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "DefaultSecurityGroupId": {
+          "Fn::GetAtt": [
+            "NetworkVpc7FB7348F",
+            "DefaultSecurityGroup"
+          ]
+        },
+        "CustomResourceId": "RevokeDefaultSecurityGroupEntries"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "NetworkVpcDeleteDefaultNetworkAclsCustomResource93324CA3": {
+      "Type": "Custom::DeleteDefaultNetworkAclEntries",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SingletonLambdaLambdaCustomResourceFunctions40B5B040",
+            "Arn"
+          ]
+        },
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "DefaultNaclId": {
+          "Fn::GetAtt": [
+            "NetworkVpc7FB7348F",
+            "DefaultNetworkAcl"
+          ]
+        },
+        "CustomResourceId": "DeleteDefaultNetworkAclEntries"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cA907B8A4": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/IsolatedSubnets62a2104787e7e76d58c1adcb3337e45c"
+          }
+        ]
+      }
+    },
+    "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cDefaultAssociationTestStackNetworkVpcIsolatedSubnet1B438B5C1B654153C": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cA907B8A4"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcIsolatedSubnet1Subnet0400477E"
+        }
+      }
+    },
+    "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cDefaultAssociationTestStackNetworkVpcIsolatedSubnet268B6DFFDF79364D8": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cA907B8A4"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcIsolatedSubnet2SubnetF65B365A"
+        }
+      }
+    },
+    "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cAllowInboundFromPrivateSubnetsRule10004A3D38CD": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cA907B8A4"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1000",
+        "CidrBlock": "10.200.2.0/23",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Isolated Subnets Allow Inbound From Private Subnets Rule 1000"
+      }
+    },
+    "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cAllowInboundFromPrivateSubnetsRule1005F3676D27": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cA907B8A4"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1005",
+        "CidrBlock": "10.200.4.0/23",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Isolated Subnets Allow Inbound From Private Subnets Rule 1005"
+      }
+    },
+    "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cAllowOutboundToPrivateSubnetsRule1000DFC95623": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cA907B8A4"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1000",
+        "CidrBlock": "10.200.2.0/23",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Isolated Subnets Allow Outbound To Private Subnets Rule 1000"
+      }
+    },
+    "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cAllowOutboundToPrivateSubnetsRule1005F54CB2E1": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cA907B8A4"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1005",
+        "CidrBlock": "10.200.4.0/23",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Isolated Subnets Allow Outbound To Private Subnets Rule 1005"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/NetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a"
+          }
+        ]
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aDefaultAssociationTestStackNetworkVpcNetworkFirewallSubnet12E489A83957A8735": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnet1SubnetF6D63164"
+        }
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aDefaultAssociationTestStackNetworkVpcNetworkFirewallSubnet23CED851F4E72323A": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnet2Subnet9343FC61"
+        }
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aAllowInboundFromPublicAndPrivateSubnetsRule10009EE9F327": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1000",
+        "CidrBlock": "10.200.0.0/25",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Allow Inbound From Public And Private Subnets Rule 1000"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aAllowInboundFromPublicAndPrivateSubnetsRule1005AD33FBCF": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1005",
+        "CidrBlock": "10.200.2.0/23",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Allow Inbound From Public And Private Subnets Rule 1005"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aAllowInboundFromPublicAndPrivateSubnetsRule10105C1344C8": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1010",
+        "CidrBlock": "10.200.4.0/23",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Allow Inbound From Public And Private Subnets Rule 1010"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aAllowOutboundToPublicAndPrivateSubnetsRule1000628232F8": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1000",
+        "CidrBlock": "10.200.0.0/25",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Allow Outbound To Public And Private Subnets Rule 1000"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aAllowOutboundToPublicAndPrivateSubnetsRule1005FE2445E4": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1005",
+        "CidrBlock": "10.200.2.0/23",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Allow Outbound To Public And Private Subnets Rule 1005"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aAllowOutboundToPublicAndPrivateSubnetsRule10104F13A8E3": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1010",
+        "CidrBlock": "10.200.4.0/23",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Allow Outbound To Public And Private Subnets Rule 1010"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aDenyInboundFromLocalNetworkRule12005A32BDA4": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1200",
+        "CidrBlock": "10.0.0.0/8",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Deny Inbound From Local Network Rule 1200"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aDenyInboundFromLocalNetworkRule1205F9311794": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1205",
+        "CidrBlock": "172.16.0.0/12",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Deny Inbound From Local Network Rule 1205"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aDenyInboundFromLocalNetworkRule12100633D657": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1210",
+        "CidrBlock": "192.168.0.0/16",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Deny Inbound From Local Network Rule 1210"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aDenyOutboundToLocalNetworkRule12006603A7ED": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1200",
+        "CidrBlock": "10.0.0.0/8",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Deny Outbound To Local Network Rule 1200"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aDenyOutboundToLocalNetworkRule12056847E993": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1205",
+        "CidrBlock": "172.16.0.0/12",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Deny Outbound To Local Network Rule 1205"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aDenyOutboundToLocalNetworkRule12100ADA260C": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1210",
+        "CidrBlock": "192.168.0.0/16",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Deny Outbound To Local Network Rule 1210"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aAllowInboundFromInternetRule140002687252": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1400",
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Allow Inbound From Internet Rule 1400"
+      }
+    },
+    "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04aAllowOutboundToInternetRule1400268155B4": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcNetworkFirewallSubnetsa626a0d5f7bc124f0f62332d0ac8d04a8031B7DF"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1400",
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "NetworkFirewall Subnets Allow Outbound To Internet Rule 1400"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PrivateSubnets3eb9d43c5e420e60f87357cc1942a04e"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eDefaultAssociationTestStackNetworkVpcPrivateSubnet1DED45A897C94B1DE": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcPrivateSubnet1Subnet6DD86AE6"
+        }
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eDefaultAssociationTestStackNetworkVpcPrivateSubnet25A2BE432687B0893": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcPrivateSubnet2Subnet1BDBE877"
+        }
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eAllowInboundFromNetworkFirewallAndIsolatedSubnetsRule100084F69C5F": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1000",
+        "CidrBlock": "10.200.0.192/27",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Allow Inbound From Network Firewall And Isolated Subnets Rule 1000"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eAllowInboundFromNetworkFirewallAndIsolatedSubnetsRule1005B5673647": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1005",
+        "CidrBlock": "10.200.8.0/22",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Allow Inbound From Network Firewall And Isolated Subnets Rule 1005"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eAllowOutboundToNetworkFirewallAndIsolatedSubnetsRule1000E9903FA9": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1000",
+        "CidrBlock": "10.200.0.192/27",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Allow Outbound To Network Firewall And Isolated Subnets Rule 1000"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eAllowOutboundToNetworkFirewallAndIsolatedSubnetsRule10059ECCFC92": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1005",
+        "CidrBlock": "10.200.8.0/22",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Allow Outbound To Network Firewall And Isolated Subnets Rule 1005"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eDenyInboundFromLocalNetworkRule12005D0A87FE": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1200",
+        "CidrBlock": "10.0.0.0/8",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Deny Inbound From Local Network Rule 1200"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eDenyInboundFromLocalNetworkRule1205D3B75EB0": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1205",
+        "CidrBlock": "172.16.0.0/12",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Deny Inbound From Local Network Rule 1205"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eDenyInboundFromLocalNetworkRule12105D224AA5": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1210",
+        "CidrBlock": "192.168.0.0/16",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Deny Inbound From Local Network Rule 1210"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eDenyOutboundToLocalNetworkRule12008E62E97E": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1200",
+        "CidrBlock": "10.0.0.0/8",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Deny Outbound To Local Network Rule 1200"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eDenyOutboundToLocalNetworkRule1205ED1B5F78": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1205",
+        "CidrBlock": "172.16.0.0/12",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Deny Outbound To Local Network Rule 1205"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eDenyOutboundToLocalNetworkRule1210906359BE": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1210",
+        "CidrBlock": "192.168.0.0/16",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Deny Outbound To Local Network Rule 1210"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eAllowInboundFromInternetRule14005D28A2D5": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1400",
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Allow Inbound From Internet Rule 1400"
+      }
+    },
+    "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04eAllowOutboundToInternetRule1400BF6EBD60": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPrivateSubnets3eb9d43c5e420e60f87357cc1942a04e2BB011B5"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1400",
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Private Subnets Allow Outbound To Internet Rule 1400"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc/PublicSubnets9fa8da000a4cbdf4e9b3cba705ceeccc"
+          }
+        ]
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccDefaultAssociationTestStackNetworkVpcPublicSubnet115A04645AC005EAB": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcPublicSubnet1Subnet36933139"
+        }
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccDefaultAssociationTestStackNetworkVpcPublicSubnet2769AB530D152DBF9": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "SubnetId": {
+          "Ref": "NetworkVpcPublicSubnet2SubnetC427CCE0"
+        }
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccAllowInboundFromNetworkFirewallSubnetsRule1000140F7FB1": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1000",
+        "CidrBlock": "10.200.0.192/27",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Allow Inbound From Network Firewall Subnets Rule 1000"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccAllowOutboundToNetworkFirewallSubnetsRule1000B02C1E48": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1000",
+        "CidrBlock": "10.200.0.192/27",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Allow Outbound To Network Firewall Subnets Rule 1000"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccDenyInboundFromLocalNetworkRule120090030702": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1200",
+        "CidrBlock": "10.0.0.0/8",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Deny Inbound From Local Network Rule 1200"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccDenyInboundFromLocalNetworkRule12056F12E844": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1205",
+        "CidrBlock": "172.16.0.0/12",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Deny Inbound From Local Network Rule 1205"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccDenyInboundFromLocalNetworkRule121052A36DF1": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1210",
+        "CidrBlock": "192.168.0.0/16",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Deny Inbound From Local Network Rule 1210"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccDenyOutboundToLocalNetworkRule12005F79C7F8": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1200",
+        "CidrBlock": "10.0.0.0/8",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Deny Outbound To Local Network Rule 1200"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccDenyOutboundToLocalNetworkRule120543FFBF69": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1205",
+        "CidrBlock": "172.16.0.0/12",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Deny Outbound To Local Network Rule 1205"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccDenyOutboundToLocalNetworkRule121082EDF4C9": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "deny",
+        "RuleNumber": "1210",
+        "CidrBlock": "192.168.0.0/16",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Deny Outbound To Local Network Rule 1210"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccAllowInboundFromInternetRule1400B05E4E65": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1400",
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": "false"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Allow Inbound From Internet Rule 1400"
+      }
+    },
+    "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccAllowOutboundToInternetRule1400C191E760": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkVpcPublicSubnets9fa8da000a4cbdf4e9b3cba705ceecccF183333B"
+        },
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "1400",
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": "true"
+      },
+      "Metadata": {
+        "cloudshift:comment": "Public Subnets Allow Outbound To Internet Rule 1400"
+      }
+    },
+    "NetworkVpcNetworkFirewallFirewallPolicy90A7752E": {
+      "Type": "AWS::NetworkFirewall::FirewallPolicy",
+      "Properties": {
+        "FirewallPolicy": {
+          "StatelessDefaultActions": [
+            "aws:pass"
+          ],
+          "StatelessFragmentDefaultActions": [
+            "aws:pass"
+          ]
+        },
+        "FirewallPolicyName": "test-stack-network-vpc-network-firewall",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      }
+    },
+    "NetworkVpcNetworkFirewallNFW6455D9DD": {
+      "Type": "AWS::NetworkFirewall::Firewall",
+      "Properties": {
+        "FirewallName": "test-stack-network-vpc-network-firewall",
+        "FirewallPolicyArn": {
+          "Fn::GetAtt": [
+            "NetworkVpcNetworkFirewallFirewallPolicy90A7752E",
+            "FirewallPolicyArn"
+          ]
+        },
+        "SubnetMappings": [
+          {
+            "SubnetId": {
+              "Ref": "NetworkVpcNetworkFirewallSubnet1SubnetF6D63164"
+            }
+          },
+          {
+            "SubnetId": {
+              "Ref": "NetworkVpcNetworkFirewallSubnet2Subnet9343FC61"
+            }
+          }
+        ],
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      }
+    },
+    "NetworkVpcNetworkFirewallNFWLookupNetworkFirewallVpcEndpointsCustomResource06F603ED": {
+      "Type": "Custom::LookupNetworkFirewallVpcEndpoints",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SingletonLambdaLambdaCustomResourceFunctions40B5B040",
+            "Arn"
+          ]
+        },
+        "VpcId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "FirewallArn": {
+          "Fn::GetAtt": [
+            "NetworkVpcNetworkFirewallNFW6455D9DD",
+            "FirewallArn"
+          ]
+        },
+        "CustomResourceId": "LookupNetworkFirewallVpcEndpoints"
+      },
+      "DependsOn": [
+        "NetworkVpcNetworkFirewallNFW6455D9DD",
+        "NetworkVpcNetworkFirewallNFWLogging66299DB2"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "NetworkVpcNetworkFirewallNFWLogging66299DB2": {
+      "Type": "AWS::NetworkFirewall::LoggingConfiguration",
+      "Properties": {
+        "FirewallArn": {
+          "Fn::GetAtt": [
+            "NetworkVpcNetworkFirewallNFW6455D9DD",
+            "FirewallArn"
+          ]
+        },
+        "LoggingConfiguration": {
+          "LogDestinationConfigs": [
+            {
+              "LogDestination": {
+                "logGroup": {
+                  "Ref": "NetworkVpcNetworkFirewallNetworkFirewallFlowLogsBC0DCF00"
+                }
+              },
+              "LogDestinationType": "CloudWatchLogs",
+              "LogType": "FLOW"
+            },
+            {
+              "LogDestination": {
+                "logGroup": {
+                  "Ref": "NetworkVpcNetworkFirewallNetworkFirewallAlertLogsC8EEA79D"
+                }
+              },
+              "LogDestinationType": "CloudWatchLogs",
+              "LogType": "ALERT"
+            }
+          ]
+        }
+      }
+    },
+    "NetworkVpcNetworkFirewallNetworkFirewallFlowLogsBC0DCF00": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "TestStack/Network/Vpc/NetworkFirewall/flow-logs",
+        "RetentionInDays": "731",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "NetworkVpcNetworkFirewallNetworkFirewallAlertLogsC8EEA79D": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "TestStack/Network/Vpc/NetworkFirewall/alert-logs",
+        "RetentionInDays": "731",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "NetworkVpcEipPoolEIP1C071D651": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "NetworkVpcEipPoolEIP2078B42F7": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "NetworkVpcEipPoolEIP3D22AD693": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "NetworkVpcFlowLogIAMRole654CF7A1": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "vpc-flow-logs.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      }
+    },
+    "NetworkVpcFlowLogIAMRoleDefaultPolicy65C62FE2": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "NetworkVpcFlowLogLogGroup94D52471",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "NetworkVpcFlowLogIAMRole654CF7A1",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "NetworkVpcFlowLogIAMRoleDefaultPolicy65C62FE2",
+        "Roles": [
+          {
+            "Ref": "NetworkVpcFlowLogIAMRole654CF7A1"
+          }
+        ]
+      }
+    },
+    "NetworkVpcFlowLogLogGroup94D52471": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": "731",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "NetworkVpcFlowLog9B71FB8D": {
+      "Type": "AWS::EC2::FlowLog",
+      "Properties": {
+        "ResourceId": {
+          "Ref": "NetworkVpc7FB7348F"
+        },
+        "ResourceType": "VPC",
+        "DeliverLogsPermissionArn": {
+          "Fn::GetAtt": [
+            "NetworkVpcFlowLogIAMRole654CF7A1",
+            "Arn"
+          ]
+        },
+        "LogDestinationType": "cloud-watch-logs",
+        "LogGroupName": {
+          "Ref": "NetworkVpcFlowLogLogGroup94D52471"
+        },
+        "MaxAggregationInterval": "60",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/Network/Vpc"
+          }
+        ],
+        "TrafficType": "REJECT"
+      }
+    },
+    "SingletonLambdaLambdaCustomResourceFunctionsServiceRoleCDC4EF9A": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "SingletonLambdaLambdaCustomResourceFunctionsServiceRoleDefaultPolicy85E6E0D3": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ec2:DescribeSecurityGroups",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "ec2:RevokeSecurityGroupIngress",
+                "ec2:RevokeSecurityGroupEgress"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ec2:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":security-group/",
+                    {
+                      "Fn::GetAtt": [
+                        "NetworkVpc7FB7348F",
+                        "DefaultSecurityGroup"
+                      ]
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ec2:DeleteNetworkAclEntry",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ec2:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":network-acl/",
+                    {
+                      "Fn::GetAtt": [
+                        "NetworkVpc7FB7348F",
+                        "DefaultNetworkAcl"
+                      ]
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ec2:DescribeNetworkAcls",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "network-firewall:DescribeFirewall",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "ec2:ReplaceRoute",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ec2:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":route-table/",
+                    {
+                      "Ref": "NetworkVpcPublicSubnet1RouteTable30235CE2"
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ec2:ReplaceRoute",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ec2:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":route-table/",
+                    {
+                      "Ref": "NetworkVpcPublicSubnet2RouteTable0FACEBB2"
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SingletonLambdaLambdaCustomResourceFunctionsServiceRoleDefaultPolicy85E6E0D3",
+        "Roles": [
+          {
+            "Ref": "SingletonLambdaLambdaCustomResourceFunctionsServiceRoleCDC4EF9A"
+          }
+        ]
+      }
+    },
+    "SingletonLambdaLambdaCustomResourceFunctions40B5B040": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "41a5ccd6c9fa401355aac81449ae23c34c2bd07c3c288fbc0934f89d197dfd32.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "SingletonLambdaLambdaCustomResourceFunctionsServiceRoleCDC4EF9A",
+            "Arn"
+          ]
+        },
+        "Architectures": [
+          "arm64"
+        ],
+        "Handler": "bootstrap",
+        "Runtime": "provided.al2",
+        "Timeout": "10"
+      },
+      "DependsOn": [
+        "SingletonLambdaLambdaCustomResourceFunctionsServiceRoleDefaultPolicy85E6E0D3",
+        "SingletonLambdaLambdaCustomResourceFunctionsServiceRoleCDC4EF9A"
+      ]
+    }
+  },
+  "Outputs": {
+    "NetworkVpcnatPublicIp12334FD1A": {
+      "Value": {
+        "Fn::GetAtt": [
+          "NetworkVpcEipPoolEIP1C071D651",
+          "PublicIp"
+        ]
+      },
+      "Export": {
+        "Name": "natPublicIp1"
+      }
+    },
+    "NetworkVpcnatPublicIp27796DC62": {
+      "Value": {
+        "Fn::GetAtt": [
+          "NetworkVpcEipPoolEIP2078B42F7",
+          "PublicIp"
+        ]
+      },
+      "Export": {
+        "Name": "natPublicIp2"
+      }
+    },
+    "NetworkVpcnatPublicIp3C491A22D": {
+      "Value": {
+        "Fn::GetAtt": [
+          "NetworkVpcEipPoolEIP3D22AD693",
+          "PublicIp"
+        ]
+      },
+      "Export": {
+        "Name": "natPublicIp3"
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}
