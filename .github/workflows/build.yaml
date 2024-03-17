@@ -13,7 +13,7 @@ env:
 jobs:
   build:
     runs-on:
-    - 'xlarge_runner'
+    - 'ubuntu-latest'
     permissions:
       id-token: write
       contents: write
