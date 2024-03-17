@@ -1,24 +1,20 @@
-name: 'Build Kotlin AWS CDK Extensions'
+name: 'Build KProcess'
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "*" ]
+permissions:
+  contents: 'write'
 env:
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: 'false'
-  ORG_GRADLE_PROJECT_signingKey: '${{ secrets.SIGNING_KEY }}'
-  ORG_GRADLE_PROJECT_signingPassword: '${{ secrets.SIGNING_PASSWORD }}'
-  ORG_GRADLE_PROJECT_sonatypeUsername: '${{ secrets.SONATYPEUSERNAME }}'
-  ORG_GRADLE_PROJECT_sonatypePassword: '${{ secrets.SONATYPEPASSWORD }}'
+  ORG_GRADLE_PROJECT_signingInMemoryKey: '${{ secrets.SIGNING_KEY }}'
+  ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: '${{ secrets.SIGNING_PASSWORD }}'
+  ORG_GRADLE_PROJECT_mavenCentralUsername: '${{ secrets.SONATYPEUSERNAME }}'
+  ORG_GRADLE_PROJECT_mavenCentralPassword: '${{ secrets.SONATYPEPASSWORD }}'
 jobs:
   build:
-    runs-on:
-    - 'ubuntu-latest'
-    permissions:
-      id-token: write
-      contents: write
-      checks: write
-      statuses: write
+    runs-on: 'ubuntu-latest'
     steps:
     # https://github.com/hmarr/debug-action
     - uses: 'hmarr/debug-action@cd1afbd7852b7ad7b1b7a9a1b03efebd3b0a1820' # v3.0.0
@@ -54,8 +50,8 @@ jobs:
         gradle-home-cache-cleanup: 'true'
         dependency-graph: 'generate-and-submit'
 
-    - name: 'build'
+    - name: 'Build'
       run: './gradlew build --info --scan --stacktrace'
 
-    - name: 'publish'
+    - name: 'Publish'
       run: './gradlew publishAllPublicationsToMavenCentralRepository --info --stacktrace --no-configuration-cache'
