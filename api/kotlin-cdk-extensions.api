@@ -205,6 +205,7 @@ public final class io/cloudshiftdev/awscdklib/network/securevpc/RouteDestination
 
 public final class io/cloudshiftdev/awscdklib/network/securevpc/SecureVpc : io/cloudshiftdev/constructs/Construct {
 	public fun <init> (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public final fun getVpc ()Lio/cloudshiftdev/awscdk/services/ec2/Vpc;
 }
 
 public final class io/cloudshiftdev/awscdklib/network/securevpc/SecureVpcBuilder {

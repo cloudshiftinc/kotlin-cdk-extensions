@@ -20,9 +20,12 @@ import io.cloudshiftdev.constructs.Construct
 
 public class SecureVpc(scope: Construct, id: String, block: (SecureVpcBuilder).() -> Unit) :
     Construct(scope, id) {
+
+    public val vpc: Vpc
+
     init {
         val networkDef = buildNetworkDefinition(block)
-        val vpc = createVpc(networkDef)
+        vpc = createVpc(networkDef)
 
         NetworkAclGenerator.generate(
             vpc,
