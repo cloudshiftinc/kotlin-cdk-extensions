@@ -3,12 +3,13 @@ package io.cloudshiftdev.awscdklib.core
 import io.cloudshiftdev.awscdk.ArnComponents
 import io.cloudshiftdev.awscdk.CfnResource
 import io.cloudshiftdev.awscdk.Stack
+import io.cloudshiftdev.awscdk.TagProps
 import io.cloudshiftdev.awscdk.Tags
 import io.cloudshiftdev.constructs.Construct
 import io.cloudshiftdev.constructs.IConstruct
 
-public fun Construct.tag(key: String, value: String) {
-    Tags.of(this).add(key, value)
+public fun Construct.tag(key: String, value: String, block: TagProps.Builder.() -> Unit = {}) {
+    Tags.of(this).add(key, value, block)
 }
 
 public fun Construct.addComment(comment: String) {
