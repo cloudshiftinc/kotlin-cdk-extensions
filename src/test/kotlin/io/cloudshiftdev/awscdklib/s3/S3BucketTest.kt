@@ -1,6 +1,7 @@
 package io.cloudshiftdev.awscdklib.s3
 
 import io.cloudshiftdev.awscdk.services.s3.Bucket
+import io.cloudshiftdev.awscdklib.testing.filterByType
 import io.cloudshiftdev.awscdklib.testing.testStack
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.FunSpec
@@ -12,7 +13,7 @@ class S3BucketTest : FunSpec() {
         test("s3 buckets are secured") {
             val ctx = testStack { Bucket(it, "SecureBucket") { secureBucket() } }
 
-            ctx.stack.resources.single().should {
+            ctx.stack.resources.filterByType("AWS::S3::Bucket").single().should {
                 it.logicalId.shouldBe("SecureBucket1ED1C5CE")
                 it.type.shouldBe("AWS::S3::Bucket")
                 it.json.shouldEqualJson(
@@ -34,6 +35,9 @@ class S3BucketTest : FunSpec() {
                                 "BlockPublicPolicy": "true",
                                 "IgnorePublicAcls": "true",
                                 "RestrictPublicBuckets": "true"
+                            },
+                            "VersioningConfiguration": {
+                              "Status": "Enabled"
                             }
                         },
                         "UpdateReplacePolicy": "Retain",
