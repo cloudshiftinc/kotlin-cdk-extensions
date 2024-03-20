@@ -264,6 +264,6 @@ public final class io/cloudshiftdev/awscdklib/network/securevpc/SubnetRouteSpec 
 }
 
 public final class io/cloudshiftdev/awscdklib/s3/ExtensionsKt {
-	public static final fun secureBucket (Lio/cloudshiftdev/awscdk/services/s3/Bucket$Builder;)V
+	public static final fun secureBucket (Lio/cloudshiftdev/awscdk/services/s3/BucketProps$Builder;)V
 }
 
