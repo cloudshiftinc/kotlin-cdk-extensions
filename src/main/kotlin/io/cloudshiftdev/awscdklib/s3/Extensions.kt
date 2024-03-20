@@ -2,7 +2,6 @@ package io.cloudshiftdev.awscdklib.s3
 
 import io.cloudshiftdev.awscdk.RemovalPolicy
 import io.cloudshiftdev.awscdk.services.s3.BlockPublicAccess
-import io.cloudshiftdev.awscdk.services.s3.Bucket
 import io.cloudshiftdev.awscdk.services.s3.BucketEncryption
 import io.cloudshiftdev.awscdk.services.s3.BucketProps
 
