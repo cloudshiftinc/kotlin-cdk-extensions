@@ -2,6 +2,7 @@ package io.cloudshiftdev.awscdklib.core
 
 import io.cloudshiftdev.awscdk.ArnComponents
 import io.cloudshiftdev.awscdk.CfnResource
+import io.cloudshiftdev.awscdk.Names
 import io.cloudshiftdev.awscdk.Stack
 import io.cloudshiftdev.awscdk.TagProps
 import io.cloudshiftdev.awscdk.Tags
@@ -15,6 +16,8 @@ public fun Construct.tag(key: String, value: String, block: TagProps.Builder.() 
 public fun Construct.addComment(comment: String) {
     node().children().filterIsInstance<CfnResource>().forEach { it.addComment(comment) }
 }
+
+public fun Construct.uniqueId(): String = Names.uniqueId(this)
 
 public inline fun <reified T : CfnResource> Construct.addPropertyOverride(
     property: String,
