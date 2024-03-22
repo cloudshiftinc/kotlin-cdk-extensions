@@ -68,3 +68,6 @@ public inline fun <reified T> Construct.withSingleton(
 ): T {
     return allChildren().filterIsInstance<T>().firstOrNull(predicate) ?: block()
 }
+
+public val IConstruct.stack: Stack
+    get() = Stack.of(this)

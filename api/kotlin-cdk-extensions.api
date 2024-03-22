@@ -4,6 +4,7 @@ public final class io/cloudshiftdev/awscdklib/core/ExtensionsKt {
 	public static final fun addMetadata (Lio/cloudshiftdev/awscdk/CfnResource;Ljava/util/Map;)V
 	public static final fun allChildren (Lio/cloudshiftdev/constructs/IConstruct;)Ljava/util/List;
 	public static final fun anyResource ()Ljava/lang/String;
+	public static final fun getStack (Lio/cloudshiftdev/constructs/IConstruct;)Lio/cloudshiftdev/awscdk/Stack;
 	public static final fun resourceArn (Lio/cloudshiftdev/constructs/Construct;Lkotlin/jvm/functions/Function1;)Ljava/lang/String;
 	public static final fun tag (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun tag$default (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
@@ -18,12 +19,18 @@ public final class io/cloudshiftdev/awscdklib/customresource/ExtensionsKt {
 
 public final class io/cloudshiftdev/awscdklib/iam/IamExtensionsKt {
 	public static final fun action (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatement$Builder;Ljava/lang/String;)V
+	public static final fun action (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatementProps$Builder;Ljava/lang/String;)V
 	public static final fun allow (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatement$Builder;)V
+	public static final fun allow (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatementProps$Builder;)V
 	public static final fun anyResource (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatement$Builder;)V
+	public static final fun anyResource (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatementProps$Builder;)V
 	public static final fun deny (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatement$Builder;)V
+	public static final fun deny (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatementProps$Builder;)V
 	public static final fun policyStatements (Lkotlin/jvm/functions/Function1;)Ljava/util/List;
 	public static final fun resource (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatement$Builder;Ljava/lang/String;)V
+	public static final fun resource (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatementProps$Builder;Ljava/lang/String;)V
 	public static final fun resourceArn (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatement$Builder;Lio/cloudshiftdev/constructs/Construct;Lkotlin/jvm/functions/Function1;)V
+	public static final fun resourceArn (Lio/cloudshiftdev/awscdk/services/iam/PolicyStatementProps$Builder;Lio/cloudshiftdev/constructs/Construct;Lkotlin/jvm/functions/Function1;)V
 }
 
 public final class io/cloudshiftdev/awscdklib/iam/PolicyStatementsBuilder {
