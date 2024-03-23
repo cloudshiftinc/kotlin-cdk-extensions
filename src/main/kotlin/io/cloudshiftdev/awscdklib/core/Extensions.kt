@@ -53,14 +53,10 @@ public fun IConstruct.allChildren(): List<IConstruct> {
 public fun resourceArn(scope: Construct, block: (ArnComponents.Builder).() -> Unit): String =
     Stack.of(scope).formatArn(block)
 
-public fun anyResource(): String = "*"
-
 public inline fun <reified T : Construct> Construct.withSingleton(
     id: String,
     block: (String) -> T
-): T {
-    return allChildren().filterIsInstance<T>().firstOrNull { it.node().id() == id } ?: block(id)
-}
+): T = node().tryFindChild(id) as? T ?: block(id)
 
 public inline fun <reified T> Construct.withSingleton(
     predicate: (T) -> Boolean = { true },

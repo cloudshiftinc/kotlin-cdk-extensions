@@ -3,7 +3,6 @@ public final class io/cloudshiftdev/awscdklib/core/ExtensionsKt {
 	public static final fun addComment (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;)V
 	public static final fun addMetadata (Lio/cloudshiftdev/awscdk/CfnResource;Ljava/util/Map;)V
 	public static final fun allChildren (Lio/cloudshiftdev/constructs/IConstruct;)Ljava/util/List;
-	public static final fun anyResource ()Ljava/lang/String;
 	public static final fun getStack (Lio/cloudshiftdev/constructs/IConstruct;)Lio/cloudshiftdev/awscdk/Stack;
 	public static final fun resourceArn (Lio/cloudshiftdev/constructs/Construct;Lkotlin/jvm/functions/Function1;)Ljava/lang/String;
 	public static final fun tag (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
