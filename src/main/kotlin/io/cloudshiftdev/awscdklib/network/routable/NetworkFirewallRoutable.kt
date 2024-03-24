@@ -3,9 +3,10 @@ package io.cloudshiftdev.awscdklib.network.routable
 import io.cloudshiftdev.awscdk.services.ec2.RouterType
 import io.cloudshiftdev.awscdk.services.ec2.Vpc
 import io.cloudshiftdev.awscdklib.network.firewall.NetworkFirewall
-import io.cloudshiftdev.awscdklib.network.securevpc.NetworkDefinition
+import io.cloudshiftdev.awscdklib.network.securevpc.SecureNetwork
+import io.cloudshiftdev.awscdklib.network.securevpc.SecureNetworkProps
 
-public class NetworkFirewallRoutable(initBlock: (Vpc, NetworkDefinition) -> NetworkFirewall) :
+public class NetworkFirewallRoutable internal constructor(initBlock: (Vpc, SecureNetworkProps) -> NetworkFirewall) :
     SingletonRoutable<NetworkFirewall>(initBlock) {
 
     override fun routeTarget(nfw: NetworkFirewall, context: RoutableContext): RouteTarget {

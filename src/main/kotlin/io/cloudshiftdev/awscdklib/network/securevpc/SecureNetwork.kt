@@ -1,16 +1,13 @@
 package io.cloudshiftdev.awscdklib.network.securevpc
 
-import io.cloudshiftdev.awscdk.services.ec2.DefaultInstanceTenancy
 import io.cloudshiftdev.awscdk.services.ec2.FlowLogDestination
 import io.cloudshiftdev.awscdk.services.ec2.FlowLogMaxAggregationInterval
 import io.cloudshiftdev.awscdk.services.ec2.FlowLogTrafficType
-import io.cloudshiftdev.awscdk.services.ec2.IpAddresses
 import io.cloudshiftdev.awscdk.services.ec2.RouterType
 import io.cloudshiftdev.awscdk.services.ec2.Subnet
 import io.cloudshiftdev.awscdk.services.ec2.SubnetConfiguration
+import io.cloudshiftdev.awscdk.services.ec2.SubnetType
 import io.cloudshiftdev.awscdk.services.ec2.Vpc
-import io.cloudshiftdev.awscdklib.network.CidrBlock
-import io.cloudshiftdev.awscdklib.network.SubnetGroupType
 import io.cloudshiftdev.awscdklib.network.SubnetPredicates
 import io.cloudshiftdev.awscdklib.network.cidrBlock
 import io.cloudshiftdev.awscdklib.network.routable.NatGatewayRoutable
@@ -18,28 +15,28 @@ import io.cloudshiftdev.awscdklib.network.routable.NetworkFirewallRoutable
 import io.cloudshiftdev.awscdklib.network.routable.RoutableContext
 import io.cloudshiftdev.constructs.Construct
 
-public class SecureVpc(scope: Construct, id: String, block: (SecureVpcBuilder).() -> Unit) :
+public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBuilder).() -> Unit) :
     Construct(scope, id) {
 
     public val vpc: Vpc
 
     init {
-        val networkDef = buildNetworkDefinition(block)
-        vpc = createVpc(networkDef)
+        val props = secureNetworkProps(block)
+        vpc = vpc(props)
 
         NetworkAclGenerator.generate(
             vpc,
-            networkDef.naclSpec.peeredSubnets,
-            networkDef.subnetGroups,
-            networkDef.naclSpec.localNetworks
+            props.naclSpec.peeredSubnets,
+            props.subnetGroups,
+            props.naclSpec.localNetworks
         )
 
-        setupRouting(vpc, networkDef)
+        setupRouting(vpc, props)
         createFlowLog(vpc)
     }
 
-    private fun buildNetworkDefinition(block: SecureVpcBuilder.() -> Unit): NetworkDefinition {
-        val builder = SecureVpcBuilder()
+    private fun secureNetworkProps(block: SecureNetworkBuilder.() -> Unit): SecureNetworkProps {
+        val builder = SecureNetworkBuilderImpl()
         builder.apply(block)
         return builder.build()
     }
@@ -52,11 +49,11 @@ public class SecureVpc(scope: Construct, id: String, block: (SecureVpcBuilder).(
         }
     }
 
-    private fun setupRouting(vpc: Vpc, networkDef: NetworkDefinition) {
+    private fun setupRouting(vpc: Vpc, networkDef: SecureNetworkProps) {
         networkDef.subnetGroups.forEach { subnetGroup ->
             val routes = subnetGroup.routes.toMutableList()
-            when (subnetGroup.subnetGroupType) {
-                SubnetGroupType.Private -> {
+            when (subnetGroup.subnetType) {
+                SubnetType.PRIVATE_WITH_EGRESS -> {
                     // no internet route specified for Private subnet;
                     require(
                         subnetGroup.routes.any { it.destination is RouteDestination.Internet }
@@ -124,83 +121,51 @@ public class SecureVpc(scope: Construct, id: String, block: (SecureVpcBuilder).(
         }
     }
 
-    private fun createVpc(networkDef: NetworkDefinition): Vpc {
+    private fun vpc(props:SecureNetworkProps): Vpc {
         val vpc =
             Vpc(this, "Vpc") {
-                ipAddresses(IpAddresses.cidr(networkDef.cidrBlock.toString()))
-                maxAzs(networkDef.maxAzs)
-                reservedAzs(networkDef.reservedAzs)
-                subnetConfiguration(networkDef.subnetGroups.map { it.toSubnetConfiguration() })
+                props.availabilityZones.takeIf { it.isNotEmpty() }?.let(::availabilityZones)
+                props.maxAzs.let(::maxAzs)
+                props.reservedAzs.let(::reservedAzs)
 
-                // disable auto-provisioning of NAT gateways; these will be provisioned if/when
-                // needed based
-                // on configuration (not all egress flows use a NAT gateway, and not all private
-                // subnets egress via NAT gateway)
+                props.ipAddresses?.let(::ipAddresses)
+                props.ipV6Addresses?.let(::ipv6Addresses)
+                props.ipProtocol.let(::ipProtocol)
+
+                props.enableDnsSupport.let(::enableDnsSupport)
+                props.enableDnsHostnames.let(::enableDnsHostnames)
+                props.defaultInstanceTenancy.let(::defaultInstanceTenancy)
+
+                props.restrictDefaultSecurityGroup.let(::restrictDefaultSecurityGroup)
+
+                props.createInternetGateway.let(::createInternetGateway)
+
+                subnetConfiguration(props.subnetGroups.map { it.toSubnetConfiguration() })
+
+                // TODO: temporary
                 natGateways(0)
-                enableDnsSupport(true)
-                enableDnsHostnames(true)
-                defaultInstanceTenancy(DefaultInstanceTenancy.DEFAULT)
-                restrictDefaultSecurityGroup(true)
             }
-
-        //    vpc.deleteDefaultNetworkAcls()
 
         return vpc
     }
 
-    private fun SubnetGroupSpec.toSubnetConfiguration() = SubnetConfiguration {
+    private fun SubnetGroupProps.toSubnetConfiguration() = SubnetConfiguration {
         name(name)
         cidrMask?.let { cidrMask(it) }
         reserved(reserved)
-        subnetType(subnetGroupType.subnetType)
+        subnetType(subnetType)
     }
 }
 
-public class NetworkDefinition
-internal constructor(
-    public val maxAzs: Int,
-    public val reservedAzs: Int,
-    public val cidrBlock: CidrBlock,
-    internal val naclSpec: NaclSpec,
-    public val subnetGroups: List<SubnetGroupSpec>
-) {
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as NetworkDefinition
-
-        if (maxAzs != other.maxAzs) return false
-        if (reservedAzs != other.reservedAzs) return false
-        if (cidrBlock != other.cidrBlock) return false
-        if (naclSpec != other.naclSpec) return false
-        if (subnetGroups != other.subnetGroups) return false
-
-        return true
+public fun SecureNetworkBuilder.publicPrivateIsolatedNetwork() {
+    subnets {
+        publicSubnetGroup { cidrMask(26) }
+        privateSubnetGroup {
+            routing.internet(NatGatewayRoutable())
+            allowCrossAzNaclFlows()
+        }
+        isolatedSubnetGroup { allowCrossAzNaclFlows() }
     }
-
-    override fun hashCode(): Int {
-        var result = maxAzs
-        result = 31 * result + reservedAzs
-        result = 31 * result + cidrBlock.hashCode()
-        result = 31 * result + naclSpec.hashCode()
-        result = 31 * result + subnetGroups.hashCode()
-        return result
-    }
-
-    override fun toString(): String {
-        return "NetworkDefinition(maxAzs=$maxAzs, reservedAzs=$reservedAzs, cidrBlock=$cidrBlock, naclSpec=$naclSpec, subnetGroups=$subnetGroups)"
-    }
-}
-
-public fun SecureVpcBuilder.publicPrivateIsolatedNetwork() {
-    publicSubnetGroup { cidrMask(26) }
-    privateSubnetGroup {
-        routing.internet(NatGatewayRoutable())
-        allowCrossAzNaclFlows()
-    }
-    isolatedSubnetGroup { allowCrossAzNaclFlows() }
 
     nacl {
         allowBetweenPeeredSubnets("Public", "Private")
@@ -208,17 +173,19 @@ public fun SecureVpcBuilder.publicPrivateIsolatedNetwork() {
     }
 }
 
-public fun SecureVpcBuilder.publicPrivateIsolatedNetworkWithFirewall(nfw: NetworkFirewallRoutable) {
-    publicSubnetGroup {
-        cidrMask(26)
-        routing.local(nfw)
+public fun SecureNetworkBuilder.publicPrivateIsolatedNetworkWithFirewall(nfw: NetworkFirewallRoutable) {
+    subnets {
+        publicSubnetGroup {
+            cidrMask(26)
+            routing.local(nfw)
+        }
+        privateSubnetGroup("NetworkFirewall") {
+            cidrMask(28)
+            routing.internet(NatGatewayRoutable())
+        }
+        privateSubnetGroup { routing.internet(nfw) }
+        isolatedSubnetGroup {}
     }
-    privateSubnetGroup("NetworkFirewall") {
-        cidrMask(28)
-        routing.internet(NatGatewayRoutable())
-    }
-    privateSubnetGroup { routing.internet(nfw) }
-    isolatedSubnetGroup {}
 
     nacl {
         allowBetweenPeeredSubnets("Public", "NetworkFirewall")

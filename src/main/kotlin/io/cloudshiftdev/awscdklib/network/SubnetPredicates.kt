@@ -18,7 +18,4 @@ public object SubnetPredicates {
     public fun type(subnetType: SubnetType): SubnetSelection = SubnetSelection {
         subnetType(subnetType)
     }
-
-    public fun type(subnetGroupType: SubnetGroupType): SubnetSelection =
-        type(subnetGroupType.subnetType)
 }

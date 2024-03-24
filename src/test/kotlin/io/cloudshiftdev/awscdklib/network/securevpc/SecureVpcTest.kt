@@ -14,11 +14,12 @@ internal class SecureVpcTest : FunSpec() {
     init {
         test("Network created successfully") {
             val ctx = testStack { stack ->
-                val secureVpc =
-                    SecureVpc(stack, "MySecureVpc") {
+                val secureNetwork =
+                    SecureNetwork(stack, "MySecureVpc") {
                         cidrBlock("10.200.0.0/20")
                         maxAzs(2)
                         reservedAzs(1)
+
                         publicPrivateIsolatedNetwork()
                     }
             }

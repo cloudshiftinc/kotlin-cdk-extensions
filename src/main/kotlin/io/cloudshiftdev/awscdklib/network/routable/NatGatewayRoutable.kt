@@ -5,10 +5,11 @@ import io.cloudshiftdev.awscdk.RemovalPolicy
 import io.cloudshiftdev.awscdk.services.ec2.CfnEIP
 import io.cloudshiftdev.awscdk.services.ec2.PublicSubnet
 import io.cloudshiftdev.awscdk.services.ec2.RouterType
+import io.cloudshiftdev.awscdklib.network.securevpc.SecureNetworkProps
 import io.cloudshiftdev.constructs.Construct
 
 public class NatGatewayRoutable(block: (NatGatewayRoutableBuilder).() -> Unit = {}) :
-    SingletonRoutable<List<String>>({ vpc, networkDefinition ->
+    SingletonRoutable<List<String>>({ vpc, networkDefinition : SecureNetworkProps ->
         val eipPool =
             EipPool(vpc, "EipPool", networkDefinition.maxAzs + networkDefinition.reservedAzs)
         eipPool.eips

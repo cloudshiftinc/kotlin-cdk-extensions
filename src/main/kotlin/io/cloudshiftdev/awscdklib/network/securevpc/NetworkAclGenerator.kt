@@ -10,12 +10,12 @@ import io.cloudshiftdev.awscdk.services.ec2.AclTraffic
 import io.cloudshiftdev.awscdk.services.ec2.Action
 import io.cloudshiftdev.awscdk.services.ec2.NetworkAcl
 import io.cloudshiftdev.awscdk.services.ec2.NetworkAclEntry
+import io.cloudshiftdev.awscdk.services.ec2.SubnetType
 import io.cloudshiftdev.awscdk.services.ec2.TrafficDirection
 import io.cloudshiftdev.awscdk.services.ec2.Vpc
 import io.cloudshiftdev.awscdklib.core.addComment
 import io.cloudshiftdev.awscdklib.core.tag
 import io.cloudshiftdev.awscdklib.network.CidrBlock
-import io.cloudshiftdev.awscdklib.network.SubnetGroupType
 import io.cloudshiftdev.awscdklib.network.SubnetPredicates
 import io.cloudshiftdev.awscdklib.network.cidrBlock
 import java.nio.charset.StandardCharsets
@@ -42,7 +42,7 @@ internal object NetworkAclGenerator {
     fun generate(
         vpc: Vpc,
         peeredSubnets: List<NaclPeering>,
-        subnetSpecs: List<SubnetGroupSpec>,
+        subnetSpecs: List<SubnetGroupProps>,
         localNetworks: List<CidrBlock>
     ) {
         val peeredSubnetMap = generateSubnetMap(peeredSubnets, subnetSpecs)
@@ -82,12 +82,12 @@ internal object NetworkAclGenerator {
 
     private fun generateSubnetMap(
         peeredSubnets: List<NaclPeering>,
-        subnetSpecs: List<SubnetGroupSpec>
-    ): ListMultimap<SubnetGroupSpec, SubnetGroupSpec> {
+        subnetSpecs: List<SubnetGroupProps>
+    ): ListMultimap<SubnetGroupProps, SubnetGroupProps> {
         val peeredSubnetMap =
-            MultimapBuilder.treeKeys<SubnetGroupSpec>(compareBy { it.name })
+            MultimapBuilder.treeKeys<SubnetGroupProps>(compareBy { it.name })
                 .arrayListValues()
-                .build<SubnetGroupSpec, SubnetGroupSpec>()
+                .build<SubnetGroupProps, SubnetGroupProps>()
 
         // create structure (example below) with unique set of subnets to process and their peers
         // Public -> Private
@@ -110,8 +110,8 @@ internal object NetworkAclGenerator {
     }
 
     private fun generateFlows(
-        subnetGroup: SubnetGroupSpec,
-        peeredSubnetGroups: Collection<SubnetGroupSpec>,
+        subnetGroup: SubnetGroupProps,
+        peeredSubnetGroups: Collection<SubnetGroupProps>,
         vpc: Vpc,
         localNetworkCidrBlocks: List<CidrBlock>
     ): MutableList<NetworkAclFlow> {
@@ -147,9 +147,8 @@ internal object NetworkAclGenerator {
         )
 
         // allow internet flows for PUBLIC, PRIVATE subnets
-        when (subnetGroup.subnetGroupType) {
-            SubnetGroupType.Public,
-            SubnetGroupType.Private -> {
+        when (subnetGroup.subnetType) {
+            SubnetType.PRIVATE_WITH_EGRESS, SubnetType.PUBLIC -> {
                 // deny traffic to other local networks
                 // only necessary when followed by allow as there's a default DENY ALL for nacls as
                 // the last rule
