@@ -11,7 +11,7 @@ vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version = "0.2
 ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.17.0" }
 
 [libraries]
-cloudshift-kotlin-cdk-wrapper = { module = "io.cloudshiftdev.kotlin-cdk-wrapper:kotlin-cdk-wrapper", version = "0.7.8" }
+cloudshift-kotlin-cdk-wrapper = { module = "io.cloudshiftdev.kotlin-cdk-wrapper:kotlin-cdk-wrapper", version = "0.7.10" }
 pearx-kasechange = { module = "net.pearx.kasechange:kasechange", version = "1.4.1" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version = "1.6.3" }
 
