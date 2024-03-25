@@ -5,7 +5,7 @@ import io.cloudshiftdev.awscdk.RemovalPolicy
 import io.cloudshiftdev.awscdk.services.ec2.CfnEIP
 import io.cloudshiftdev.awscdk.services.ec2.PublicSubnet
 import io.cloudshiftdev.awscdk.services.ec2.RouterType
-import io.cloudshiftdev.awscdklib.network.securevpc.SecureNetworkProps
+import io.cloudshiftdev.awscdklib.network.securenetwork.SecureNetworkProps
 import io.cloudshiftdev.constructs.Construct
 
 public class NatGatewayRoutable(block: (NatGatewayRoutableBuilder).() -> Unit = {}) :

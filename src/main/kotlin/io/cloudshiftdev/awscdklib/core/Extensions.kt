@@ -2,10 +2,12 @@ package io.cloudshiftdev.awscdklib.core
 
 import io.cloudshiftdev.awscdk.ArnComponents
 import io.cloudshiftdev.awscdk.CfnResource
+import io.cloudshiftdev.awscdk.Duration
 import io.cloudshiftdev.awscdk.Names
 import io.cloudshiftdev.awscdk.Stack
 import io.cloudshiftdev.awscdk.TagProps
 import io.cloudshiftdev.awscdk.Tags
+import io.cloudshiftdev.awscdk.services.route53.IHostedZone
 import io.cloudshiftdev.constructs.Construct
 import io.cloudshiftdev.constructs.IConstruct
 
@@ -67,3 +69,17 @@ public inline fun <reified T> Construct.withSingleton(
 
 public val IConstruct.stack: Stack
     get() = Stack.of(this)
+
+
+public val Int.seconds: Duration
+    get() = Duration.seconds(this)
+
+public fun IHostedZone.dnsName(name: String): String = "${name}.${zoneName()}"
+
+public fun IHostedZone.wildcardDnsName(): String = dnsName("*")
+
+public fun IHostedZone.uniqueDnsName(construct: IConstruct, name: String): String =
+    "${name}_${construct.address}.${zoneName()}"
+
+public val IConstruct.address: String
+    get() = this.node().addr()

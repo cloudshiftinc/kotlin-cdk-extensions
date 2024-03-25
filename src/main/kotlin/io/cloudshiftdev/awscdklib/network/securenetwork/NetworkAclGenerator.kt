@@ -1,4 +1,4 @@
-package io.cloudshiftdev.awscdklib.network.securevpc
+package io.cloudshiftdev.awscdklib.network.securenetwork
 
 import com.google.common.collect.ListMultimap
 import com.google.common.collect.MultimapBuilder

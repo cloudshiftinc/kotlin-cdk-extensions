@@ -1,140 +1,123 @@
 package io.cloudshiftdev.awscdklib.network.firewall
 
+import io.cloudshiftdev.awscdk.customresources.AwsCustomResource
+import io.cloudshiftdev.awscdk.customresources.AwsCustomResourcePolicy
+import io.cloudshiftdev.awscdk.customresources.PhysicalResourceId
+import io.cloudshiftdev.awscdk.services.ec2.ISubnet
+import io.cloudshiftdev.awscdk.services.ec2.SubnetSelection
 import io.cloudshiftdev.awscdk.services.ec2.Vpc
-import io.cloudshiftdev.awscdk.services.logs.LogGroup
 import io.cloudshiftdev.awscdk.services.networkfirewall.CfnFirewall
 import io.cloudshiftdev.awscdk.services.networkfirewall.CfnFirewallPolicy
-import io.cloudshiftdev.awscdk.services.networkfirewall.CfnLoggingConfiguration
-import io.cloudshiftdev.awscdklib.network.SubnetPredicates
 import io.cloudshiftdev.constructs.Construct
-import net.pearx.kasechange.toKebabCase
 
-public class NetworkFirewall(
+public enum class StatelessStandardAction(internal val value: String) {
+    FORWARD("aws:forward_to_sfe"),
+    PASS("aws:pass"),
+    DROP("aws:drop"),
+}
+
+public enum class StatefulStandardAction(internal val value: String) {
+    ALERT("ALERT"),
+    PASS("PASS"),
+    DROP("DROP"),
+}
+
+public enum class StatefulStrictAction(internal val value: String) {
+    DROP_STRICT("aws:drop_strict"),
+    DROP_ESTABLISHED("aws:drop_established"),
+    ALERT_STRICT("aws:alert_strict"),
+    ALERT_ESTABLISHED("aws:alert_established"),
+}
+
+public class FirewallPolicy(
     scope: Construct,
     id: String,
-    block: (NetworkFirewallPropsBuilder).() -> Unit
+    firewallPolicyName: String? = null,
+    description: String? = null,
+    statelessDefaultActions: List<StatelessStandardAction> = emptyList(),
+    statelessFragmentDefaultActions: List<StatelessStandardAction> = emptyList(),
+    statefulDefaultActions: List<StatefulStandardAction> = emptyList(),
 ) : Construct(scope, id) {
-    internal val azEndpointMap = mutableMapOf<String, String>()
+    public val firewallPolicyId: String
+    public val firewallPolicyArn: String
 
     init {
-        val props = NetworkFirewallPropsBuilder().apply(block).build()
-
-        val networkFirewallPolicy =
-            CfnFirewallPolicy(this, "FirewallPolicy") {
-                firewallPolicyName(
-                    this@NetworkFirewall.node().path().toKebabCase().replace("/", "-")
-                )
-                firewallPolicy(
-                    CfnFirewallPolicy.FirewallPolicyProperty {
-                        statelessDefaultActions(listOf("aws:pass"))
-                        statelessFragmentDefaultActions(listOf("aws:pass"))
-                        //                    statefulDefaultActions(listOf("aws:pass"))
-                    }
-                )
-            }
-
-        val networkFirewall = createFirewall(props, networkFirewallPolicy)
-
-        val flowLogGroup =
-            LogGroup(this, "${id}FlowLogs") {
-                logGroupName("${this@NetworkFirewall.node().path()}/flow-logs")
-            }
-
-        val alertLogGroup =
-            LogGroup(this, "${id}AlertLogs") {
-                logGroupName("${this@NetworkFirewall.node().path()}/alert-logs")
-            }
-
-        CfnLoggingConfiguration(networkFirewall, "Logging") {
-            firewallArn(networkFirewall.attrFirewallArn())
-            loggingConfiguration(
-                CfnLoggingConfiguration.LoggingConfigurationProperty {
-                    logDestinationConfigs(
-                        listOf(
-                            CfnLoggingConfiguration.LogDestinationConfigProperty {
-                                logDestination(mapOf("logGroup" to flowLogGroup.logGroupName()))
-                                logDestinationType("CloudWatchLogs")
-                                logType("FLOW")
-                            },
-                            CfnLoggingConfiguration.LogDestinationConfigProperty {
-                                logDestination(mapOf("logGroup" to alertLogGroup.logGroupName()))
-                                logDestinationType("CloudWatchLogs")
-                                logType("ALERT")
-                            }
-                        )
-                    )
+        val policy = CfnFirewallPolicy(this, "CfnFirewallPolicy") {
+            firewallPolicyName(firewallPolicyName ?: id)
+            description?.let(::description)
+            firewallPolicy(
+                CfnFirewallPolicy.FirewallPolicyProperty {
+                    statelessDefaultActions(statelessDefaultActions.map { it.value })
+                    statelessFragmentDefaultActions(statelessFragmentDefaultActions.map { it.value })
+                    statefulDefaultActions(statefulDefaultActions.map { it.value })
                 }
             )
         }
+
+        firewallPolicyId = policy.attrFirewallPolicyId()
+        firewallPolicyArn = policy.attrFirewallPolicyArn()
     }
+}
 
-    private fun createFirewall(
-        props: NetworkFirewallProps,
-        networkFirewallPolicy: CfnFirewallPolicy
-    ): CfnFirewall {
-        val vpc = props.vpc
-        val nfSubnets =
-            vpc.selectSubnets(SubnetPredicates.groupNamed(props.subnetPlacement)).subnets()
+public class NetworkFirewall(
+    scope: Construct, id: String,
+    vpc: Vpc,
+    subnetMappings: SubnetSelection,
+    firewallName: String,
+    firewallPolicy: FirewallPolicy
+) : Construct(scope, id) {
+    public val endpointIds: List<String>
+    public val firewallArn: String
+    public val firewallId: String
+    public val availabilityZoneEndpointMap: Map<String, String>
 
-        val networkFirewall =
-            CfnFirewall(this, "NFW") {
-                firewallName(this@NetworkFirewall.node().path().toKebabCase().replace("/", "-"))
-                vpcId(vpc.vpcId())
-                subnetMappings(
-                    nfSubnets.map { CfnFirewall.SubnetMappingProperty { subnetId(it.subnetId()) } }
-                )
-                firewallPolicyArn(networkFirewallPolicy.attrFirewallPolicyArn())
+    init {
+        val placementSubnets = vpc.selectSubnets(subnetMappings).subnets()
+
+        val nfw = CfnFirewall(vpc, "Firewall") {
+            firewallName(firewallName)
+            vpcId(vpc.vpcId())
+            subnetMappings(placementSubnets.toSubnetMappings())
+            firewallPolicyArn(firewallPolicy.firewallPolicyArn)
+        }
+
+        // WTF AWS: https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-networkfirewall/issues/15
+
+        val lookupNfwEndpoints = AwsCustomResource(scope, "FirewallCustomResource") {
+            onCreate {
+                service("networkfirewall")
+                action("DescribeFirewall")
+                parameters(mapOf("FirewallArn" to nfw.attrFirewallArn()))
+                physicalResourceId(PhysicalResourceId.of(nfw.attrFirewallArn()))
+            }
+            onUpdate {
+                service("networkfirewall")
+                action("DescribeFirewall")
+                parameters(mapOf("FirewallArn" to nfw.attrFirewallArn()))
+                physicalResourceId(PhysicalResourceId.of(nfw.attrFirewallArn()))
+            }
+            installLatestAwsSdk(false)
+            policy(AwsCustomResourcePolicy.fromSdkCalls {
+                resources(nfw.attrFirewallArn())
+            })
+        }
+
+        val azs = placementSubnets.map { it.availabilityZone() }
+        availabilityZoneEndpointMap = azs
+            .associateWith {
+                lookupNfwEndpoints.responseField("FirewallStatus.SyncStates.${it}.Attachment.EndpointId")
             }
 
-        // determine the set of AZs that the NFW was deployed to
-        val availabilityZones = nfSubnets.map { it.availabilityZone() }.toList()
-
-        // determine the NFW endpoint ID in each deployed AZ
-        //        azEndpointMap.putAll(mapAzToVpcEndpoint(networkFirewall, vpc, availabilityZones))
-
-        return networkFirewall
+        endpointIds = nfw.attrEndpointIds()
+        firewallArn = nfw.attrFirewallArn()
+        firewallId = nfw.attrFirewallId()
     }
 
-    //    private fun mapAzToVpcEndpoint(
-    //        nfw: CfnFirewall,
-    //        vpc: Vpc,
-    //        availabilityZones: Iterable<String>
-    //    ): Map<String, String> {
-    //        val cr = DispatchingCustomResource.create(nfw, "LookupNetworkFirewallVpcEndpoints") {
-    //            codeSource(FunctionCodeSource.fromResource("lambda-custom-resource-functions"))
-    //            customResourceId("LookupNetworkFirewallVpcEndpoints")
-    //            properties("VpcId" to vpc.vpcId(), "FirewallArn" to nfw.attrFirewallArn())
-    //            policyStatement {
-    //                allow()
-    //                action("network-firewall:DescribeFirewall")
-    //                anyResource()
-    //            }
-    //        }
-    //        cr.node().addDependency(nfw)
-    //        return availabilityZones.associateWith {
-    //            cr.attString(it)
-    //        }
-    //    }
-}
-
-public class NetworkFirewallPropsBuilder internal constructor() {
-    private var vpc: Vpc? = null
-    private var subnetPlacement: String? = null
-
-    public fun vpc(vpc: Vpc) {
-        this.vpc = vpc
-    }
-
-    public fun subnetPlacement(value: String) {
-        this.subnetPlacement = value
-    }
-
-    internal fun build(): NetworkFirewallProps {
-        return NetworkFirewallProps(
-            vpc = requireNotNull(vpc) { "vpc is required" },
-            subnetPlacement = requireNotNull(subnetPlacement) { "subnetPlacement is required" }
-        )
+    private fun List<ISubnet>.toSubnetMappings(): List<CfnFirewall.SubnetMappingProperty> {
+        return map {
+            CfnFirewall.SubnetMappingProperty {
+                subnetId(it.subnetId())
+            }
+        }
     }
 }
-
-internal data class NetworkFirewallProps(val vpc: Vpc, val subnetPlacement: String)

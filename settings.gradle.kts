@@ -30,6 +30,7 @@ plugins {
     id("com.gradle.enterprise") version "3.16.2"
 }
 
+include(":cdk-test")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories { maven("https://cache-redirector.jetbrains.com/repo1.maven.org/maven2") }
