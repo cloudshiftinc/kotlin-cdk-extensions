@@ -8,41 +8,41 @@ import io.cloudshiftdev.awscdklib.network.firewall.NetworkFirewall
 import io.cloudshiftdev.awscdklib.testing.filterByType
 import io.cloudshiftdev.awscdklib.testing.shouldEqualJson
 import io.cloudshiftdev.awscdklib.testing.shouldEqualJsonResource
-import io.cloudshiftdev.awscdklib.testing.shouldEqualJsonValueAtPath
 import io.cloudshiftdev.awscdklib.testing.testStack
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldHaveSize
 
-class NetworkFirewallTest : FunSpec({
+class NetworkFirewallTest :
+    FunSpec({
+        test("NetworkFirewall test") {
+            val ctx = testStack { stack ->
+                val vpc = Vpc(stack, "MyVpc") { ipAddresses(IpAddresses.cidr("10.200.0.0/20")) }
 
-    test("NetworkFirewall test") {
-        val ctx = testStack { stack ->
-            val vpc = Vpc(stack, "MyVpc") {
-                ipAddresses(IpAddresses.cidr("10.200.0.0/20"))
+                val firewallPolicy =
+                    FirewallPolicy(
+                        scope = vpc,
+                        id = "FirewallPolicy",
+                    )
+
+                val firewall =
+                    NetworkFirewall(
+                        stack,
+                        "MyFirewall",
+                        vpc = vpc,
+                        subnetMappings = SubnetPredicates.publicSubnets(),
+                        firewallName = "MyFirewall",
+                        firewallPolicy = firewallPolicy
+                    )
             }
 
-            val firewallPolicy = FirewallPolicy(
-                scope = vpc,
-                id = "FirewallPolicy",
-            )
+            val resources = ctx.stack.resources
 
-            val firewall = NetworkFirewall(
-                stack,
-                "MyFirewall",
-                vpc = vpc,
-                subnetMappings = SubnetPredicates.publicSubnets(),
-                firewallName = "MyFirewall",
-                firewallPolicy = firewallPolicy
-            )
-        }
-
-        val resources = ctx.stack.resources
-
-        assertSoftly {
-            resources.filterByType("AWS::NetworkFirewall::Firewall").shouldBeSingleton {
-                it.json.shouldEqualJson("""{
+            assertSoftly {
+                resources.filterByType("AWS::NetworkFirewall::Firewall").shouldBeSingleton {
+                    it.json.shouldEqualJson(
+                        """{
       "Type": "AWS::NetworkFirewall::Firewall",
       "Properties": {
         "FirewallName": "MyFirewall",
@@ -74,23 +74,26 @@ class NetworkFirewallTest : FunSpec({
           "Ref": "MyVpcF9F0CA6F"
         }
       }
-               } """.trimIndent())
+               } """
+                            .trimIndent()
+                    )
+                }
+                resources.filterByType("AWS::EC2::InternetGateway").shouldBeSingleton()
+                resources
+                    .filterByType("AWS::EC2::Subnet")
+                    .filter { it.tags["aws-cdk:subnet-type"] == "Public" }
+                    .shouldHaveSize(2)
+                resources
+                    .filterByType("AWS::EC2::Subnet")
+                    .filter { it.tags["aws-cdk:subnet-type"] == "Private" }
+                    .shouldHaveSize(2)
+
+                resources.filterByType("AWS::EC2::Subnet").shouldHaveSize(4)
+                resources.filterByType("AWS::EC2::NatGateway").shouldHaveSize(2)
+
+                ctx.shouldEqualJsonResource(
+                    "/cloudshift/awscdk/networkfirewall/NetworkFirewall-simple.json"
+                )
             }
-            resources.filterByType("AWS::EC2::InternetGateway").shouldBeSingleton()
-            resources
-                .filterByType("AWS::EC2::Subnet")
-                .filter { it.tags["aws-cdk:subnet-type"] == "Public" }
-                .shouldHaveSize(2)
-            resources
-                .filterByType("AWS::EC2::Subnet")
-                .filter { it.tags["aws-cdk:subnet-type"] == "Private" }
-                .shouldHaveSize(2)
-
-            resources.filterByType("AWS::EC2::Subnet").shouldHaveSize(4)
-            resources.filterByType("AWS::EC2::NatGateway").shouldHaveSize(2)
-
-            ctx.shouldEqualJsonResource("/cloudshift/awscdk/networkfirewall/NetworkFirewall-simple.json")
         }
-    }
-
-})
+    })

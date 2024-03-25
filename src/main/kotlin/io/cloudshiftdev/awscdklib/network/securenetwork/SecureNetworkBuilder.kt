@@ -14,12 +14,12 @@ import io.cloudshiftdev.awscdklib.network.CidrBlock
 import io.cloudshiftdev.awscdklib.network.SubnetPredicates
 import net.pearx.kasechange.toPascalCase
 
-@DslMarker
-public annotation class NetworkDslMarker
+@DslMarker public annotation class NetworkDslMarker
 
 @NetworkDslMarker
 public interface SecureNetworkBuilder {
     public fun availabilityZones(azs: List<String>)
+
     public fun availabilityZones(vararg azs: String) {
         availabilityZones(azs.toList())
     }
@@ -29,16 +29,23 @@ public interface SecureNetworkBuilder {
     }
 
     public fun createInternetGateway(value: Boolean)
+
     public fun defaultInstanceTenancy(value: DefaultInstanceTenancy)
+
     public fun enableDnsHostnames(value: Boolean)
+
     public fun enableDnsSupport(value: Boolean)
 
     public fun ipAddresses(ipAddresses: IIpAddresses)
+
     public fun ipV6Addresses(ipAddresses: IIpv6Addresses)
 
     public fun ipProtocol(protocol: IpProtocol)
+
     public fun maxAzs(azs: Int)
+
     public fun reservedAzs(azs: Int)
+
     public fun restrictDefaultSecurityGroup(value: Boolean)
 
     public fun nacl(block: (NaclBuilder).() -> Unit)
@@ -47,7 +54,6 @@ public interface SecureNetworkBuilder {
 
     public fun routers(block: (RoutersBuilder).() -> Unit)
 }
-
 
 internal class SecureNetworkBuilderImpl : SecureNetworkBuilder {
     var maxAzs = 2
@@ -184,11 +190,7 @@ public interface SubnetsBuilder {
         subnetGroup(name, SubnetType.PRIVATE_ISOLATED, block)
     }
 
-    public fun subnetGroup(
-        name: String,
-        type: SubnetType,
-        block: (SubnetGroupBuilder).() -> Unit
-    )
+    public fun subnetGroup(name: String, type: SubnetType, block: (SubnetGroupBuilder).() -> Unit)
 }
 
 internal class SubnetsBuilderImpl : SubnetsBuilder {
@@ -202,11 +204,12 @@ internal class SubnetsBuilderImpl : SubnetsBuilder {
         block: (SubnetGroupBuilder).() -> Unit
     ) {
         validateSubnetGroupName(name)
-        val effectiveType = when (type) {
-            // transform deprecated type
-            SubnetType.PRIVATE_WITH_NAT -> SubnetType.PRIVATE_WITH_EGRESS
-            else -> type
-        }
+        val effectiveType =
+            when (type) {
+                // transform deprecated type
+                SubnetType.PRIVATE_WITH_NAT -> SubnetType.PRIVATE_WITH_EGRESS
+                else -> type
+            }
         val builder = subnetMap.computeIfAbsent(name) { SubnetGroupBuilder(name, effectiveType) }
         builder.apply(block)
     }
@@ -215,7 +218,9 @@ internal class SubnetsBuilderImpl : SubnetsBuilder {
 @NetworkDslMarker
 public interface NaclBuilder {
     public fun allowBetween(subnet: String, peeredSubnet: String)
+
     public fun denyToLocalNetwork(cidr: String)
+
     public fun denyToAllPrivateNetworks()
 }
 
@@ -223,10 +228,7 @@ internal class NaclBuilderImpl : NaclBuilder {
     private val peeredSubnets = mutableListOf<NaclPeering>()
     private val localNetworks = mutableListOf<CidrBlock>()
 
-    override fun allowBetween(
-        subnet: String,
-        peeredSubnet: String
-    ) {
+    override fun allowBetween(subnet: String, peeredSubnet: String) {
         validateSubnetGroupName(subnet)
         validateSubnetGroupName(peeredSubnet)
         val peering = NaclPeering(subnet, peeredSubnet)
@@ -272,6 +274,7 @@ public interface RoutersBuilder {
 
 internal class RoutersBuilderImpl : RoutersBuilder {
     private val providers = mutableListOf<RouterProvider>()
+
     fun build(): List<RouterProvider> = providers.toList()
 
     override fun routerProvider(provider: RouterProvider) {
@@ -294,6 +297,7 @@ internal class RoutersBuilderImpl : RoutersBuilder {
 @NetworkDslMarker
 public interface RouterBuilder {
     public fun routerSubnet(subnetSelection: SubnetSelection)
+
     public fun routableSubnets(subnetSelections: List<SubnetSelection>)
 }
 
@@ -328,6 +332,7 @@ internal abstract class BaseRouterBuilder : RouterBuilder {
 
 internal abstract class BaseNatRouterBuilder : BaseRouterBuilder(), NatRouterBuilder {
     protected var natGateways = 99
+
     override fun natGateways(count: Int) {
         natGateways = count
     }
@@ -365,8 +370,8 @@ internal class NatInstanceRouterBuilderImpl : BaseNatRouterBuilder(), NatInstanc
     }
 }
 
-internal class NetworkFirewallRouterBuilderImpl : BaseRouterBuilder(),
-    NetworkFirewallRouterBuilder {
+internal class NetworkFirewallRouterBuilderImpl :
+    BaseRouterBuilder(), NetworkFirewallRouterBuilder {
     private val egressSubnets = mutableListOf<SubnetSelection>()
 
     fun build(): RouterProvider {

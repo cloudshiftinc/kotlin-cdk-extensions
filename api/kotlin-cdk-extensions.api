@@ -3,11 +3,16 @@ public final class io/cloudshiftdev/awscdklib/core/ExtensionsKt {
 	public static final fun addComment (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;)V
 	public static final fun addMetadata (Lio/cloudshiftdev/awscdk/CfnResource;Ljava/util/Map;)V
 	public static final fun allChildren (Lio/cloudshiftdev/constructs/IConstruct;)Ljava/util/List;
+	public static final fun dnsName (Lio/cloudshiftdev/awscdk/services/route53/IHostedZone;Ljava/lang/String;)Ljava/lang/String;
+	public static final fun getAddress (Lio/cloudshiftdev/constructs/IConstruct;)Ljava/lang/String;
+	public static final fun getSeconds (I)Lio/cloudshiftdev/awscdk/Duration;
 	public static final fun getStack (Lio/cloudshiftdev/constructs/IConstruct;)Lio/cloudshiftdev/awscdk/Stack;
 	public static final fun resourceArn (Lio/cloudshiftdev/constructs/Construct;Lkotlin/jvm/functions/Function1;)Ljava/lang/String;
 	public static final fun tag (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun tag$default (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun uniqueDnsName (Lio/cloudshiftdev/awscdk/services/route53/IHostedZone;Lio/cloudshiftdev/constructs/IConstruct;Ljava/lang/String;)Ljava/lang/String;
 	public static final fun uniqueId (Lio/cloudshiftdev/constructs/Construct;)Ljava/lang/String;
+	public static final fun wildcardDnsName (Lio/cloudshiftdev/awscdk/services/route53/IHostedZone;)Ljava/lang/String;
 }
 
 public final class io/cloudshiftdev/awscdklib/customresource/ExtensionsKt {
@@ -67,30 +72,9 @@ public final class io/cloudshiftdev/awscdklib/network/ExtensionsKt {
 	public static final fun isPublic (Lio/cloudshiftdev/awscdk/services/ec2/ISubnet;)Z
 }
 
-public abstract class io/cloudshiftdev/awscdklib/network/SubnetGroupType {
-	public synthetic fun <init> (Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getSubnetType ()Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;
-}
-
-public final class io/cloudshiftdev/awscdklib/network/SubnetGroupType$Isolated : io/cloudshiftdev/awscdklib/network/SubnetGroupType {
-	public static final field INSTANCE Lio/cloudshiftdev/awscdklib/network/SubnetGroupType$Isolated;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/cloudshiftdev/awscdklib/network/SubnetGroupType$Private : io/cloudshiftdev/awscdklib/network/SubnetGroupType {
-	public static final field INSTANCE Lio/cloudshiftdev/awscdklib/network/SubnetGroupType$Private;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/cloudshiftdev/awscdklib/network/SubnetGroupType$Public : io/cloudshiftdev/awscdklib/network/SubnetGroupType {
-	public static final field INSTANCE Lio/cloudshiftdev/awscdklib/network/SubnetGroupType$Public;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+public final class io/cloudshiftdev/awscdklib/network/NatEipPool : io/cloudshiftdev/constructs/Construct {
+	public fun <init> (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;I)V
+	public final fun getEips ()Ljava/util/List;
 }
 
 public final class io/cloudshiftdev/awscdklib/network/SubnetPredicates {
@@ -100,173 +84,160 @@ public final class io/cloudshiftdev/awscdklib/network/SubnetPredicates {
 	public final fun privateSubnets ()Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;
 	public final fun publicSubnets ()Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;
 	public final fun type (Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;)Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;
-	public final fun type (Lio/cloudshiftdev/awscdklib/network/SubnetGroupType;)Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;
+}
+
+public final class io/cloudshiftdev/awscdklib/network/firewall/FirewallPolicy : io/cloudshiftdev/constructs/Construct {
+	public fun <init> (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getFirewallPolicyArn ()Ljava/lang/String;
+	public final fun getFirewallPolicyId ()Ljava/lang/String;
 }
 
 public final class io/cloudshiftdev/awscdklib/network/firewall/NetworkFirewall : io/cloudshiftdev/constructs/Construct {
-	public fun <init> (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public fun <init> (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/Vpc;Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;Ljava/lang/String;Lio/cloudshiftdev/awscdklib/network/firewall/FirewallPolicy;)V
+	public final fun getAvailabilityZoneEndpointMap ()Ljava/util/Map;
+	public final fun getEndpointIds ()Ljava/util/List;
+	public final fun getFirewallArn ()Ljava/lang/String;
+	public final fun getFirewallId ()Ljava/lang/String;
 }
 
-public final class io/cloudshiftdev/awscdklib/network/firewall/NetworkFirewallPropsBuilder {
-	public final fun subnetPlacement (Ljava/lang/String;)V
-	public final fun vpc (Lio/cloudshiftdev/awscdk/services/ec2/Vpc;)V
+public final class io/cloudshiftdev/awscdklib/network/firewall/StatefulStandardAction : java/lang/Enum {
+	public static final field ALERT Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStandardAction;
+	public static final field DROP Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStandardAction;
+	public static final field PASS Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStandardAction;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStandardAction;
+	public static fun values ()[Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStandardAction;
 }
 
-public final class io/cloudshiftdev/awscdklib/network/routable/NatGatewayRoutable : io/cloudshiftdev/awscdklib/network/routable/SingletonRoutable {
-	public fun <init> ()V
-	public fun <init> (Lkotlin/jvm/functions/Function1;)V
-	public synthetic fun <init> (Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun routeTarget (Ljava/lang/Object;Lio/cloudshiftdev/awscdklib/network/routable/RoutableContext;)Lio/cloudshiftdev/awscdklib/network/routable/RouteTarget;
-	public fun routeTarget (Ljava/util/List;Lio/cloudshiftdev/awscdklib/network/routable/RoutableContext;)Lio/cloudshiftdev/awscdklib/network/routable/RouteTarget;
+public final class io/cloudshiftdev/awscdklib/network/firewall/StatefulStrictAction : java/lang/Enum {
+	public static final field ALERT_ESTABLISHED Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStrictAction;
+	public static final field ALERT_STRICT Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStrictAction;
+	public static final field DROP_ESTABLISHED Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStrictAction;
+	public static final field DROP_STRICT Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStrictAction;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStrictAction;
+	public static fun values ()[Lio/cloudshiftdev/awscdklib/network/firewall/StatefulStrictAction;
 }
 
-public final class io/cloudshiftdev/awscdklib/network/routable/NatGatewayRoutableBuilder {
-	public final fun subnetPlacements (Ljava/lang/String;)V
+public final class io/cloudshiftdev/awscdklib/network/firewall/StatelessStandardAction : java/lang/Enum {
+	public static final field DROP Lio/cloudshiftdev/awscdklib/network/firewall/StatelessStandardAction;
+	public static final field FORWARD Lio/cloudshiftdev/awscdklib/network/firewall/StatelessStandardAction;
+	public static final field PASS Lio/cloudshiftdev/awscdklib/network/firewall/StatelessStandardAction;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/cloudshiftdev/awscdklib/network/firewall/StatelessStandardAction;
+	public static fun values ()[Lio/cloudshiftdev/awscdklib/network/firewall/StatelessStandardAction;
 }
 
-public final class io/cloudshiftdev/awscdklib/network/routable/NetworkFirewallRoutable : io/cloudshiftdev/awscdklib/network/routable/SingletonRoutable {
-	public fun <init> (Lkotlin/jvm/functions/Function2;)V
-	public fun routeTarget (Lio/cloudshiftdev/awscdklib/network/firewall/NetworkFirewall;Lio/cloudshiftdev/awscdklib/network/routable/RoutableContext;)Lio/cloudshiftdev/awscdklib/network/routable/RouteTarget;
-	public synthetic fun routeTarget (Ljava/lang/Object;Lio/cloudshiftdev/awscdklib/network/routable/RoutableContext;)Lio/cloudshiftdev/awscdklib/network/routable/RouteTarget;
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/NaclBuilder {
+	public abstract fun allowBetween (Ljava/lang/String;Ljava/lang/String;)V
+	public abstract fun denyToAllPrivateNetworks ()V
+	public abstract fun denyToLocalNetwork (Ljava/lang/String;)V
 }
 
-public abstract interface class io/cloudshiftdev/awscdklib/network/routable/Routable {
-	public abstract fun routeTarget (Lio/cloudshiftdev/awscdklib/network/routable/RoutableContext;)Lio/cloudshiftdev/awscdklib/network/routable/RouteTarget;
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/NatGatewayRouterBuilder : io/cloudshiftdev/awscdklib/network/securenetwork/NatRouterBuilder {
+	public abstract fun props (Lkotlin/jvm/functions/Function1;)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/routable/RoutableContext {
-	public fun <init> (Lio/cloudshiftdev/constructs/Construct;Lio/cloudshiftdev/awscdklib/network/securevpc/SubnetResolver;Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/Vpc;Lio/cloudshiftdev/awscdklib/network/securevpc/NetworkDefinition;)V
-	public final fun getAvailabilityZone ()Ljava/lang/String;
-	public final fun getNetworkDefinition ()Lio/cloudshiftdev/awscdklib/network/securevpc/NetworkDefinition;
-	public final fun getSubnetResolver ()Lio/cloudshiftdev/awscdklib/network/securevpc/SubnetResolver;
-	public final fun getSubnetScope ()Lio/cloudshiftdev/constructs/Construct;
-	public final fun getVpc ()Lio/cloudshiftdev/awscdk/services/ec2/Vpc;
+public final class io/cloudshiftdev/awscdklib/network/securenetwork/NatGatewayRouterBuilder$DefaultImpls {
+	public static synthetic fun props$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/NatGatewayRouterBuilder;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/routable/RouteTarget {
-	public fun <init> (Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/RouterType;Z)V
-	public final fun getEnablesInternetConnectivity ()Z
-	public final fun getRouterId ()Ljava/lang/String;
-	public final fun getRouterType ()Lio/cloudshiftdev/awscdk/services/ec2/RouterType;
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/NatInstanceRouterBuilder : io/cloudshiftdev/awscdklib/network/securenetwork/NatRouterBuilder {
+	public abstract fun props (Lkotlin/jvm/functions/Function1;)V
 }
 
-public abstract class io/cloudshiftdev/awscdklib/network/routable/SingletonRoutable : io/cloudshiftdev/awscdklib/network/routable/Routable {
-	public fun <init> (Lkotlin/jvm/functions/Function2;)V
-	public final fun routeTarget (Lio/cloudshiftdev/awscdklib/network/routable/RoutableContext;)Lio/cloudshiftdev/awscdklib/network/routable/RouteTarget;
-	public abstract fun routeTarget (Ljava/lang/Object;Lio/cloudshiftdev/awscdklib/network/routable/RoutableContext;)Lio/cloudshiftdev/awscdklib/network/routable/RouteTarget;
+public final class io/cloudshiftdev/awscdklib/network/securenetwork/NatInstanceRouterBuilder$DefaultImpls {
+	public static synthetic fun props$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/NatInstanceRouterBuilder;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/NaclBuilder {
-	public fun <init> ()V
-	public final fun allowBetweenPeeredSubnets (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun allowBetweenPeeredSubnets$default (Lio/cloudshiftdev/awscdklib/network/securevpc/NaclBuilder;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public final fun denyToAllPrivateNetworks ()V
-	public final fun denyToLocalNetwork (Ljava/lang/String;)V
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/NatRouterBuilder : io/cloudshiftdev/awscdklib/network/securenetwork/RouterBuilder {
+	public abstract fun natGateways (I)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/NaclPeeringBuilder {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+public abstract interface annotation class io/cloudshiftdev/awscdklib/network/securenetwork/NetworkDslMarker : java/lang/annotation/Annotation {
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/NetworkDefinition {
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getCidrBlock-YJChKtE ()Ljava/lang/String;
-	public final fun getMaxAzs ()I
-	public final fun getReservedAzs ()I
-	public final fun getSubnetGroups ()Ljava/util/List;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/NetworkFirewallRouterBuilder : io/cloudshiftdev/awscdklib/network/securenetwork/RouterBuilder {
+	public abstract fun egressSubnets (Ljava/util/List;)V
 }
 
-public abstract interface annotation class io/cloudshiftdev/awscdklib/network/securevpc/NetworkDslMarker : java/lang/annotation/Annotation {
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/RouterBuilder {
+	public abstract fun routableSubnets (Ljava/util/List;)V
+	public abstract fun routerSubnet (Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/RouteBuilder {
-	public fun <init> ()V
-	public final fun internet (Lio/cloudshiftdev/awscdklib/network/routable/Routable;)V
-	public final fun local (Lio/cloudshiftdev/awscdklib/network/routable/Routable;)V
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/RouterProvider {
+	public abstract fun create (Lio/cloudshiftdev/awscdk/services/ec2/Vpc;)V
 }
 
-public abstract class io/cloudshiftdev/awscdklib/network/securevpc/RouteDestination {
-	public fun name ()Ljava/lang/String;
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/RoutersBuilder {
+	public abstract fun egressNatGateway (Lkotlin/jvm/functions/Function1;)V
+	public abstract fun egressNatInstance (Lkotlin/jvm/functions/Function1;)V
+	public abstract fun egressNetworkFirewall (Lkotlin/jvm/functions/Function1;)V
+	public abstract fun routerProvider (Lio/cloudshiftdev/awscdklib/network/securenetwork/RouterProvider;)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/RouteDestination$Cidr : io/cloudshiftdev/awscdklib/network/securevpc/RouteDestination {
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getCidr-YJChKtE ()Ljava/lang/String;
-	public fun name ()Ljava/lang/String;
+public final class io/cloudshiftdev/awscdklib/network/securenetwork/RoutersBuilder$DefaultImpls {
+	public static synthetic fun egressNatGateway$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/RoutersBuilder;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static synthetic fun egressNatInstance$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/RoutersBuilder;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static synthetic fun egressNetworkFirewall$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/RoutersBuilder;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/RouteDestination$Internet : io/cloudshiftdev/awscdklib/network/securevpc/RouteDestination {
-	public static final field INSTANCE Lio/cloudshiftdev/awscdklib/network/securevpc/RouteDestination$Internet;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/cloudshiftdev/awscdklib/network/securevpc/RouteDestination$Vpc : io/cloudshiftdev/awscdklib/network/securevpc/RouteDestination {
-	public static final field INSTANCE Lio/cloudshiftdev/awscdklib/network/securevpc/RouteDestination$Vpc;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/cloudshiftdev/awscdklib/network/securevpc/SecureVpc : io/cloudshiftdev/constructs/Construct {
+public final class io/cloudshiftdev/awscdklib/network/securenetwork/SecureNetwork : io/cloudshiftdev/constructs/Construct {
 	public fun <init> (Lio/cloudshiftdev/constructs/Construct;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public final fun getVpc ()Lio/cloudshiftdev/awscdk/services/ec2/Vpc;
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/SecureVpcBuilder {
-	public fun <init> ()V
-	public final fun cidrBlock (Ljava/lang/String;)V
-	public final fun isolatedSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun isolatedSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securevpc/SecureVpcBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public final fun maxAzs (I)V
-	public final fun nacl (Lkotlin/jvm/functions/Function1;)V
-	public final fun privateSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun privateSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securevpc/SecureVpcBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public final fun publicSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun publicSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securevpc/SecureVpcBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public final fun reservedAzs (I)V
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/SecureNetworkBuilder {
+	public abstract fun availabilityZones (Ljava/util/List;)V
+	public abstract fun availabilityZones ([Ljava/lang/String;)V
+	public abstract fun cidrBlock (Ljava/lang/String;)V
+	public abstract fun createInternetGateway (Z)V
+	public abstract fun defaultInstanceTenancy (Lio/cloudshiftdev/awscdk/services/ec2/DefaultInstanceTenancy;)V
+	public abstract fun enableDnsHostnames (Z)V
+	public abstract fun enableDnsSupport (Z)V
+	public abstract fun ipAddresses (Lio/cloudshiftdev/awscdk/services/ec2/IIpAddresses;)V
+	public abstract fun ipProtocol (Lio/cloudshiftdev/awscdk/services/ec2/IpProtocol;)V
+	public abstract fun ipV6Addresses (Lio/cloudshiftdev/awscdk/services/ec2/IIpv6Addresses;)V
+	public abstract fun maxAzs (I)V
+	public abstract fun nacl (Lkotlin/jvm/functions/Function1;)V
+	public abstract fun reservedAzs (I)V
+	public abstract fun restrictDefaultSecurityGroup (Z)V
+	public abstract fun routers (Lkotlin/jvm/functions/Function1;)V
+	public abstract fun subnets (Lkotlin/jvm/functions/Function1;)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/SecureVpcKt {
-	public static final fun publicPrivateIsolatedNetwork (Lio/cloudshiftdev/awscdklib/network/securevpc/SecureVpcBuilder;)V
-	public static final fun publicPrivateIsolatedNetworkWithFirewall (Lio/cloudshiftdev/awscdklib/network/securevpc/SecureVpcBuilder;Lio/cloudshiftdev/awscdklib/network/routable/NetworkFirewallRoutable;)V
+public final class io/cloudshiftdev/awscdklib/network/securenetwork/SecureNetworkBuilder$DefaultImpls {
+	public static fun availabilityZones (Lio/cloudshiftdev/awscdklib/network/securenetwork/SecureNetworkBuilder;[Ljava/lang/String;)V
+	public static fun cidrBlock (Lio/cloudshiftdev/awscdklib/network/securenetwork/SecureNetworkBuilder;Ljava/lang/String;)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/SubnetGroupBuilder {
+public final class io/cloudshiftdev/awscdklib/network/securenetwork/SecureNetworkKt {
+	public static final fun publicPrivateIsolatedNetwork (Lio/cloudshiftdev/awscdklib/network/securenetwork/SecureNetworkBuilder;)V
+	public static final fun publicPrivateIsolatedNetworkWithFirewall (Lio/cloudshiftdev/awscdklib/network/securenetwork/SecureNetworkBuilder;)V
+}
+
+public final class io/cloudshiftdev/awscdklib/network/securenetwork/SubnetGroupBuilder {
 	public final fun allowCrossAzNaclFlows ()V
 	public final fun cidrMask (I)V
-	public final fun getRouting ()Lio/cloudshiftdev/awscdklib/network/securevpc/RouteBuilder;
 	public final fun reserved ()V
-	public final fun routing (Lkotlin/jvm/functions/Function1;)V
 }
 
-public final class io/cloudshiftdev/awscdklib/network/securevpc/SubnetGroupSpec {
-	public fun <init> (Ljava/lang/String;Lio/cloudshiftdev/awscdklib/network/SubnetGroupType;Ljava/lang/Integer;ZLjava/util/List;Z)V
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAllowCrossAzNaclFlows ()Z
-	public final fun getCidrMask ()Ljava/lang/Integer;
-	public final fun getName ()Ljava/lang/String;
-	public final fun getReserved ()Z
-	public final fun getRoutes ()Ljava/util/List;
-	public final fun getSubnetGroupType ()Lio/cloudshiftdev/awscdklib/network/SubnetGroupType;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder {
+	public abstract fun isolatedSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun privateSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun publicSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun subnetGroup (Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;Lkotlin/jvm/functions/Function1;)V
 }
 
-public abstract interface class io/cloudshiftdev/awscdklib/network/securevpc/SubnetResolver {
-	public abstract fun resolve (Ljava/lang/String;Ljava/lang/String;)Lio/cloudshiftdev/awscdk/services/ec2/Subnet;
-}
-
-public final class io/cloudshiftdev/awscdklib/network/securevpc/SubnetRouteSpec {
-	public fun <init> (Lio/cloudshiftdev/awscdklib/network/securevpc/RouteDestination;Lio/cloudshiftdev/awscdklib/network/routable/Routable;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDestination ()Lio/cloudshiftdev/awscdklib/network/securevpc/RouteDestination;
-	public final fun getRoutable ()Lio/cloudshiftdev/awscdklib/network/routable/Routable;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+public final class io/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder$DefaultImpls {
+	public static fun isolatedSubnetGroup (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun isolatedSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun privateSubnetGroup (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun privateSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun publicSubnetGroup (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun publicSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
 public final class io/cloudshiftdev/awscdklib/s3/ExtensionsKt {

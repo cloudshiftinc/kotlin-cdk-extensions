@@ -41,7 +41,7 @@ public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBu
         }
     }
 
-    private fun vpc(props:SecureNetworkProps): Vpc {
+    private fun vpc(props: SecureNetworkProps): Vpc {
         val vpc =
             Vpc(this, "Vpc") {
                 props.availabilityZones.takeIf { it.isNotEmpty() }?.let(::availabilityZones)
@@ -67,9 +67,7 @@ public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBu
                 }
             }
 
-        props.routerProviders.forEach {
-            it.create(vpc)
-        }
+        props.routerProviders.forEach { it.create(vpc) }
         return vpc
     }
 
@@ -84,9 +82,7 @@ public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBu
 public fun SecureNetworkBuilder.publicPrivateIsolatedNetwork() {
     subnets {
         publicSubnetGroup { cidrMask(26) }
-        privateSubnetGroup {
-            allowCrossAzNaclFlows()
-        }
+        privateSubnetGroup { allowCrossAzNaclFlows() }
         isolatedSubnetGroup { allowCrossAzNaclFlows() }
     }
 
@@ -106,12 +102,8 @@ public fun SecureNetworkBuilder.publicPrivateIsolatedNetworkWithFirewall() {
     }
 
     subnets {
-        publicSubnetGroup {
-            cidrMask(26)
-        }
-        privateSubnetGroup("NetworkFirewall") {
-            cidrMask(28)
-        }
+        publicSubnetGroup { cidrMask(26) }
+        privateSubnetGroup("NetworkFirewall") { cidrMask(28) }
         isolatedSubnetGroup("Private")
         isolatedSubnetGroup()
     }

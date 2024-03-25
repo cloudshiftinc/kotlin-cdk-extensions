@@ -441,7 +441,7 @@
         }
       }
     },
-    "FirewallPolicyCustomResource763C729C": {
+    "FirewallCustomResourceBEC1FB63": {
       "Type": "Custom::AWS",
       "Properties": {
         "ServiceToken": {
@@ -472,15 +472,37 @@
             ]
           ]
         },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"action\":\"DescribeFirewall\",\"service\":\"networkfirewall\",\"parameters\":{\"FirewallArn\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MyVpcFirewall5D3F14BC",
+                  "FirewallArn"
+                ]
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MyVpcFirewall5D3F14BC",
+                  "FirewallArn"
+                ]
+              },
+              "\"}}"
+            ]
+          ]
+        },
         "InstallLatestAwsSdk": "false"
       },
       "DependsOn": [
-        "FirewallPolicyCustomResourceCustomResourcePolicyD9138B13"
+        "FirewallCustomResourceCustomResourcePolicy238D4884"
       ],
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete"
     },
-    "FirewallPolicyCustomResourceCustomResourcePolicyD9138B13": {
+    "FirewallCustomResourceCustomResourcePolicy238D4884": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -498,7 +520,7 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "FirewallPolicyCustomResourceCustomResourcePolicyD9138B13",
+        "PolicyName": "FirewallCustomResourceCustomResourcePolicy238D4884",
         "Roles": [
           {
             "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"

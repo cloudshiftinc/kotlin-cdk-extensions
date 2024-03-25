@@ -70,7 +70,6 @@ public inline fun <reified T> Construct.withSingleton(
 public val IConstruct.stack: Stack
     get() = Stack.of(this)
 
-
 public val Int.seconds: Duration
     get() = Duration.seconds(this)
 

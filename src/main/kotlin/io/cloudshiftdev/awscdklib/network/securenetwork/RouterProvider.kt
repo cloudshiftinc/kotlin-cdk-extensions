@@ -49,13 +49,14 @@ internal class EgressNetworkFirewallRouterProvider(
 ) : BaseRouterProvider(routerSubnet) {
     override fun create(vpc: Vpc) {
 
-        val firewallPolicy = FirewallPolicy(
-            scope = vpc,
-            id = "FirewallPolicy",
-            // TODO: make these configurable
-            statelessDefaultActions = listOf(StatelessStandardAction.PASS),
-            statelessFragmentDefaultActions = listOf(StatelessStandardAction.PASS)
-        )
+        val firewallPolicy =
+            FirewallPolicy(
+                scope = vpc,
+                id = "FirewallPolicy",
+                // TODO: make these configurable
+                statelessDefaultActions = listOf(StatelessStandardAction.PASS),
+                statelessFragmentDefaultActions = listOf(StatelessStandardAction.PASS)
+            )
 
         val firewall =
             NetworkFirewall(
@@ -81,13 +82,16 @@ internal class EgressNetworkFirewallRouterProvider(
 
         val azMap = firewall.availabilityZoneEndpointMap
 
-        val azRouteInfo = azMap.entries.map { azEntry ->
-            AzRouteInfo(
-                az = azEntry.key,
-                endpointId = azEntry.value,
-                protectedSubnets = protectedSubnets.filter { it.availabilityZone() == azEntry.key },
-                ingressSubnets = ingress.filter { it.availabilityZone() == azEntry.key })
-        }
+        val azRouteInfo =
+            azMap.entries.map { azEntry ->
+                AzRouteInfo(
+                    az = azEntry.key,
+                    endpointId = azEntry.value,
+                    protectedSubnets =
+                        protectedSubnets.filter { it.availabilityZone() == azEntry.key },
+                    ingressSubnets = ingress.filter { it.availabilityZone() == azEntry.key }
+                )
+            }
         azRouteInfo.forEach { routeInfo ->
             routeInfo.protectedSubnets.forEach { protectedSubnet ->
 
@@ -101,7 +105,9 @@ internal class EgressNetworkFirewallRouterProvider(
 
                 // reverse flow back from NAT gateway to firewall
                 routeInfo.ingressSubnets.forEach { ingressSubnet ->
-                    ingressSubnet.addRoute("NetworkFirewallIngressRoute${protectedSubnet.address}") {
+                    ingressSubnet.addRoute(
+                        "NetworkFirewallIngressRoute${protectedSubnet.address}"
+                    ) {
                         routerId(routeInfo.endpointId)
                         routerType(RouterType.VPC_ENDPOINT)
                         enablesInternetConnectivity(true)
@@ -112,5 +118,3 @@ internal class EgressNetworkFirewallRouterProvider(
         }
     }
 }
-
-

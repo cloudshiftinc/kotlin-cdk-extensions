@@ -42,17 +42,20 @@ public class FirewallPolicy(
     public val firewallPolicyArn: String
 
     init {
-        val policy = CfnFirewallPolicy(this, "CfnFirewallPolicy") {
-            firewallPolicyName(firewallPolicyName ?: id)
-            description?.let(::description)
-            firewallPolicy(
-                CfnFirewallPolicy.FirewallPolicyProperty {
-                    statelessDefaultActions(statelessDefaultActions.map { it.value })
-                    statelessFragmentDefaultActions(statelessFragmentDefaultActions.map { it.value })
-                    statefulDefaultActions(statefulDefaultActions.map { it.value })
-                }
-            )
-        }
+        val policy =
+            CfnFirewallPolicy(this, "CfnFirewallPolicy") {
+                firewallPolicyName(firewallPolicyName ?: id)
+                description?.let(::description)
+                firewallPolicy(
+                    CfnFirewallPolicy.FirewallPolicyProperty {
+                        statelessDefaultActions(statelessDefaultActions.map { it.value })
+                        statelessFragmentDefaultActions(
+                            statelessFragmentDefaultActions.map { it.value }
+                        )
+                        statefulDefaultActions(statefulDefaultActions.map { it.value })
+                    }
+                )
+            }
 
         firewallPolicyId = policy.attrFirewallPolicyId()
         firewallPolicyArn = policy.attrFirewallPolicyArn()
@@ -60,7 +63,8 @@ public class FirewallPolicy(
 }
 
 public class NetworkFirewall(
-    scope: Construct, id: String,
+    scope: Construct,
+    id: String,
     vpc: Vpc,
     subnetMappings: SubnetSelection,
     firewallName: String,
@@ -74,38 +78,41 @@ public class NetworkFirewall(
     init {
         val placementSubnets = vpc.selectSubnets(subnetMappings).subnets()
 
-        val nfw = CfnFirewall(vpc, "Firewall") {
-            firewallName(firewallName)
-            vpcId(vpc.vpcId())
-            subnetMappings(placementSubnets.toSubnetMappings())
-            firewallPolicyArn(firewallPolicy.firewallPolicyArn)
-        }
-
-        // WTF AWS: https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-networkfirewall/issues/15
-
-        val lookupNfwEndpoints = AwsCustomResource(scope, "FirewallCustomResource") {
-            onCreate {
-                service("networkfirewall")
-                action("DescribeFirewall")
-                parameters(mapOf("FirewallArn" to nfw.attrFirewallArn()))
-                physicalResourceId(PhysicalResourceId.of(nfw.attrFirewallArn()))
+        val nfw =
+            CfnFirewall(vpc, "Firewall") {
+                firewallName(firewallName)
+                vpcId(vpc.vpcId())
+                subnetMappings(placementSubnets.toSubnetMappings())
+                firewallPolicyArn(firewallPolicy.firewallPolicyArn)
             }
-            onUpdate {
-                service("networkfirewall")
-                action("DescribeFirewall")
-                parameters(mapOf("FirewallArn" to nfw.attrFirewallArn()))
-                physicalResourceId(PhysicalResourceId.of(nfw.attrFirewallArn()))
+
+        // WTF AWS:
+        // https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-networkfirewall/issues/15
+
+        val lookupNfwEndpoints =
+            AwsCustomResource(scope, "FirewallCustomResource") {
+                onCreate {
+                    service("networkfirewall")
+                    action("DescribeFirewall")
+                    parameters(mapOf("FirewallArn" to nfw.attrFirewallArn()))
+                    physicalResourceId(PhysicalResourceId.of(nfw.attrFirewallArn()))
+                }
+                onUpdate {
+                    service("networkfirewall")
+                    action("DescribeFirewall")
+                    parameters(mapOf("FirewallArn" to nfw.attrFirewallArn()))
+                    physicalResourceId(PhysicalResourceId.of(nfw.attrFirewallArn()))
+                }
+                installLatestAwsSdk(false)
+                policy(AwsCustomResourcePolicy.fromSdkCalls { resources(nfw.attrFirewallArn()) })
             }
-            installLatestAwsSdk(false)
-            policy(AwsCustomResourcePolicy.fromSdkCalls {
-                resources(nfw.attrFirewallArn())
-            })
-        }
 
         val azs = placementSubnets.map { it.availabilityZone() }
-        availabilityZoneEndpointMap = azs
-            .associateWith {
-                lookupNfwEndpoints.responseField("FirewallStatus.SyncStates.${it}.Attachment.EndpointId")
+        availabilityZoneEndpointMap =
+            azs.associateWith {
+                lookupNfwEndpoints.responseField(
+                    "FirewallStatus.SyncStates.${it}.Attachment.EndpointId"
+                )
             }
 
         endpointIds = nfw.attrEndpointIds()
@@ -114,10 +121,6 @@ public class NetworkFirewall(
     }
 
     private fun List<ISubnet>.toSubnetMappings(): List<CfnFirewall.SubnetMappingProperty> {
-        return map {
-            CfnFirewall.SubnetMappingProperty {
-                subnetId(it.subnetId())
-            }
-        }
+        return map { CfnFirewall.SubnetMappingProperty { subnetId(it.subnetId()) } }
     }
 }

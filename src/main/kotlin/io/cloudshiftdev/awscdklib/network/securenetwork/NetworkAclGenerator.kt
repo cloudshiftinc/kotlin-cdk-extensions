@@ -148,7 +148,8 @@ internal object NetworkAclGenerator {
 
         // allow internet flows for PUBLIC, PRIVATE subnets
         when (subnetGroup.subnetType) {
-            SubnetType.PRIVATE_WITH_EGRESS, SubnetType.PUBLIC -> {
+            SubnetType.PRIVATE_WITH_EGRESS,
+            SubnetType.PUBLIC -> {
                 // deny traffic to other local networks
                 // only necessary when followed by allow as there's a default DENY ALL for nacls as
                 // the last rule
