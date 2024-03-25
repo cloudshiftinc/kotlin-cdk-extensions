@@ -1,4 +1,4 @@
-name: 'Build KProcess'
+name: 'kotlin-cdk-extensions'
 on:
   push:
     branches: [ "main" ]

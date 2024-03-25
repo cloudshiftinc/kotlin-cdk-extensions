@@ -53,3 +53,8 @@ kotlin {
     explicitApi()
     jvmToolchain(17)
 }
+
+tasks.withType<KtfmtFormatTask>().configureEach {
+    enabled = false
+}
+
