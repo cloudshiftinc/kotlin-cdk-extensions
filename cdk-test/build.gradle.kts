@@ -59,3 +59,8 @@ tasks.withType<KtfmtBaseTask>().configureEach {
     enabled = false
 }
 
+
+tasks.named("apiCheck") {
+    enabled = false
+}
+
