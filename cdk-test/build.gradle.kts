@@ -1,4 +1,5 @@
 import com.gradle.scan.agent.serialization.scan.serializer.kryo.ja
+import com.ncorti.ktfmt.gradle.tasks.KtfmtBaseTask
 import com.ncorti.ktfmt.gradle.tasks.KtfmtCheckTask
 import com.ncorti.ktfmt.gradle.tasks.KtfmtFormatTask
 import com.vanniktech.maven.publish.SonatypeHost
@@ -54,7 +55,7 @@ kotlin {
     jvmToolchain(17)
 }
 
-tasks.withType<KtfmtFormatTask>().configureEach {
+tasks.withType<KtfmtBaseTask>().configureEach {
     enabled = false
 }
 
