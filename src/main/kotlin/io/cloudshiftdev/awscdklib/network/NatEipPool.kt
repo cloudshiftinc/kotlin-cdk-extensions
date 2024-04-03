@@ -3,7 +3,6 @@ package io.cloudshiftdev.awscdklib.network
 import io.cloudshiftdev.awscdk.CfnOutput
 import io.cloudshiftdev.awscdk.RemovalPolicy
 import io.cloudshiftdev.awscdk.services.ec2.CfnEIP
-import io.cloudshiftdev.awscdklib.core.address
 import io.cloudshiftdev.constructs.Construct
 
 public class NatEipPool(scope: Construct, id: String, poolSize: Int) : Construct(scope, id) {
@@ -24,9 +23,7 @@ public class NatEipPool(scope: Construct, id: String, poolSize: Int) : Construct
 
         eipConstructs.forEachIndexed { idx, eip ->
             val outputId = "natPublicIp${idx + 1}"
-            CfnOutput(scope, outputId) {
-                value(eip.attrPublicIp())
-            }
+            CfnOutput(scope, outputId) { value(eip.attrPublicIp()) }
         }
     }
 }
