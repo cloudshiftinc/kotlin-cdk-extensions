@@ -222,11 +222,14 @@ public interface NaclBuilder {
     public fun denyToLocalNetwork(cidr: String)
 
     public fun denyToAllPrivateNetworks()
+
+    public fun egressSubnets(vararg subnets: String)
 }
 
 internal class NaclBuilderImpl : NaclBuilder {
     private val peeredSubnets = mutableListOf<NaclPeering>()
     private val localNetworks = mutableListOf<CidrBlock>()
+    private val egressSubnets = mutableListOf<String>()
 
     override fun allowBetween(subnet: String, peeredSubnet: String) {
         validateSubnetGroupName(subnet)
@@ -249,8 +252,16 @@ internal class NaclBuilderImpl : NaclBuilder {
         localNetworks.addAll(CidrBlock.privateNetworks())
     }
 
+    override fun egressSubnets(vararg subnets: String) {
+        egressSubnets.addAll(subnets.toList())
+    }
+
     internal fun build(): NaclSpec {
-        return NaclSpec(peeredSubnets, localNetworks.ifEmpty { CidrBlock.privateNetworks() })
+        return NaclSpec(
+            peeredSubnets,
+            localNetworks.ifEmpty { CidrBlock.privateNetworks() },
+            egressSubnets.toSet()
+        )
     }
 }
 

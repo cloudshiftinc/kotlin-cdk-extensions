@@ -32,7 +32,8 @@ internal data class NetworkAclFlow(
 
 internal data class NaclSpec(
     val peeredSubnets: List<NaclPeering>,
-    val localNetworks: List<CidrBlock>
+    val localNetworks: List<CidrBlock>,
+    val egressSubnets: Set<String>
 )
 
 internal data class NaclPeering(val subnet: String, val peeredSubnet: String)
@@ -41,15 +42,21 @@ internal object NetworkAclGenerator {
 
     fun generate(
         vpc: Vpc,
-        peeredSubnets: List<NaclPeering>,
+        naclSpec: NaclSpec,
         subnetSpecs: List<SubnetGroupProps>,
-        localNetworks: List<CidrBlock>
     ) {
-        val peeredSubnetMap = generateSubnetMap(peeredSubnets, subnetSpecs)
+        val peeredSubnetMap = generateSubnetMap(naclSpec.peeredSubnets, subnetSpecs)
 
         peeredSubnetMap.asMap().forEach { entry ->
             val subnet = entry.key
-            val flows = generateFlows(subnet, entry.value, vpc, localNetworks)
+            val flows =
+                generateFlows(
+                    subnet,
+                    entry.value,
+                    vpc,
+                    naclSpec.localNetworks,
+                    naclSpec.egressSubnets
+                )
 
             // create a hash of flows such that any changes (new subnet, etc) will force a new NACL
             // to be provisioned
@@ -113,7 +120,8 @@ internal object NetworkAclGenerator {
         subnetGroup: SubnetGroupProps,
         peeredSubnetGroups: Collection<SubnetGroupProps>,
         vpc: Vpc,
-        localNetworkCidrBlocks: List<CidrBlock>
+        localNetworkCidrBlocks: List<CidrBlock>,
+        egressSubnets: Set<String>
     ): MutableList<NetworkAclFlow> {
         // order of flows is important as they reflect the order that nacl entries are processed in
         val flows = mutableListOf<NetworkAclFlow>()
@@ -147,9 +155,8 @@ internal object NetworkAclGenerator {
         )
 
         // allow internet flows for PUBLIC, PRIVATE subnets
-        when (subnetGroup.subnetType) {
-            SubnetType.PRIVATE_WITH_EGRESS,
-            SubnetType.PUBLIC -> {
+        when {
+            isEgressSubnet(subnetGroup, egressSubnets) -> {
                 // deny traffic to other local networks
                 // only necessary when followed by allow as there's a default DENY ALL for nacls as
                 // the last rule
@@ -177,6 +184,17 @@ internal object NetworkAclGenerator {
             else -> {}
         }
         return flows
+    }
+
+    private fun isEgressSubnet(subnetGroup: SubnetGroupProps, egressSubnets: Set<String>): Boolean {
+        return when {
+            subnetGroup.subnetType == SubnetType.PRIVATE_WITH_EGRESS -> true
+            subnetGroup.subnetType == SubnetType.PUBLIC -> true
+
+            // or any specified subnet group that allows egress
+            subnetGroup.name in egressSubnets -> true
+            else -> false
+        }
     }
 
     private fun collapseCidrs(

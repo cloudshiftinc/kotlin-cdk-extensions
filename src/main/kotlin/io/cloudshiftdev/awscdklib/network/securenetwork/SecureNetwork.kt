@@ -17,12 +17,7 @@ public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBu
         val props = secureNetworkProps(block)
         vpc = vpc(props)
 
-        NetworkAclGenerator.generate(
-            vpc,
-            props.naclSpec.peeredSubnets,
-            props.subnetGroups,
-            props.naclSpec.localNetworks
-        )
+        NetworkAclGenerator.generate(vpc, props.naclSpec, props.subnetGroups)
 
         createFlowLog(vpc)
     }
