@@ -177,6 +177,13 @@ public interface SubnetsBuilder {
         subnetGroup(name, SubnetType.PUBLIC, block)
     }
 
+    public fun publicSubnetGroup(
+        name: SubnetGroupName,
+        block: (SubnetGroupBuilder).() -> Unit = {}
+    ) {
+        subnetGroup(name, SubnetType.PUBLIC, block)
+    }
+
     public fun privateSubnetGroup(
         name: String = "Private",
         block: (SubnetGroupBuilder).() -> Unit = {}
@@ -184,8 +191,22 @@ public interface SubnetsBuilder {
         subnetGroup(name, SubnetType.PRIVATE_WITH_EGRESS, block)
     }
 
+    public fun privateSubnetGroup(
+        name: SubnetGroupName,
+        block: (SubnetGroupBuilder).() -> Unit = {}
+    ) {
+        subnetGroup(name, SubnetType.PRIVATE_WITH_EGRESS, block)
+    }
+
     public fun isolatedSubnetGroup(
         name: String = "Isolated",
+        block: (SubnetGroupBuilder).() -> Unit = {}
+    ) {
+        subnetGroup(name, SubnetType.PRIVATE_ISOLATED, block)
+    }
+
+    public fun isolatedSubnetGroup(
+        name: SubnetGroupName,
         block: (SubnetGroupBuilder).() -> Unit = {}
     ) {
         subnetGroup(name, SubnetType.PRIVATE_ISOLATED, block)

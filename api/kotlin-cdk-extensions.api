@@ -256,8 +256,11 @@ public final class io/cloudshiftdev/awscdklib/network/securenetwork/SubnetGroupB
 
 public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder {
 	public abstract fun isolatedSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun isolatedSubnetGroup-uIp5qyk (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public abstract fun privateSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun privateSubnetGroup-uIp5qyk (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public abstract fun publicSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun publicSubnetGroup-uIp5qyk (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public abstract fun subnetGroup (Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;Lkotlin/jvm/functions/Function1;)V
 	public abstract fun subnetGroup-l_74Hag (Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;Lkotlin/jvm/functions/Function1;)V
 }
@@ -265,10 +268,16 @@ public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork
 public final class io/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder$DefaultImpls {
 	public static fun isolatedSubnetGroup (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun isolatedSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun isolatedSubnetGroup-uIp5qyk (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun isolatedSubnetGroup-uIp5qyk$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static fun privateSubnetGroup (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun privateSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun privateSubnetGroup-uIp5qyk (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun privateSubnetGroup-uIp5qyk$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static fun publicSubnetGroup (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun publicSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun publicSubnetGroup-uIp5qyk (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun publicSubnetGroup-uIp5qyk$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static fun subnetGroup (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;Lkotlin/jvm/functions/Function1;)V
 }
 
