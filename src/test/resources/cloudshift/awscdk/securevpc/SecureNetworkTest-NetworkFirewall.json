@@ -908,13 +908,13 @@
         ]
       }
     },
-    "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45c4AE80F6F": {
+    "MySecureNetworkVpcIsolatedSubnets54B96B80": {
       "Type": "AWS::EC2::NetworkAcl",
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "TestStack/MySecureNetwork/Vpc/IsolatedSubnets62a2104787e7e76d58c1adcb3337e45c"
+            "Value": "IsolatedSubnets"
           }
         ],
         "VpcId": {
@@ -922,35 +922,35 @@
         }
       }
     },
-    "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cDefaultAssociationTestStackMySecureNetworkVpcIsolatedSubnet1D60C1DD49D3AC3D6": {
+    "MySecureNetworkVpcIsolatedSubnetsDefaultAssociationTestStackMySecureNetworkVpcIsolatedSubnet1D60C1DD40656980F": {
       "Type": "AWS::EC2::SubnetNetworkAclAssociation",
       "Properties": {
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45c4AE80F6F"
+          "Ref": "MySecureNetworkVpcIsolatedSubnets54B96B80"
         },
         "SubnetId": {
           "Ref": "MySecureNetworkVpcIsolatedSubnet1SubnetB6F4DA45"
         }
       }
     },
-    "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cDefaultAssociationTestStackMySecureNetworkVpcIsolatedSubnet28206D26C0CF15B70": {
+    "MySecureNetworkVpcIsolatedSubnetsDefaultAssociationTestStackMySecureNetworkVpcIsolatedSubnet28206D26CDF3EB36C": {
       "Type": "AWS::EC2::SubnetNetworkAclAssociation",
       "Properties": {
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45c4AE80F6F"
+          "Ref": "MySecureNetworkVpcIsolatedSubnets54B96B80"
         },
         "SubnetId": {
           "Ref": "MySecureNetworkVpcIsolatedSubnet2Subnet97F98D8E"
         }
       }
     },
-    "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cAllowInboundFromPrivateSubnetsRule100022671EBF": {
+    "MySecureNetworkVpcIsolatedSubnetsAllowInboundFromPrivateSubnetsRule10009809BB0D": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.2.0/23",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45c4AE80F6F"
+          "Ref": "MySecureNetworkVpcIsolatedSubnets54B96B80"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -960,13 +960,13 @@
         "cloudshift:comment": "Isolated Subnets Allow Inbound From Private Subnets Rule 1000"
       }
     },
-    "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cAllowInboundFromPrivateSubnetsRule1005E776F53E": {
+    "MySecureNetworkVpcIsolatedSubnetsAllowInboundFromPrivateSubnetsRule1005368B3538": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.4.0/23",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45c4AE80F6F"
+          "Ref": "MySecureNetworkVpcIsolatedSubnets54B96B80"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -976,13 +976,13 @@
         "cloudshift:comment": "Isolated Subnets Allow Inbound From Private Subnets Rule 1005"
       }
     },
-    "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cAllowOutboundToPrivateSubnetsRule1000FD1CD106": {
+    "MySecureNetworkVpcIsolatedSubnetsAllowOutboundToPrivateSubnetsRule1000DAF7CD94": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.2.0/23",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45c4AE80F6F"
+          "Ref": "MySecureNetworkVpcIsolatedSubnets54B96B80"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -992,13 +992,13 @@
         "cloudshift:comment": "Isolated Subnets Allow Outbound To Private Subnets Rule 1000"
       }
     },
-    "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45cAllowOutboundToPrivateSubnetsRule1005CC9F5E8E": {
+    "MySecureNetworkVpcIsolatedSubnetsAllowOutboundToPrivateSubnetsRule100543FCDB80": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.4.0/23",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcIsolatedSubnets62a2104787e7e76d58c1adcb3337e45c4AE80F6F"
+          "Ref": "MySecureNetworkVpcIsolatedSubnets54B96B80"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1008,13 +1008,13 @@
         "cloudshift:comment": "Isolated Subnets Allow Outbound To Private Subnets Rule 1005"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA": {
       "Type": "AWS::EC2::NetworkAcl",
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "TestStack/MySecureNetwork/Vpc/NetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560"
+            "Value": "NetworkFirewallSubnets"
           }
         ],
         "VpcId": {
@@ -1022,35 +1022,35 @@
         }
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560DefaultAssociationTestStackMySecureNetworkVpcNetworkFirewallSubnet17AE3B06A61F5DD72": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsDefaultAssociationTestStackMySecureNetworkVpcNetworkFirewallSubnet17AE3B06A05A6E2DE": {
       "Type": "AWS::EC2::SubnetNetworkAclAssociation",
       "Properties": {
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "SubnetId": {
           "Ref": "MySecureNetworkVpcNetworkFirewallSubnet1Subnet130AF3AC"
         }
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560DefaultAssociationTestStackMySecureNetworkVpcNetworkFirewallSubnet2F29AFE2CCC4231E0": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsDefaultAssociationTestStackMySecureNetworkVpcNetworkFirewallSubnet2F29AFE2C32385631": {
       "Type": "AWS::EC2::SubnetNetworkAclAssociation",
       "Properties": {
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "SubnetId": {
           "Ref": "MySecureNetworkVpcNetworkFirewallSubnet2Subnet2806CD2F"
         }
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560AllowInboundFromPublicAndPrivateSubnetsRule1000D2EC7B19": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsAllowInboundFromPublicAndPrivateSubnetsRule1000DFE94B4B": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.0.0/25",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1060,13 +1060,13 @@
         "cloudshift:comment": "NetworkFirewall Subnets Allow Inbound From Public And Private Subnets Rule 1000"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560AllowInboundFromPublicAndPrivateSubnetsRule10057D8C9DBB": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsAllowInboundFromPublicAndPrivateSubnetsRule1005D21F929E": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.2.0/23",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1076,13 +1076,13 @@
         "cloudshift:comment": "NetworkFirewall Subnets Allow Inbound From Public And Private Subnets Rule 1005"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560AllowInboundFromPublicAndPrivateSubnetsRule1010B7244960": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsAllowInboundFromPublicAndPrivateSubnetsRule101064C173F3": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.4.0/23",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1092,13 +1092,13 @@
         "cloudshift:comment": "NetworkFirewall Subnets Allow Inbound From Public And Private Subnets Rule 1010"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560AllowOutboundToPublicAndPrivateSubnetsRule1000BDF32671": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsAllowOutboundToPublicAndPrivateSubnetsRule100019EF3416": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.0.0/25",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1108,13 +1108,13 @@
         "cloudshift:comment": "NetworkFirewall Subnets Allow Outbound To Public And Private Subnets Rule 1000"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560AllowOutboundToPublicAndPrivateSubnetsRule100543C342B8": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsAllowOutboundToPublicAndPrivateSubnetsRule10057E8A76E6": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.2.0/23",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1124,13 +1124,13 @@
         "cloudshift:comment": "NetworkFirewall Subnets Allow Outbound To Public And Private Subnets Rule 1005"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560AllowOutboundToPublicAndPrivateSubnetsRule101043CFA3F0": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsAllowOutboundToPublicAndPrivateSubnetsRule101051E1A8DB": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.4.0/23",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1140,7 +1140,7 @@
         "cloudshift:comment": "NetworkFirewall Subnets Allow Outbound To Public And Private Subnets Rule 1010"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560DenyInboundFromLocalNetworkRule120034227103": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsDenyInboundFromLocalNetworkRule1200DA81F8DE": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": {
@@ -1151,7 +1151,7 @@
         },
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "deny",
@@ -1161,7 +1161,7 @@
         "cloudshift:comment": "NetworkFirewall Subnets Deny Inbound From Local Network Rule 1200"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560DenyOutboundToLocalNetworkRule1200279BA038": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsDenyOutboundToLocalNetworkRule12007DD01F27": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": {
@@ -1172,7 +1172,7 @@
         },
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "deny",
@@ -1182,13 +1182,13 @@
         "cloudshift:comment": "NetworkFirewall Subnets Deny Outbound To Local Network Rule 1200"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560AllowInboundFromInternetRule1400FED29BC9": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsAllowInboundFromInternetRule140035D54A7B": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "0.0.0.0/0",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1198,13 +1198,13 @@
         "cloudshift:comment": "NetworkFirewall Subnets Allow Inbound From Internet Rule 1400"
       }
     },
-    "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd46560AllowOutboundToInternetRule1400F8DFEED9": {
+    "MySecureNetworkVpcNetworkFirewallSubnetsAllowOutboundToInternetRule14003E40FFEA": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "0.0.0.0/0",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcNetworkFirewallSubnets1b0f9e64a488a9a94699461eccd465600CF9F07B"
+          "Ref": "MySecureNetworkVpcNetworkFirewallSubnetsEDEABFDA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1214,13 +1214,13 @@
         "cloudshift:comment": "NetworkFirewall Subnets Allow Outbound To Internet Rule 1400"
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79": {
+    "MySecureNetworkVpcPrivateSubnetsA7560DBA": {
       "Type": "AWS::EC2::NetworkAcl",
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "TestStack/MySecureNetwork/Vpc/PrivateSubnets2900a5dc5b27e66d9c374463ca9f0458"
+            "Value": "PrivateSubnets"
           }
         ],
         "VpcId": {
@@ -1228,35 +1228,35 @@
         }
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458DefaultAssociationTestStackMySecureNetworkVpcPrivateSubnet12A53ECF0268F8240": {
+    "MySecureNetworkVpcPrivateSubnetsDefaultAssociationTestStackMySecureNetworkVpcPrivateSubnet12A53ECF0A13FD36A": {
       "Type": "AWS::EC2::SubnetNetworkAclAssociation",
       "Properties": {
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "SubnetId": {
           "Ref": "MySecureNetworkVpcPrivateSubnet1Subnet3B6546FB"
         }
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458DefaultAssociationTestStackMySecureNetworkVpcPrivateSubnet27E3C79AD9B1EE593": {
+    "MySecureNetworkVpcPrivateSubnetsDefaultAssociationTestStackMySecureNetworkVpcPrivateSubnet27E3C79AD8D53A793": {
       "Type": "AWS::EC2::SubnetNetworkAclAssociation",
       "Properties": {
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "SubnetId": {
           "Ref": "MySecureNetworkVpcPrivateSubnet2Subnet11FF6F8F"
         }
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458AllowInboundFromNetworkFirewallAndIsolatedSubnetsRule1000BCDEB2C0": {
+    "MySecureNetworkVpcPrivateSubnetsAllowInboundFromNetworkFirewallAndIsolatedSubnetsRule1000007ED98A": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.0.192/27",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1266,13 +1266,13 @@
         "cloudshift:comment": "Private Subnets Allow Inbound From Network Firewall And Isolated Subnets Rule 1000"
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458AllowInboundFromNetworkFirewallAndIsolatedSubnetsRule1005CEAB0CA5": {
+    "MySecureNetworkVpcPrivateSubnetsAllowInboundFromNetworkFirewallAndIsolatedSubnetsRule10059A32656E": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.8.0/22",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1282,13 +1282,13 @@
         "cloudshift:comment": "Private Subnets Allow Inbound From Network Firewall And Isolated Subnets Rule 1005"
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458AllowOutboundToNetworkFirewallAndIsolatedSubnetsRule100031855377": {
+    "MySecureNetworkVpcPrivateSubnetsAllowOutboundToNetworkFirewallAndIsolatedSubnetsRule10006D7AEBA3": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.0.192/27",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1298,13 +1298,13 @@
         "cloudshift:comment": "Private Subnets Allow Outbound To Network Firewall And Isolated Subnets Rule 1000"
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458AllowOutboundToNetworkFirewallAndIsolatedSubnetsRule10057A511098": {
+    "MySecureNetworkVpcPrivateSubnetsAllowOutboundToNetworkFirewallAndIsolatedSubnetsRule1005E3E11173": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.8.0/22",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1314,7 +1314,7 @@
         "cloudshift:comment": "Private Subnets Allow Outbound To Network Firewall And Isolated Subnets Rule 1005"
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458DenyInboundFromLocalNetworkRule120074BD850A": {
+    "MySecureNetworkVpcPrivateSubnetsDenyInboundFromLocalNetworkRule12004C6E9B7E": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": {
@@ -1325,7 +1325,7 @@
         },
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "Protocol": "-1",
         "RuleAction": "deny",
@@ -1335,7 +1335,7 @@
         "cloudshift:comment": "Private Subnets Deny Inbound From Local Network Rule 1200"
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458DenyOutboundToLocalNetworkRule1200C1BC40FF": {
+    "MySecureNetworkVpcPrivateSubnetsDenyOutboundToLocalNetworkRule12004BAEBDF3": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": {
@@ -1346,7 +1346,7 @@
         },
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "Protocol": "-1",
         "RuleAction": "deny",
@@ -1356,13 +1356,13 @@
         "cloudshift:comment": "Private Subnets Deny Outbound To Local Network Rule 1200"
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458AllowInboundFromInternetRule14000B693253": {
+    "MySecureNetworkVpcPrivateSubnetsAllowInboundFromInternetRule140008730932": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "0.0.0.0/0",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1372,13 +1372,13 @@
         "cloudshift:comment": "Private Subnets Allow Inbound From Internet Rule 1400"
       }
     },
-    "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f0458AllowOutboundToInternetRule14003D553F2B": {
+    "MySecureNetworkVpcPrivateSubnetsAllowOutboundToInternetRule14008D6FB35B": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "0.0.0.0/0",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPrivateSubnets2900a5dc5b27e66d9c374463ca9f045827EEAB79"
+          "Ref": "MySecureNetworkVpcPrivateSubnetsA7560DBA"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1388,13 +1388,13 @@
         "cloudshift:comment": "Private Subnets Allow Outbound To Internet Rule 1400"
       }
     },
-    "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b13440457F": {
+    "MySecureNetworkVpcPublicSubnets508AB722": {
       "Type": "AWS::EC2::NetworkAcl",
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "TestStack/MySecureNetwork/Vpc/PublicSubnetsd8d350613a1dcae69043cba5277076b1"
+            "Value": "PublicSubnets"
           }
         ],
         "VpcId": {
@@ -1402,35 +1402,35 @@
         }
       }
     },
-    "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b1DefaultAssociationTestStackMySecureNetworkVpcPublicSubnet1587EF40B88610072": {
+    "MySecureNetworkVpcPublicSubnetsDefaultAssociationTestStackMySecureNetworkVpcPublicSubnet1587EF40B80F95AA4": {
       "Type": "AWS::EC2::SubnetNetworkAclAssociation",
       "Properties": {
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b13440457F"
+          "Ref": "MySecureNetworkVpcPublicSubnets508AB722"
         },
         "SubnetId": {
           "Ref": "MySecureNetworkVpcPublicSubnet1SubnetB2ED5840"
         }
       }
     },
-    "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b1DefaultAssociationTestStackMySecureNetworkVpcPublicSubnet2DF70607163FA26D4": {
+    "MySecureNetworkVpcPublicSubnetsDefaultAssociationTestStackMySecureNetworkVpcPublicSubnet2DF70607193863B3B": {
       "Type": "AWS::EC2::SubnetNetworkAclAssociation",
       "Properties": {
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b13440457F"
+          "Ref": "MySecureNetworkVpcPublicSubnets508AB722"
         },
         "SubnetId": {
           "Ref": "MySecureNetworkVpcPublicSubnet2Subnet6395CFF0"
         }
       }
     },
-    "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b1AllowInboundFromNetworkFirewallSubnetsRule100081ED4054": {
+    "MySecureNetworkVpcPublicSubnetsAllowInboundFromNetworkFirewallSubnetsRule100099E39C7E": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.0.192/27",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b13440457F"
+          "Ref": "MySecureNetworkVpcPublicSubnets508AB722"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1440,13 +1440,13 @@
         "cloudshift:comment": "Public Subnets Allow Inbound From Network Firewall Subnets Rule 1000"
       }
     },
-    "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b1AllowOutboundToNetworkFirewallSubnetsRule100015B28AD0": {
+    "MySecureNetworkVpcPublicSubnetsAllowOutboundToNetworkFirewallSubnetsRule1000D013A820": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "10.200.0.192/27",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b13440457F"
+          "Ref": "MySecureNetworkVpcPublicSubnets508AB722"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1456,7 +1456,7 @@
         "cloudshift:comment": "Public Subnets Allow Outbound To Network Firewall Subnets Rule 1000"
       }
     },
-    "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b1DenyInboundFromLocalNetworkRule1200A5FFA9FD": {
+    "MySecureNetworkVpcPublicSubnetsDenyInboundFromLocalNetworkRule1200AB4CE64B": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": {
@@ -1467,7 +1467,7 @@
         },
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b13440457F"
+          "Ref": "MySecureNetworkVpcPublicSubnets508AB722"
         },
         "Protocol": "-1",
         "RuleAction": "deny",
@@ -1477,7 +1477,7 @@
         "cloudshift:comment": "Public Subnets Deny Inbound From Local Network Rule 1200"
       }
     },
-    "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b1DenyOutboundToLocalNetworkRule1200542774C7": {
+    "MySecureNetworkVpcPublicSubnetsDenyOutboundToLocalNetworkRule1200A6125971": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": {
@@ -1488,7 +1488,7 @@
         },
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b13440457F"
+          "Ref": "MySecureNetworkVpcPublicSubnets508AB722"
         },
         "Protocol": "-1",
         "RuleAction": "deny",
@@ -1498,13 +1498,13 @@
         "cloudshift:comment": "Public Subnets Deny Outbound To Local Network Rule 1200"
       }
     },
-    "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b1AllowInboundFromInternetRule140001B47414": {
+    "MySecureNetworkVpcPublicSubnetsAllowInboundFromInternetRule140096203498": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "0.0.0.0/0",
         "Egress": "false",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b13440457F"
+          "Ref": "MySecureNetworkVpcPublicSubnets508AB722"
         },
         "Protocol": "-1",
         "RuleAction": "allow",
@@ -1514,13 +1514,13 @@
         "cloudshift:comment": "Public Subnets Allow Inbound From Internet Rule 1400"
       }
     },
-    "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b1AllowOutboundToInternetRule140077532442": {
+    "MySecureNetworkVpcPublicSubnetsAllowOutboundToInternetRule1400EA4D0AB8": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "CidrBlock": "0.0.0.0/0",
         "Egress": "true",
         "NetworkAclId": {
-          "Ref": "MySecureNetworkVpcPublicSubnetsd8d350613a1dcae69043cba5277076b13440457F"
+          "Ref": "MySecureNetworkVpcPublicSubnets508AB722"
         },
         "Protocol": "-1",
         "RuleAction": "allow",

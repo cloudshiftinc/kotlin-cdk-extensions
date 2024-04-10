@@ -4,11 +4,9 @@ package io.cloudshiftdev.awscdklib.network.securenetwork
 
 import com.google.common.collect.ListMultimap
 import com.google.common.collect.MultimapBuilder
-import com.google.common.hash.Hashing
 import inet.ipaddr.IPAddress
 import inet.ipaddr.IPAddressSegmentSeries
 import inet.ipaddr.IPAddressString
-import io.cloudshiftdev.awscdk.Token
 import io.cloudshiftdev.awscdk.services.ec2.AclTraffic
 import io.cloudshiftdev.awscdk.services.ec2.Action
 import io.cloudshiftdev.awscdk.services.ec2.NetworkAcl
@@ -17,12 +15,10 @@ import io.cloudshiftdev.awscdk.services.ec2.SubnetType
 import io.cloudshiftdev.awscdk.services.ec2.TrafficDirection
 import io.cloudshiftdev.awscdk.services.ec2.Vpc
 import io.cloudshiftdev.awscdklib.core.addComment
-import io.cloudshiftdev.awscdklib.core.tag
 import io.cloudshiftdev.awscdklib.network.CidrBlock
 import io.cloudshiftdev.awscdklib.network.SubnetGroupName
 import io.cloudshiftdev.awscdklib.network.SubnetPredicates
 import io.cloudshiftdev.awscdklib.network.cidrBlock
-import java.nio.charset.StandardCharsets
 import net.pearx.kasechange.splitToWords
 import net.pearx.kasechange.toPascalCase
 
@@ -57,32 +53,36 @@ internal object NetworkAclGenerator {
             val flows =
                 generateFlows(subnet, entry.value, vpc, deniedNetworks, naclSpec.egressSubnets)
 
-            // create a hash of flows such that any changes (new subnet, etc) will force a new NACL
-            // to be provisioned which will flip over the existing one
-            // this is done as changing nacl entries is problematic due to rule number clashes,
-            // entry limits, and the need to keep traffic flowing (to the extent possible) during
-            // updates
-            val hasher = Hashing.murmur3_128().newHasher()
-            flows.forEach { flow ->
-                hasher.putString(subnet.name.value, StandardCharsets.UTF_8)
-                hasher.putString(flow.peerName, StandardCharsets.UTF_8)
-                hasher.putString(
-                    flow.cidrBlocks.map { if (Token.isUnresolved(it.value)) "" else it }.toString(),
-                    StandardCharsets.UTF_8
-                )
-                hasher.putString(flow.ruleAction.toString(), StandardCharsets.UTF_8)
-            }
-            val flowHash = hasher.hash()
+            //            // create a hash of flows such that any changes (new subnet, etc) will
+            // force a new NACL
+            //            // to be provisioned which will flip over the existing one
+            //            // this is done as changing nacl entries is problematic due to rule number
+            // clashes,
+            //            // entry limits, and the need to keep traffic flowing (to the extent
+            // possible) during
+            //            // updates
+            //            val hasher = Hashing.murmur3_128().newHasher()
+            //            flows.forEach { flow ->
+            //                hasher.putString(subnet.name.value, StandardCharsets.UTF_8)
+            //                hasher.putString(flow.peerName, StandardCharsets.UTF_8)
+            //                hasher.putString(
+            //                    flow.cidrBlocks.map { if (Token.isUnresolved(it.value)) "" else it
+            // }.toString(),
+            //                    StandardCharsets.UTF_8
+            //                )
+            //                hasher.putString(flow.ruleAction.toString(), StandardCharsets.UTF_8)
+            //            }
+            //            val flowHash = hasher.hash()
 
             val ruleCount = flows.fold(1) { r, it -> r + it.cidrBlocks.size }
             check(ruleCount <= 20) { "Network ACL rule count must be <= 20" }
 
             val nacl =
-                NetworkAcl(vpc, "${subnet.name}Subnets$flowHash") {
+                NetworkAcl(vpc, "${subnet.name}Subnets") {
                     vpc(vpc)
                     subnetSelection(SubnetPredicates.groupNamed(subnet.name))
+                    networkAclName("${subnet.name}Subnets")
                 }
-            nacl.tag("Name", nacl.node().path())
 
             createNetworkAclEntries(nacl, subnet.name, flows)
         }
