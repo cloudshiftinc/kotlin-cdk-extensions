@@ -3,6 +3,7 @@ package io.cloudshiftdev.awscdklib.network.securenetwork
 import io.cloudshiftdev.awscdk.services.ec2.FlowLogDestination
 import io.cloudshiftdev.awscdk.services.ec2.FlowLogMaxAggregationInterval
 import io.cloudshiftdev.awscdk.services.ec2.FlowLogTrafficType
+import io.cloudshiftdev.awscdk.services.ec2.LogFormat
 import io.cloudshiftdev.awscdk.services.ec2.SubnetConfiguration
 import io.cloudshiftdev.awscdk.services.ec2.Vpc
 import io.cloudshiftdev.awscdklib.network.SubnetPredicates
@@ -33,6 +34,37 @@ public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBu
             destination((FlowLogDestination.toCloudWatchLogs()))
             trafficType(FlowLogTrafficType.REJECT)
             maxAggregationInterval(FlowLogMaxAggregationInterval.ONE_MINUTE)
+            logFormat(
+                LogFormat.VERSION,
+                LogFormat.ACCOUNT_ID,
+                LogFormat.INTERFACE_ID,
+                LogFormat.SRC_ADDR,
+                LogFormat.DST_ADDR,
+                LogFormat.SRC_PORT,
+                LogFormat.DST_PORT,
+                LogFormat.PROTOCOL,
+                LogFormat.PACKETS,
+                LogFormat.BYTES,
+                LogFormat.START_TIMESTAMP,
+                LogFormat.END_TIMESTAMP,
+                LogFormat.ACTION,
+                LogFormat.LOG_STATUS,
+                LogFormat.VPC_ID,
+                LogFormat.SUBNET_ID,
+                LogFormat.INSTANCE_ID,
+                LogFormat.TCP_FLAGS,
+                LogFormat.TRAFFIC_TYPE,
+                LogFormat.PKT_SRC_ADDR,
+                LogFormat.PKT_DST_ADDR,
+                LogFormat.REGION,
+                LogFormat.AZ_ID,
+                LogFormat.SUBLOCATION_TYPE,
+                LogFormat.SUBLOCATION_ID,
+                LogFormat.PKT_SRC_AWS_SERVICE,
+                LogFormat.PKT_DST_AWS_SERVICE,
+                LogFormat.FLOW_DIRECTION,
+                LogFormat.TRAFFIC_PATH
+            )
         }
     }
 
