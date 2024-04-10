@@ -91,7 +91,7 @@ internal class EgressNetworkFirewallRouterProvider(
                     az = azEntry.key,
                     endpointId = azEntry.value,
                     protectedSubnets =
-                    protectedSubnets.filter { it.availabilityZone() == azEntry.key },
+                        protectedSubnets.filter { it.availabilityZone() == azEntry.key },
                     ingressSubnets = ingress.filter { it.availabilityZone() == azEntry.key }
                 )
             }
@@ -149,13 +149,17 @@ internal class EgressNetworkFirewallRouterProvider(
                         physicalResourceId(PhysicalResourceId.of(routeTableId))
                     }
                     installLatestAwsSdk(false)
-                    policy(AwsCustomResourcePolicy.fromSdkCalls {
-                        resources(resourceArn(firewall) {
-                            service("ec2")
-                            resource("route-table")
-                            resourceName(routeTableId)
-                        })
-                    })
+                    policy(
+                        AwsCustomResourcePolicy.fromSdkCalls {
+                            resources(
+                                resourceArn(firewall) {
+                                    service("ec2")
+                                    resource("route-table")
+                                    resourceName(routeTableId)
+                                }
+                            )
+                        }
+                    )
                 }
             }
         }
