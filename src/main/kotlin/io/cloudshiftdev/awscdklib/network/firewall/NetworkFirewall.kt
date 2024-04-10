@@ -8,6 +8,7 @@ import io.cloudshiftdev.awscdk.services.ec2.SubnetSelection
 import io.cloudshiftdev.awscdk.services.ec2.Vpc
 import io.cloudshiftdev.awscdk.services.networkfirewall.CfnFirewall
 import io.cloudshiftdev.awscdk.services.networkfirewall.CfnFirewallPolicy
+import io.cloudshiftdev.awscdklib.core.address
 import io.cloudshiftdev.constructs.Construct
 
 public enum class StatelessStandardAction(internal val value: String) {
@@ -44,7 +45,7 @@ public class FirewallPolicy(
     init {
         val policy =
             CfnFirewallPolicy(this, "CfnFirewallPolicy") {
-                firewallPolicyName(firewallPolicyName ?: id)
+                firewallPolicyName("${firewallPolicyName ?: id}$address")
                 description?.let(::description)
                 firewallPolicy(
                     CfnFirewallPolicy.FirewallPolicyProperty {
@@ -80,7 +81,7 @@ public class NetworkFirewall(
 
         val nfw =
             CfnFirewall(vpc, "Firewall") {
-                firewallName(firewallName)
+                firewallName("${firewallName}$address")
                 vpcId(vpc.vpcId())
                 subnetMappings(placementSubnets.toSubnetMappings())
                 firewallPolicyArn(firewallPolicy.firewallPolicyArn)

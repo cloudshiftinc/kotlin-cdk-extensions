@@ -22,8 +22,6 @@ public fun main(args: Array<String>) {
             reservedAzs(0)
 
             publicPrivateIsolatedNetworkWithFirewall()
-
-            //            publicPrivateIsolatedNetwork()
         }
 
     app.synth()

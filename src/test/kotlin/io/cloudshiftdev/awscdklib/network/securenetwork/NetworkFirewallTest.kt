@@ -45,7 +45,7 @@ class NetworkFirewallTest :
                         """{
       "Type": "AWS::NetworkFirewall::Firewall",
       "Properties": {
-        "FirewallName": "MyFirewall",
+        "FirewallName": "MyFirewallc8a9fcc6a9c7750886fafeba070abc369c63af5e5a",
         "FirewallPolicyArn": {
           "Fn::GetAtt": [
             "MyVpcFirewallPolicyCfnFirewallPolicyCA70F78E",

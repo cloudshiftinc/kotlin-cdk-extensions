@@ -120,39 +120,182 @@
       },
       "DependsOn": [
         "MySecureNetworkVpcPublicSubnet1DefaultRoute73BED9FA",
-        "MySecureNetworkVpcPublicSubnet1NetworkFirewallIngressRoutec8cdb1b7aeb34ac3805b0d2a975da8121b65627937F8A11766",
         "MySecureNetworkVpcPublicSubnet1RouteTableAssociationCF1DA622"
       ]
     },
-    "MySecureNetworkVpcPublicSubnet1NetworkFirewallIngressRoutec8cdb1b7aeb34ac3805b0d2a975da8121b65627937F8A11766": {
-      "Type": "AWS::EC2::Route",
+    "MySecureNetworkVpcPublicSubnet1ReplaceLocalRouteNetworkFirewallC8289B16": {
+      "Type": "Custom::AWS",
       "Properties": {
-        "DestinationCidrBlock": "10.200.2.0/23",
-        "RouteTableId": {
-          "Ref": "MySecureNetworkVpcPublicSubnet1RouteTable3A24E58C"
-        },
-        "VpcEndpointId": {
+        "ServiceToken": {
           "Fn::GetAtt": [
-            "MySecureNetworkVpcFirewallCustomResource3D6F73ED",
-            {
-              "Fn::Join": [
-                "",
-                [
-                  "FirewallStatus.SyncStates.",
-                  {
-                    "Fn::Select": [
-                      "0",
-                      {
-                        "Fn::GetAZs": ""
-                      }
-                    ]
-                  },
-                  ".Attachment.EndpointId"
-                ]
-              ]
-            }
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn"
           ]
-        }
+        },
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"action\":\"ReplaceRoute\",\"service\":\"ec2\",\"parameters\":{\"DestinationCidrBlock\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcC16153F8",
+                  "CidrBlock"
+                ]
+              },
+              "\",\"RouteTableId\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet1RouteTable3A24E58C"
+              },
+              "\",\"VpcEndpointId\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcFirewallCustomResource3D6F73ED",
+                  {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "FirewallStatus.SyncStates.",
+                        {
+                          "Fn::Select": [
+                            "0",
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        ".Attachment.EndpointId"
+                      ]
+                    ]
+                  }
+                ]
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet1RouteTable3A24E58C"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"action\":\"ReplaceRoute\",\"service\":\"ec2\",\"parameters\":{\"DestinationCidrBlock\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcC16153F8",
+                  "CidrBlock"
+                ]
+              },
+              "\",\"RouteTableId\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet1RouteTable3A24E58C"
+              },
+              "\",\"VpcEndpointId\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcFirewallCustomResource3D6F73ED",
+                  {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "FirewallStatus.SyncStates.",
+                        {
+                          "Fn::Select": [
+                            "0",
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        ".Attachment.EndpointId"
+                      ]
+                    ]
+                  }
+                ]
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet1RouteTable3A24E58C"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "Delete": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"action\":\"ReplaceRoute\",\"service\":\"ec2\",\"parameters\":{\"DestinationCidrBlock\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcC16153F8",
+                  "CidrBlock"
+                ]
+              },
+              "\",\"RouteTableId\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet1RouteTable3A24E58C"
+              },
+              "\",\"LocalTarget\":true},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet1RouteTable3A24E58C"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "InstallLatestAwsSdk": "false"
+      },
+      "DependsOn": [
+        "MySecureNetworkVpcPublicSubnet1ReplaceLocalRouteNetworkFirewallCustomResourcePolicy1A8BA386"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "MySecureNetworkVpcPublicSubnet1ReplaceLocalRouteNetworkFirewallCustomResourcePolicy1A8BA386": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ec2:ReplaceRoute",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ec2:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":route-table/",
+                    {
+                      "Ref": "MySecureNetworkVpcPublicSubnet1RouteTable3A24E58C"
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "MySecureNetworkVpcPublicSubnet1ReplaceLocalRouteNetworkFirewallCustomResourcePolicy1A8BA386",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ]
       }
     },
     "MySecureNetworkVpcPublicSubnet2Subnet6395CFF0": {
@@ -260,39 +403,182 @@
       },
       "DependsOn": [
         "MySecureNetworkVpcPublicSubnet2DefaultRoute76889C0D",
-        "MySecureNetworkVpcPublicSubnet2NetworkFirewallIngressRoutec82c35749a18abe440d98d511deb98b4e1d89a3b74886E0907",
         "MySecureNetworkVpcPublicSubnet2RouteTableAssociation9C062129"
       ]
     },
-    "MySecureNetworkVpcPublicSubnet2NetworkFirewallIngressRoutec82c35749a18abe440d98d511deb98b4e1d89a3b74886E0907": {
-      "Type": "AWS::EC2::Route",
+    "MySecureNetworkVpcPublicSubnet2ReplaceLocalRouteNetworkFirewall8B0370C5": {
+      "Type": "Custom::AWS",
       "Properties": {
-        "DestinationCidrBlock": "10.200.4.0/23",
-        "RouteTableId": {
-          "Ref": "MySecureNetworkVpcPublicSubnet2RouteTable9935A169"
-        },
-        "VpcEndpointId": {
+        "ServiceToken": {
           "Fn::GetAtt": [
-            "MySecureNetworkVpcFirewallCustomResource3D6F73ED",
-            {
-              "Fn::Join": [
-                "",
-                [
-                  "FirewallStatus.SyncStates.",
-                  {
-                    "Fn::Select": [
-                      "1",
-                      {
-                        "Fn::GetAZs": ""
-                      }
-                    ]
-                  },
-                  ".Attachment.EndpointId"
-                ]
-              ]
-            }
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn"
           ]
-        }
+        },
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"action\":\"ReplaceRoute\",\"service\":\"ec2\",\"parameters\":{\"DestinationCidrBlock\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcC16153F8",
+                  "CidrBlock"
+                ]
+              },
+              "\",\"RouteTableId\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet2RouteTable9935A169"
+              },
+              "\",\"VpcEndpointId\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcFirewallCustomResource3D6F73ED",
+                  {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "FirewallStatus.SyncStates.",
+                        {
+                          "Fn::Select": [
+                            "1",
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        ".Attachment.EndpointId"
+                      ]
+                    ]
+                  }
+                ]
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet2RouteTable9935A169"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"action\":\"ReplaceRoute\",\"service\":\"ec2\",\"parameters\":{\"DestinationCidrBlock\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcC16153F8",
+                  "CidrBlock"
+                ]
+              },
+              "\",\"RouteTableId\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet2RouteTable9935A169"
+              },
+              "\",\"VpcEndpointId\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcFirewallCustomResource3D6F73ED",
+                  {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "FirewallStatus.SyncStates.",
+                        {
+                          "Fn::Select": [
+                            "1",
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        ".Attachment.EndpointId"
+                      ]
+                    ]
+                  }
+                ]
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet2RouteTable9935A169"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "Delete": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"action\":\"ReplaceRoute\",\"service\":\"ec2\",\"parameters\":{\"DestinationCidrBlock\":\"",
+              {
+                "Fn::GetAtt": [
+                  "MySecureNetworkVpcC16153F8",
+                  "CidrBlock"
+                ]
+              },
+              "\",\"RouteTableId\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet2RouteTable9935A169"
+              },
+              "\",\"LocalTarget\":true},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "MySecureNetworkVpcPublicSubnet2RouteTable9935A169"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "InstallLatestAwsSdk": "false"
+      },
+      "DependsOn": [
+        "MySecureNetworkVpcPublicSubnet2ReplaceLocalRouteNetworkFirewallCustomResourcePolicy03D2AFB3"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "MySecureNetworkVpcPublicSubnet2ReplaceLocalRouteNetworkFirewallCustomResourcePolicy03D2AFB3": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ec2:ReplaceRoute",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ec2:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":route-table/",
+                    {
+                      "Ref": "MySecureNetworkVpcPublicSubnet2RouteTable9935A169"
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "MySecureNetworkVpcPublicSubnet2ReplaceLocalRouteNetworkFirewallCustomResourcePolicy03D2AFB3",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ]
       }
     },
     "MySecureNetworkVpcNetworkFirewallSubnet1Subnet130AF3AC": {
@@ -779,7 +1065,7 @@
             "aws:pass"
           ]
         },
-        "FirewallPolicyName": "FirewallPolicy",
+        "FirewallPolicyName": "FirewallPolicyc8665061483b0ae06d2a0fa1336db457df9fabc3de",
         "Tags": [
           {
             "Key": "Name",
@@ -791,7 +1077,7 @@
     "MySecureNetworkVpcFirewall52F5D5CE": {
       "Type": "AWS::NetworkFirewall::Firewall",
       "Properties": {
-        "FirewallName": "Firewall",
+        "FirewallName": "Firewallc802ece02b6d97fc4805f0ba6dd903c2c25c5ffc3c",
         "FirewallPolicyArn": {
           "Fn::GetAtt": [
             "MySecureNetworkVpcFirewallPolicyCfnFirewallPolicy0FBD6320",

@@ -1,12 +1,15 @@
 package io.cloudshiftdev.awscdklib.network.securenetwork
 
+import io.cloudshiftdev.awscdk.customresources.AwsCustomResource
+import io.cloudshiftdev.awscdk.customresources.AwsCustomResourcePolicy
+import io.cloudshiftdev.awscdk.customresources.PhysicalResourceId
 import io.cloudshiftdev.awscdk.services.ec2.NatProvider
 import io.cloudshiftdev.awscdk.services.ec2.RouterType
 import io.cloudshiftdev.awscdk.services.ec2.Subnet
 import io.cloudshiftdev.awscdk.services.ec2.SubnetSelection
 import io.cloudshiftdev.awscdk.services.ec2.Vpc
 import io.cloudshiftdev.awscdk.services.ec2.VpcProps
-import io.cloudshiftdev.awscdklib.core.address
+import io.cloudshiftdev.awscdklib.core.resourceArn
 import io.cloudshiftdev.awscdklib.network.CidrBlock
 import io.cloudshiftdev.awscdklib.network.firewall.FirewallPolicy
 import io.cloudshiftdev.awscdklib.network.firewall.NetworkFirewall
@@ -88,7 +91,7 @@ internal class EgressNetworkFirewallRouterProvider(
                     az = azEntry.key,
                     endpointId = azEntry.value,
                     protectedSubnets =
-                        protectedSubnets.filter { it.availabilityZone() == azEntry.key },
+                    protectedSubnets.filter { it.availabilityZone() == azEntry.key },
                     ingressSubnets = ingress.filter { it.availabilityZone() == azEntry.key }
                 )
             }
@@ -102,17 +105,57 @@ internal class EgressNetworkFirewallRouterProvider(
                     enablesInternetConnectivity(true)
                     destinationCidrBlock(CidrBlock.allIPv4().toString())
                 }
+            }
 
-                // reverse flow back from NAT gateway to firewall
-                routeInfo.ingressSubnets.forEach { ingressSubnet ->
-                    ingressSubnet.addRoute(
-                        "NetworkFirewallIngressRoute${protectedSubnet.address}"
-                    ) {
-                        routerId(routeInfo.endpointId)
-                        routerType(RouterType.VPC_ENDPOINT)
-                        enablesInternetConnectivity(true)
-                        destinationCidrBlock(protectedSubnet.ipv4CidrBlock())
+            // reverse flow back from NAT gateway to firewall
+            routeInfo.ingressSubnets.forEach { ingressSubnet ->
+                val routeTableId = ingressSubnet.routeTable().routeTableId()
+
+                AwsCustomResource(ingressSubnet, "ReplaceLocalRouteNetworkFirewall") {
+                    onCreate {
+                        service("ec2")
+                        action("ReplaceRoute")
+                        parameters(
+                            mapOf(
+                                "DestinationCidrBlock" to vpc.vpcCidrBlock(),
+                                "RouteTableId" to routeTableId,
+                                "VpcEndpointId" to routeInfo.endpointId
+                            )
+                        )
+                        physicalResourceId(PhysicalResourceId.of(routeTableId))
                     }
+                    onUpdate {
+                        service("ec2")
+                        action("ReplaceRoute")
+                        parameters(
+                            mapOf(
+                                "DestinationCidrBlock" to vpc.vpcCidrBlock(),
+                                "RouteTableId" to routeTableId,
+                                "VpcEndpointId" to routeInfo.endpointId
+                            )
+                        )
+                        physicalResourceId(PhysicalResourceId.of(routeTableId))
+                    }
+                    onDelete {
+                        service("ec2")
+                        action("ReplaceRoute")
+                        parameters(
+                            mapOf(
+                                "DestinationCidrBlock" to vpc.vpcCidrBlock(),
+                                "RouteTableId" to routeTableId,
+                                "LocalTarget" to true
+                            )
+                        )
+                        physicalResourceId(PhysicalResourceId.of(routeTableId))
+                    }
+                    installLatestAwsSdk(false)
+                    policy(AwsCustomResourcePolicy.fromSdkCalls {
+                        resources(resourceArn(firewall) {
+                            service("ec2")
+                            resource("route-table")
+                            resourceName(routeTableId)
+                        })
+                    })
                 }
             }
         }
