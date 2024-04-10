@@ -15,6 +15,10 @@ public object SubnetPredicates {
 
     public fun groupNamed(name: String): SubnetSelection = SubnetSelection { subnetGroupName(name) }
 
+    public fun groupNamed(name: SubnetGroupName): SubnetSelection = SubnetSelection {
+        subnetGroupName(name.value)
+    }
+
     public fun type(subnetType: SubnetType): SubnetSelection = SubnetSelection {
         subnetType(subnetType)
     }

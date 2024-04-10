@@ -77,9 +77,29 @@ public final class io/cloudshiftdev/awscdklib/network/NatEipPool : io/cloudshift
 	public final fun getEips ()Ljava/util/List;
 }
 
+public final class io/cloudshiftdev/awscdklib/network/SubnetGroupName {
+	public static final field Companion Lio/cloudshiftdev/awscdklib/network/SubnetGroupName$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/cloudshiftdev/awscdklib/network/SubnetGroupName;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class io/cloudshiftdev/awscdklib/network/SubnetGroupName$Companion {
+	public final fun of-E88IwDQ (Ljava/lang/String;)Ljava/lang/String;
+	public final fun toSubnetGroupName-E88IwDQ (Ljava/lang/String;)Ljava/lang/String;
+}
+
 public final class io/cloudshiftdev/awscdklib/network/SubnetPredicates {
 	public static final field INSTANCE Lio/cloudshiftdev/awscdklib/network/SubnetPredicates;
 	public final fun groupNamed (Ljava/lang/String;)Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;
+	public final fun groupNamed-rEjE77M (Ljava/lang/String;)Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;
 	public final fun isolatedSubnets ()Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;
 	public final fun privateSubnets ()Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;
 	public final fun publicSubnets ()Lio/cloudshiftdev/awscdk/services/ec2/SubnetSelection;
@@ -131,9 +151,18 @@ public final class io/cloudshiftdev/awscdklib/network/firewall/StatelessStandard
 
 public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/NaclBuilder {
 	public abstract fun allowBetween (Ljava/lang/String;Ljava/lang/String;)V
+	public abstract fun allowBetween-0TasGNc (Ljava/lang/String;Ljava/lang/String;)V
 	public abstract fun denyToAllPrivateNetworks ()V
 	public abstract fun denyToLocalNetwork (Ljava/lang/String;)V
+	public abstract fun egressSubnet-rEjE77M (Ljava/lang/String;)V
+	public abstract fun egressSubnets (Ljava/lang/Iterable;)V
 	public abstract fun egressSubnets ([Ljava/lang/String;)V
+}
+
+public final class io/cloudshiftdev/awscdklib/network/securenetwork/NaclBuilder$DefaultImpls {
+	public static fun allowBetween (Lio/cloudshiftdev/awscdklib/network/securenetwork/NaclBuilder;Ljava/lang/String;Ljava/lang/String;)V
+	public static fun egressSubnet-rEjE77M (Lio/cloudshiftdev/awscdklib/network/securenetwork/NaclBuilder;Ljava/lang/String;)V
+	public static fun egressSubnets (Lio/cloudshiftdev/awscdklib/network/securenetwork/NaclBuilder;[Ljava/lang/String;)V
 }
 
 public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork/NatGatewayRouterBuilder : io/cloudshiftdev/awscdklib/network/securenetwork/NatRouterBuilder {
@@ -230,6 +259,7 @@ public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork
 	public abstract fun privateSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public abstract fun publicSubnetGroup (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public abstract fun subnetGroup (Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun subnetGroup-l_74Hag (Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;Lkotlin/jvm/functions/Function1;)V
 }
 
 public final class io/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder$DefaultImpls {
@@ -239,6 +269,7 @@ public final class io/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuild
 	public static synthetic fun privateSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static fun publicSubnetGroup (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun publicSubnetGroup$default (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static fun subnetGroup (Lio/cloudshiftdev/awscdklib/network/securenetwork/SubnetsBuilder;Ljava/lang/String;Lio/cloudshiftdev/awscdk/services/ec2/SubnetType;Lkotlin/jvm/functions/Function1;)V
 }
 
 public final class io/cloudshiftdev/awscdklib/s3/ExtensionsKt {

@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package io.cloudshiftdev.awscdklib.network.securenetwork
 
 import com.google.common.collect.ListMultimap
@@ -16,6 +18,7 @@ import io.cloudshiftdev.awscdk.services.ec2.Vpc
 import io.cloudshiftdev.awscdklib.core.addComment
 import io.cloudshiftdev.awscdklib.core.tag
 import io.cloudshiftdev.awscdklib.network.CidrBlock
+import io.cloudshiftdev.awscdklib.network.SubnetGroupName
 import io.cloudshiftdev.awscdklib.network.SubnetPredicates
 import io.cloudshiftdev.awscdklib.network.cidrBlock
 import java.nio.charset.StandardCharsets
@@ -33,10 +36,10 @@ internal data class NetworkAclFlow(
 internal data class NaclSpec(
     val peeredSubnets: List<NaclPeering>,
     val localNetworks: List<CidrBlock>,
-    val egressSubnets: Set<String>
+    val egressSubnets: Set<SubnetGroupName>
 )
 
-internal data class NaclPeering(val subnet: String, val peeredSubnet: String)
+internal data class NaclPeering(val subnet: SubnetGroupName, val peeredSubnet: SubnetGroupName)
 
 internal object NetworkAclGenerator {
 
@@ -66,7 +69,7 @@ internal object NetworkAclGenerator {
             // to keep traffic flowing (to the extent possible) during updates
             val hasher = Hashing.murmur3_128().newHasher()
             flows.forEach { flow ->
-                hasher.putString(subnet.name, StandardCharsets.UTF_8)
+                hasher.putString(subnet.name.value, StandardCharsets.UTF_8)
                 hasher.putString(flow.peerName, StandardCharsets.UTF_8)
                 hasher.putString(flow.cidrBlocks.toString(), StandardCharsets.UTF_8)
                 hasher.putString(flow.ruleAction.toString(), StandardCharsets.UTF_8)
@@ -92,7 +95,7 @@ internal object NetworkAclGenerator {
         subnetSpecs: List<SubnetGroupProps>
     ): ListMultimap<SubnetGroupProps, SubnetGroupProps> {
         val peeredSubnetMap =
-            MultimapBuilder.treeKeys<SubnetGroupProps>(compareBy { it.name })
+            MultimapBuilder.treeKeys<SubnetGroupProps>(compareBy { it.name.value })
                 .arrayListValues()
                 .build<SubnetGroupProps, SubnetGroupProps>()
 
@@ -121,7 +124,7 @@ internal object NetworkAclGenerator {
         peeredSubnetGroups: Collection<SubnetGroupProps>,
         vpc: Vpc,
         localNetworkCidrBlocks: List<CidrBlock>,
-        egressSubnets: Set<String>
+        egressSubnets: Set<SubnetGroupName>
     ): MutableList<NetworkAclFlow> {
         // order of flows is important as they reflect the order that nacl entries are processed in
         val flows = mutableListOf<NetworkAclFlow>()
@@ -139,7 +142,8 @@ internal object NetworkAclGenerator {
         // efficiency
         flows.add(
             NetworkAclFlow(
-                peerName = peeredSubnetGroupList.joinToString(separator = " and ") { it.name },
+                peerName =
+                    peeredSubnetGroupList.joinToString(separator = " and ") { it.name.value },
                 type = "Subnets",
                 cidrBlocks =
                     collapseCidrs(
@@ -186,7 +190,10 @@ internal object NetworkAclGenerator {
         return flows
     }
 
-    private fun isEgressSubnet(subnetGroup: SubnetGroupProps, egressSubnets: Set<String>): Boolean {
+    private fun isEgressSubnet(
+        subnetGroup: SubnetGroupProps,
+        egressSubnets: Set<SubnetGroupName>
+    ): Boolean {
         return when {
             subnetGroup.subnetType == SubnetType.PRIVATE_WITH_EGRESS -> true
             subnetGroup.subnetType == SubnetType.PUBLIC -> true
@@ -230,7 +237,7 @@ internal object NetworkAclGenerator {
 
     private fun createNetworkAclEntries(
         nacl: NetworkAcl,
-        subnet: String,
+        subnet: SubnetGroupName,
         flows: List<NetworkAclFlow>
     ) {
         var ruleBase = 1000

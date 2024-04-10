@@ -67,7 +67,7 @@ public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBu
     }
 
     private fun SubnetGroupProps.toSubnetConfiguration() = SubnetConfiguration {
-        name(name)
+        name(name.value)
         cidrMask?.let { cidrMask(it) }
         reserved(reserved)
         subnetType(subnetType)

@@ -11,8 +11,9 @@ import io.cloudshiftdev.awscdk.services.ec2.NatProvider
 import io.cloudshiftdev.awscdk.services.ec2.SubnetSelection
 import io.cloudshiftdev.awscdk.services.ec2.SubnetType
 import io.cloudshiftdev.awscdklib.network.CidrBlock
+import io.cloudshiftdev.awscdklib.network.SubnetGroupName
+import io.cloudshiftdev.awscdklib.network.SubnetGroupName.Companion.toSubnetGroupName
 import io.cloudshiftdev.awscdklib.network.SubnetPredicates
-import net.pearx.kasechange.toPascalCase
 
 @DslMarker public annotation class NetworkDslMarker
 
@@ -190,20 +191,29 @@ public interface SubnetsBuilder {
         subnetGroup(name, SubnetType.PRIVATE_ISOLATED, block)
     }
 
-    public fun subnetGroup(name: String, type: SubnetType, block: (SubnetGroupBuilder).() -> Unit)
+    public fun subnetGroup(
+        name: String,
+        type: SubnetType,
+        block: (SubnetGroupBuilder).() -> Unit
+    ): Unit = subnetGroup(name.toSubnetGroupName(), type, block)
+
+    public fun subnetGroup(
+        name: SubnetGroupName,
+        type: SubnetType,
+        block: (SubnetGroupBuilder).() -> Unit
+    )
 }
 
 internal class SubnetsBuilderImpl : SubnetsBuilder {
-    private val subnetMap = mutableMapOf<String, SubnetGroupBuilder>()
+    private val subnetMap = mutableMapOf<SubnetGroupName, SubnetGroupBuilder>()
 
     fun build(): List<SubnetGroupProps> = subnetMap.values.map { it.build() }
 
     override fun subnetGroup(
-        name: String,
+        name: SubnetGroupName,
         type: SubnetType,
         block: (SubnetGroupBuilder).() -> Unit
     ) {
-        validateSubnetGroupName(name)
         val effectiveType =
             when (type) {
                 // transform deprecated type
@@ -217,23 +227,29 @@ internal class SubnetsBuilderImpl : SubnetsBuilder {
 
 @NetworkDslMarker
 public interface NaclBuilder {
-    public fun allowBetween(subnet: String, peeredSubnet: String)
+    public fun allowBetween(subnet: String, peeredSubnet: String): Unit =
+        allowBetween(subnet.toSubnetGroupName(), peeredSubnet.toSubnetGroupName())
+
+    public fun allowBetween(subnet: SubnetGroupName, peeredSubnet: SubnetGroupName)
 
     public fun denyToLocalNetwork(cidr: String)
 
     public fun denyToAllPrivateNetworks()
 
-    public fun egressSubnets(vararg subnets: String)
+    public fun egressSubnets(vararg subnets: String): Unit =
+        egressSubnets(subnets.map { it.toSubnetGroupName() }.toSet())
+
+    public fun egressSubnets(subnets: Iterable<SubnetGroupName>)
+
+    public fun egressSubnet(subnet: SubnetGroupName): Unit = egressSubnets(listOf(subnet))
 }
 
 internal class NaclBuilderImpl : NaclBuilder {
     private val peeredSubnets = mutableListOf<NaclPeering>()
     private val localNetworks = mutableListOf<CidrBlock>()
-    private val egressSubnets = mutableListOf<String>()
+    private val egressSubnets = mutableSetOf<SubnetGroupName>()
 
-    override fun allowBetween(subnet: String, peeredSubnet: String) {
-        validateSubnetGroupName(subnet)
-        validateSubnetGroupName(peeredSubnet)
+    override fun allowBetween(subnet: SubnetGroupName, peeredSubnet: SubnetGroupName) {
         val peering = NaclPeering(subnet, peeredSubnet)
         val noDuplicatePeering =
             peeredSubnets.none {
@@ -252,8 +268,8 @@ internal class NaclBuilderImpl : NaclBuilder {
         localNetworks.addAll(CidrBlock.privateNetworks())
     }
 
-    override fun egressSubnets(vararg subnets: String) {
-        egressSubnets.addAll(subnets.toList())
+    override fun egressSubnets(subnets: Iterable<SubnetGroupName>) {
+        egressSubnets.addAll(subnets)
     }
 
     internal fun build(): NaclSpec {
@@ -262,12 +278,6 @@ internal class NaclBuilderImpl : NaclBuilder {
             localNetworks.ifEmpty { CidrBlock.privateNetworks() },
             egressSubnets.toSet()
         )
-    }
-}
-
-internal fun validateSubnetGroupName(name: String) {
-    require(name == name.toPascalCase()) {
-        "Subnet group name must match convention; expected '${name.toPascalCase()}', got '$name'"
     }
 }
 
@@ -400,7 +410,7 @@ internal class NetworkFirewallRouterBuilderImpl :
 
 @NetworkDslMarker
 public class SubnetGroupBuilder
-internal constructor(private val name: String, private val type: SubnetType) {
+internal constructor(private val name: SubnetGroupName, private val type: SubnetType) {
     private var reserved = false
     private var cidrMask: Int? = null
     private var allowCrossAzNaclFlows: Boolean = false
