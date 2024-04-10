@@ -107,5 +107,6 @@ public fun SecureNetworkBuilder.publicPrivateIsolatedNetworkWithFirewall() {
         allowBetween("Public", "NetworkFirewall")
         allowBetween("Private", "NetworkFirewall")
         allowBetween("Private", "Isolated")
+        egressSubnets("Private")
     }
 }

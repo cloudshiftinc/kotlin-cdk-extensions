@@ -4,7 +4,7 @@ import inet.ipaddr.IPAddress
 import io.cloudshiftdev.awscdk.services.ec2.AclCidr
 
 @JvmInline
-public value class CidrBlock private constructor(private val value: String) {
+public value class CidrBlock private constructor(public val value: String) {
     public companion object {
 
         public fun of(value: IPAddress): CidrBlock {

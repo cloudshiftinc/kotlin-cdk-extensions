@@ -8,6 +8,7 @@ import com.google.common.hash.Hashing
 import inet.ipaddr.IPAddress
 import inet.ipaddr.IPAddressSegmentSeries
 import inet.ipaddr.IPAddressString
+import io.cloudshiftdev.awscdk.Token
 import io.cloudshiftdev.awscdk.services.ec2.AclTraffic
 import io.cloudshiftdev.awscdk.services.ec2.Action
 import io.cloudshiftdev.awscdk.services.ec2.NetworkAcl
@@ -35,7 +36,7 @@ internal data class NetworkAclFlow(
 
 internal data class NaclSpec(
     val peeredSubnets: List<NaclPeering>,
-    val localNetworks: List<CidrBlock>,
+    val deniedNetworks: List<CidrBlock>,
     val egressSubnets: Set<SubnetGroupName>
 )
 
@@ -50,28 +51,25 @@ internal object NetworkAclGenerator {
     ) {
         val peeredSubnetMap = generateSubnetMap(naclSpec.peeredSubnets, subnetSpecs)
 
+        val deniedNetworks = naclSpec.deniedNetworks.ifEmpty { vpc.cidrBlock.let(::listOf) }
         peeredSubnetMap.asMap().forEach { entry ->
             val subnet = entry.key
             val flows =
-                generateFlows(
-                    subnet,
-                    entry.value,
-                    vpc,
-                    naclSpec.localNetworks,
-                    naclSpec.egressSubnets
-                )
+                generateFlows(subnet, entry.value, vpc, deniedNetworks, naclSpec.egressSubnets)
 
             // create a hash of flows such that any changes (new subnet, etc) will force a new NACL
-            // to be provisioned
-            // which will flip over the existing one
+            // to be provisioned which will flip over the existing one
             // this is done as changing nacl entries is problematic due to rule number clashes,
-            // entry limits, and the need
-            // to keep traffic flowing (to the extent possible) during updates
+            // entry limits, and the need to keep traffic flowing (to the extent possible) during
+            // updates
             val hasher = Hashing.murmur3_128().newHasher()
             flows.forEach { flow ->
                 hasher.putString(subnet.name.value, StandardCharsets.UTF_8)
                 hasher.putString(flow.peerName, StandardCharsets.UTF_8)
-                hasher.putString(flow.cidrBlocks.toString(), StandardCharsets.UTF_8)
+                hasher.putString(
+                    flow.cidrBlocks.map { if (Token.isUnresolved(it.value)) "" else it }.toString(),
+                    StandardCharsets.UTF_8
+                )
                 hasher.putString(flow.ruleAction.toString(), StandardCharsets.UTF_8)
             }
             val flowHash = hasher.hash()
@@ -123,7 +121,7 @@ internal object NetworkAclGenerator {
         subnetGroup: SubnetGroupProps,
         peeredSubnetGroups: Collection<SubnetGroupProps>,
         vpc: Vpc,
-        localNetworkCidrBlocks: List<CidrBlock>,
+        deniedCidrBlocks: List<CidrBlock>,
         egressSubnets: Set<SubnetGroupName>
     ): MutableList<NetworkAclFlow> {
         // order of flows is important as they reflect the order that nacl entries are processed in
@@ -168,7 +166,7 @@ internal object NetworkAclGenerator {
                     NetworkAclFlow(
                         peerName = "Local",
                         type = "Network",
-                        cidrBlocks = collapseCidrs(localNetworkCidrBlocks, true),
+                        cidrBlocks = deniedCidrBlocks,
                         ruleAction = Action.DENY,
                         traffic = AclTraffic.allTraffic()
                     )
