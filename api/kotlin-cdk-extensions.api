@@ -232,7 +232,6 @@ public abstract interface class io/cloudshiftdev/awscdklib/network/securenetwork
 	public abstract fun ipProtocol (Lio/cloudshiftdev/awscdk/services/ec2/IpProtocol;)V
 	public abstract fun ipV6Addresses (Lio/cloudshiftdev/awscdk/services/ec2/IIpv6Addresses;)V
 	public abstract fun maxAzs (I)V
-	public abstract fun nacl (Lkotlin/jvm/functions/Function1;)V
 	public abstract fun reservedAzs (I)V
 	public abstract fun restrictDefaultSecurityGroup (Z)V
 	public abstract fun routers (Lkotlin/jvm/functions/Function1;)V
@@ -250,7 +249,6 @@ public final class io/cloudshiftdev/awscdklib/network/securenetwork/SecureNetwor
 }
 
 public final class io/cloudshiftdev/awscdklib/network/securenetwork/SubnetGroupBuilder {
-	public final fun allowCrossAzNaclFlows ()V
 	public final fun cidrMask (I)V
 	public final fun reserved ()V
 }

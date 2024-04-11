@@ -8,5 +8,4 @@ internal data class SubnetGroupProps(
     val subnetType: SubnetType,
     val cidrMask: Int?,
     val reserved: Boolean,
-    val allowCrossAzNaclFlows: Boolean
 )

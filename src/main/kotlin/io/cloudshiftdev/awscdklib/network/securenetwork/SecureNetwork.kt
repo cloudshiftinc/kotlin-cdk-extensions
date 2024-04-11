@@ -18,8 +18,6 @@ public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBu
         val props = secureNetworkProps(block)
         vpc = vpc(props)
 
-        NetworkAclGenerator.generate(vpc, props.naclSpec, props.subnetGroups)
-
         createFlowLog(vpc)
     }
 
@@ -109,13 +107,8 @@ public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBu
 public fun SecureNetworkBuilder.publicPrivateIsolatedNetwork() {
     subnets {
         publicSubnetGroup { cidrMask(26) }
-        privateSubnetGroup { allowCrossAzNaclFlows() }
-        isolatedSubnetGroup { allowCrossAzNaclFlows() }
-    }
-
-    nacl {
-        allowBetween("Public", "Private")
-        allowBetween("Private", "Isolated")
+        privateSubnetGroup()
+        isolatedSubnetGroup()
     }
 }
 
@@ -133,12 +126,5 @@ public fun SecureNetworkBuilder.publicPrivateIsolatedNetworkWithFirewall() {
         privateSubnetGroup("NetworkFirewall") { cidrMask(28) }
         isolatedSubnetGroup("Private")
         isolatedSubnetGroup()
-    }
-
-    nacl {
-        allowBetween("Public", "NetworkFirewall")
-        allowBetween("Private", "NetworkFirewall")
-        allowBetween("Private", "Isolated")
-        egressSubnets("Private")
     }
 }

@@ -10,7 +10,6 @@ import io.cloudshiftdev.awscdk.services.ec2.NatInstanceProps
 import io.cloudshiftdev.awscdk.services.ec2.NatProvider
 import io.cloudshiftdev.awscdk.services.ec2.SubnetSelection
 import io.cloudshiftdev.awscdk.services.ec2.SubnetType
-import io.cloudshiftdev.awscdklib.network.CidrBlock
 import io.cloudshiftdev.awscdklib.network.SubnetGroupName
 import io.cloudshiftdev.awscdklib.network.SubnetGroupName.Companion.toSubnetGroupName
 import io.cloudshiftdev.awscdklib.network.SubnetPredicates
@@ -49,8 +48,6 @@ public interface SecureNetworkBuilder {
 
     public fun restrictDefaultSecurityGroup(value: Boolean)
 
-    public fun nacl(block: (NaclBuilder).() -> Unit)
-
     public fun subnets(block: (SubnetsBuilder).() -> Unit)
 
     public fun routers(block: (RoutersBuilder).() -> Unit)
@@ -68,7 +65,6 @@ internal class SecureNetworkBuilderImpl : SecureNetworkBuilder {
     var defaultInstanceTenancy = DefaultInstanceTenancy.DEFAULT
     val availabilityZones = mutableListOf<String>()
     var createInternetGateway = true
-    private val naclBuilder = NaclBuilderImpl()
     private val subnetsBuilder = SubnetsBuilderImpl()
     private val routersBuilder = RoutersBuilderImpl()
 
@@ -85,7 +81,6 @@ internal class SecureNetworkBuilderImpl : SecureNetworkBuilder {
             restrictDefaultSecurityGroup = this.restrictDefaultSecurityGroup,
             defaultInstanceTenancy = this.defaultInstanceTenancy,
             createInternetGateway = this.createInternetGateway,
-            naclSpec = naclBuilder.build(),
             subnetGroups = subnetsBuilder.build(),
             routerProviders = routersBuilder.build()
         )
@@ -137,10 +132,6 @@ internal class SecureNetworkBuilderImpl : SecureNetworkBuilder {
         this.restrictDefaultSecurityGroup = value
     }
 
-    override fun nacl(block: (NaclBuilder).() -> Unit) {
-        naclBuilder.apply(block)
-    }
-
     override fun subnets(block: SubnetsBuilder.() -> Unit) {
         subnetsBuilder.apply(block)
     }
@@ -162,7 +153,6 @@ internal data class SecureNetworkProps(
     val restrictDefaultSecurityGroup: Boolean,
     val availabilityZones: List<String>,
     val createInternetGateway: Boolean,
-    val naclSpec: NaclSpec,
     val subnetGroups: List<SubnetGroupProps>,
     val routerProviders: List<RouterProvider>
 )
@@ -263,39 +253,6 @@ public interface NaclBuilder {
     public fun egressSubnets(subnets: Iterable<SubnetGroupName>)
 
     public fun egressSubnet(subnet: SubnetGroupName): Unit = egressSubnets(listOf(subnet))
-}
-
-internal class NaclBuilderImpl : NaclBuilder {
-    private val peeredSubnets = mutableListOf<NaclPeering>()
-    private val deniedNetworks = mutableListOf<CidrBlock>()
-    private val egressSubnets = mutableSetOf<SubnetGroupName>()
-
-    override fun allowBetween(subnet: SubnetGroupName, peeredSubnet: SubnetGroupName) {
-        val peering = NaclPeering(subnet, peeredSubnet)
-        val noDuplicatePeering =
-            peeredSubnets.none {
-                (it.subnet == peering.subnet && it.peeredSubnet == peering.peeredSubnet) ||
-                    (it.subnet == peering.peeredSubnet && it.peeredSubnet == peering.subnet)
-            }
-        require(noDuplicatePeering) { "Duplicate peering: $peering" }
-        peeredSubnets.add(peering)
-    }
-
-    override fun denyToNetwork(cidr: String) {
-        deniedNetworks.add(CidrBlock.of(cidr))
-    }
-
-    override fun denyToAllPrivateNetworks() {
-        deniedNetworks.addAll(CidrBlock.privateNetworks())
-    }
-
-    override fun egressSubnets(subnets: Iterable<SubnetGroupName>) {
-        egressSubnets.addAll(subnets)
-    }
-
-    internal fun build(): NaclSpec {
-        return NaclSpec(peeredSubnets, deniedNetworks, egressSubnets.toSet())
-    }
 }
 
 @NetworkDslMarker
@@ -430,7 +387,6 @@ public class SubnetGroupBuilder
 internal constructor(private val name: SubnetGroupName, private val type: SubnetType) {
     private var reserved = false
     private var cidrMask: Int? = null
-    private var allowCrossAzNaclFlows: Boolean = false
 
     public fun cidrMask(value: Int) {
         require(value in 16..28) {
@@ -443,17 +399,12 @@ internal constructor(private val name: SubnetGroupName, private val type: Subnet
         reserved = true
     }
 
-    public fun allowCrossAzNaclFlows() {
-        this.allowCrossAzNaclFlows = true
-    }
-
     internal fun build(): SubnetGroupProps {
         return SubnetGroupProps(
             name = name,
             subnetType = type,
             cidrMask = cidrMask,
             reserved = reserved,
-            allowCrossAzNaclFlows = allowCrossAzNaclFlows
         )
     }
 }
