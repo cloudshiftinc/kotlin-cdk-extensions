@@ -18,7 +18,7 @@ public fun main(args: Array<String>) {
     val secureNetwork =
         SecureNetwork(stack, "MySecureNetwork") {
             cidrBlock("10.200.0.0/20")
-            maxAzs(1)
+            maxAzs(3)
             reservedAzs(0)
 
             publicPrivateIsolatedNetworkWithFirewall()

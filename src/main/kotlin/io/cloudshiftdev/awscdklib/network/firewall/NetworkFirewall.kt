@@ -2,6 +2,7 @@ package io.cloudshiftdev.awscdklib.network.firewall
 
 import io.cloudshiftdev.awscdk.customresources.AwsCustomResource
 import io.cloudshiftdev.awscdk.customresources.AwsCustomResourcePolicy
+import io.cloudshiftdev.awscdk.customresources.AwsSdkCall
 import io.cloudshiftdev.awscdk.customresources.PhysicalResourceId
 import io.cloudshiftdev.awscdk.services.ec2.ISubnet
 import io.cloudshiftdev.awscdk.services.ec2.SubnetSelection
@@ -90,35 +91,36 @@ public class NetworkFirewall(
         // WTF AWS:
         // https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-networkfirewall/issues/15
 
+        val describeFirewall = AwsSdkCall {
+            service("networkfirewall")
+            action("DescribeFirewall")
+            parameters(mapOf("FirewallArn" to nfw.attrFirewallArn()))
+            outputPaths(vpc.availabilityZones().map(::vpcEndpointIdResponsePath))
+            physicalResourceId(PhysicalResourceId.of(nfw.attrFirewallArn()))
+        }
         val lookupNfwEndpoints =
             AwsCustomResource(scope, "FirewallCustomResource") {
-                onCreate {
-                    service("networkfirewall")
-                    action("DescribeFirewall")
-                    parameters(mapOf("FirewallArn" to nfw.attrFirewallArn()))
-                    physicalResourceId(PhysicalResourceId.of(nfw.attrFirewallArn()))
-                }
-                onUpdate {
-                    service("networkfirewall")
-                    action("DescribeFirewall")
-                    parameters(mapOf("FirewallArn" to nfw.attrFirewallArn()))
-                    physicalResourceId(PhysicalResourceId.of(nfw.attrFirewallArn()))
-                }
+                onCreate(describeFirewall)
+                onUpdate(describeFirewall)
                 installLatestAwsSdk(false)
                 policy(AwsCustomResourcePolicy.fromSdkCalls { resources(nfw.attrFirewallArn()) })
             }
 
+        lookupNfwEndpoints.node().addDependency(nfw)
+
         val azs = placementSubnets.map { it.availabilityZone() }
         availabilityZoneEndpointMap =
             azs.associateWith {
-                lookupNfwEndpoints.responseField(
-                    "FirewallStatus.SyncStates.${it}.Attachment.EndpointId"
-                )
+                lookupNfwEndpoints.responseField(vpcEndpointIdResponsePath(it))
             }
 
         endpointIds = nfw.attrEndpointIds()
         firewallArn = nfw.attrFirewallArn()
         firewallId = nfw.attrFirewallId()
+    }
+
+    private fun vpcEndpointIdResponsePath(az: String): String {
+        return "FirewallStatus.SyncStates.${az}.Attachment.EndpointId"
     }
 
     private fun List<ISubnet>.toSubnetMappings(): List<CfnFirewall.SubnetMappingProperty> {
