@@ -110,9 +110,7 @@ public class NetworkFirewall(
 
         val azs = placementSubnets.map { it.availabilityZone() }
         availabilityZoneEndpointMap =
-            azs.associateWith {
-                lookupNfwEndpoints.responseField(vpcEndpointIdResponsePath(it))
-            }
+            azs.associateWith { lookupNfwEndpoints.responseField(vpcEndpointIdResponsePath(it)) }
 
         endpointIds = nfw.attrEndpointIds()
         firewallArn = nfw.attrFirewallArn()
