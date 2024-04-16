@@ -1120,7 +1120,25 @@
           "Fn::Join": [
             "",
             [
-              "{\"action\":\"DescribeFirewall\",\"service\":\"networkfirewall\",\"parameters\":{\"FirewallArn\":\"",
+              "{\"action\":\"DescribeFirewall\",\"service\":\"networkfirewall\",\"outputPaths\":[\"FirewallStatus.SyncStates.",
+              {
+                "Fn::Select": [
+                  "0",
+                  {
+                    "Fn::GetAZs": ""
+                  }
+                ]
+              },
+              ".Attachment.EndpointId\",\"FirewallStatus.SyncStates.",
+              {
+                "Fn::Select": [
+                  "1",
+                  {
+                    "Fn::GetAZs": ""
+                  }
+                ]
+              },
+              ".Attachment.EndpointId\",\"FirewallStatus.SyncStates.fake-az.Attachment.EndpointId\"],\"parameters\":{\"FirewallArn\":\"",
               {
                 "Fn::GetAtt": [
                   "MySecureNetworkVpcFirewall52F5D5CE",
@@ -1142,7 +1160,25 @@
           "Fn::Join": [
             "",
             [
-              "{\"action\":\"DescribeFirewall\",\"service\":\"networkfirewall\",\"parameters\":{\"FirewallArn\":\"",
+              "{\"action\":\"DescribeFirewall\",\"service\":\"networkfirewall\",\"outputPaths\":[\"FirewallStatus.SyncStates.",
+              {
+                "Fn::Select": [
+                  "0",
+                  {
+                    "Fn::GetAZs": ""
+                  }
+                ]
+              },
+              ".Attachment.EndpointId\",\"FirewallStatus.SyncStates.",
+              {
+                "Fn::Select": [
+                  "1",
+                  {
+                    "Fn::GetAZs": ""
+                  }
+                ]
+              },
+              ".Attachment.EndpointId\",\"FirewallStatus.SyncStates.fake-az.Attachment.EndpointId\"],\"parameters\":{\"FirewallArn\":\"",
               {
                 "Fn::GetAtt": [
                   "MySecureNetworkVpcFirewall52F5D5CE",
@@ -1163,6 +1199,7 @@
         "InstallLatestAwsSdk": "false"
       },
       "DependsOn": [
+        "MySecureNetworkVpcFirewall52F5D5CE",
         "MySecureNetworkVpcFirewallCustomResourceCustomResourcePolicyB3862A11"
       ],
       "UpdateReplacePolicy": "Delete",
@@ -1192,7 +1229,10 @@
             "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
           }
         ]
-      }
+      },
+      "DependsOn": [
+        "MySecureNetworkVpcFirewall52F5D5CE"
+      ]
     },
     "MySecureNetworkVpcFlowLogIAMRole4B495BB2": {
       "Type": "AWS::IAM::Role",
