@@ -73,6 +73,15 @@ public val IConstruct.stack: Stack
 public val Int.seconds: Duration
     get() = Duration.seconds(this)
 
+public val Int.minutes: Duration
+    get() = Duration.minutes(this)
+
+public val Int.hours: Duration
+    get() = Duration.hours(this)
+
+public val Int.days: Duration
+    get() = Duration.days(this)
+
 public fun IHostedZone.dnsName(name: String): String = "${name}.${zoneName()}"
 
 public fun IHostedZone.wildcardDnsName(): String = dnsName("*")

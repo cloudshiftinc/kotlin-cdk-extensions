@@ -5,6 +5,9 @@ public final class io/cloudshiftdev/awscdklib/core/ExtensionsKt {
 	public static final fun allChildren (Lio/cloudshiftdev/constructs/IConstruct;)Ljava/util/List;
 	public static final fun dnsName (Lio/cloudshiftdev/awscdk/services/route53/IHostedZone;Ljava/lang/String;)Ljava/lang/String;
 	public static final fun getAddress (Lio/cloudshiftdev/constructs/IConstruct;)Ljava/lang/String;
+	public static final fun getDays (I)Lio/cloudshiftdev/awscdk/Duration;
+	public static final fun getHours (I)Lio/cloudshiftdev/awscdk/Duration;
+	public static final fun getMinutes (I)Lio/cloudshiftdev/awscdk/Duration;
 	public static final fun getSeconds (I)Lio/cloudshiftdev/awscdk/Duration;
 	public static final fun getStack (Lio/cloudshiftdev/constructs/IConstruct;)Lio/cloudshiftdev/awscdk/Stack;
 	public static final fun resourceArn (Lio/cloudshiftdev/constructs/Construct;Lkotlin/jvm/functions/Function1;)Ljava/lang/String;
