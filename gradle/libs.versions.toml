@@ -25,7 +25,7 @@ oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version 
 
 ##### Testing libraries
 
-kotest-bom = { module = "io.kotest:kotest-bom", version = "5.9.0" }
+kotest-bom = { module = "io.kotest:kotest-bom", version = "5.9.1" }
 kotest-framework-api = { module = "io.kotest:kotest-framework-api-jvm" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core" }
 kotest-assertions-json = { module = "io.kotest:kotest-assertions-json" }
