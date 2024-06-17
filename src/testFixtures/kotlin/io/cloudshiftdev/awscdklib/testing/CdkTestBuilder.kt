@@ -17,7 +17,7 @@ fun testStack(block: (io.cloudshiftdev.awscdk.Stack) -> Unit): CdkTestContext {
     block(stack)
 
     val template = Template.fromStack(stack)
-    val jsonRoot = template.toJson().toJsonElement().jsonObject
+    val jsonRoot = template.toJSON().toJsonElement().jsonObject
     val jsonStr = jsonRoot.toString()
     println(jsonStr)
 
