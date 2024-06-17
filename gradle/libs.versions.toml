@@ -1,31 +1,31 @@
 # Reference: https://docs.gradle.org/current/userguide/platforms.html
 
 [versions]
-kotlin = "1.9.23"
+kotlin = "1.9.24"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.14.0" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version = "0.28.0" }
-ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.17.0" }
+ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.18.0" }
 
 [libraries]
-cloudshift-kotlin-cdk-wrapper = { module = "io.cloudshiftdev.kotlin-cdk-wrapper:kotlin-cdk-wrapper", version = "0.7.10" }
+cloudshift-kotlin-cdk-wrapper = { module = "io.cloudshiftdev.kotlin-cdk-wrapper:kotlin-cdk-wrapper", version = "0.8.1" }
 pearx-kasechange = { module = "net.pearx.kasechange:kasechange", version = "1.4.1" }
-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version = "1.6.3" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version = "1.7.0" }
 
-google-guava = { module = "com.google.guava:guava", version = "33.1.0-jre" }
+google-guava = { module = "com.google.guava:guava", version = "33.2.1-jre" }
 seancfoley-ipaddress = { module = "com.github.seancfoley:ipaddress", version = "5.5.0" }
 jayway-jsonpath= { module = "com.jayway.jsonpath:json-path", version = "2.9.0" }
-slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.12" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.13" }
 
 oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version = "5.1.4" }
 
 
 ##### Testing libraries
 
-kotest-bom = { module = "io.kotest:kotest-bom", version = "5.8.1" }
+kotest-bom = { module = "io.kotest:kotest-bom", version = "5.9.1" }
 kotest-framework-api = { module = "io.kotest:kotest-framework-api-jvm" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core" }
 kotest-assertions-json = { module = "io.kotest:kotest-assertions-json" }
