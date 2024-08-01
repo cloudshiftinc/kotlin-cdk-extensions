@@ -20,7 +20,7 @@ jobs:
     - uses: 'hmarr/debug-action@cd1afbd7852b7ad7b1b7a9a1b03efebd3b0a1820' # v3.0.0
 
     # https://github.com/zgosalvez/github-actions-ensure-sha-pinned-actions
-    - uses: 'zgosalvez/github-actions-ensure-sha-pinned-actions@74606c30450304eee8660aae751818321754feb1' # v3.0.9
+    - uses: 'zgosalvez/github-actions-ensure-sha-pinned-actions@b88cd0aad2c36a63e42c71f81cb1958fed95ac87' # v3.0.10
 
     # https://github.com/actions/checkout
     - name: 'checkout'
@@ -36,7 +36,7 @@ jobs:
 
     # https://github.com/gradle/actions/tree/main/setup-gradle
     - name: 'Set up Gradle'
-      uses: 'gradle/actions/setup-gradle@31ae3562f68c96d481c31bc1a8a55cc1be162f83' # v3.4.1
+      uses: 'gradle/actions/setup-gradle@d9c87d481d55275bb5441eef3fe0e46805f9ef70' # v3.5.0
       with:
         gradle-version: 'wrapper'
         gradle-home-cache-includes: |-
@@ -48,7 +48,7 @@ jobs:
 
     # https://github.com/gradle/actions/tree/main/dependency-submission
     - name: "Generate and submit dependency graph"
-      uses: "gradle/actions/dependency-submission@31ae3562f68c96d481c31bc1a8a55cc1be162f83" # v3.4.1
+      uses: "gradle/actions/dependency-submission@d9c87d481d55275bb5441eef3fe0e46805f9ef70" # v3.5.0
       env:
         DEPENDENCY_GRAPH_EXCLUDE_PROJECTS: "^:(build-logic|buildSrc|.*[Tt]test.*)"
         DEPENDENCY_GRAPH_EXCLUDE_CONFIGURATIONS: ".*[Tt]est.*Classpath"
