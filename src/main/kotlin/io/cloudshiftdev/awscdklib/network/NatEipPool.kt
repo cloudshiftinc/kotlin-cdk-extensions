@@ -3,6 +3,7 @@ package io.cloudshiftdev.awscdklib.network
 import io.cloudshiftdev.awscdk.CfnOutput
 import io.cloudshiftdev.awscdk.RemovalPolicy
 import io.cloudshiftdev.awscdk.services.ec2.CfnEIP
+import io.cloudshiftdev.awscdklib.core.tag
 import io.cloudshiftdev.constructs.Construct
 
 public class NatEipPool(scope: Construct, id: String, poolSize: Int) : Construct(scope, id) {
@@ -15,6 +16,7 @@ public class NatEipPool(scope: Construct, id: String, poolSize: Int) : Construct
                 .map {
                     val eip = CfnEIP(this, "EIP$it") { domain("vpc") }
                     eip.applyRemovalPolicy(RemovalPolicy.RETAIN)
+                    eip.tag("Name", eip.node().path())
                     eip
                 }
                 .toList()
