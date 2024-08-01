@@ -58,8 +58,7 @@ internal class EgressNetworkFirewallRouterProvider(
                 id = "FirewallPolicy",
                 // TODO: make these configurable
                 statelessDefaultActions = listOf(StatelessStandardAction.PASS),
-                statelessFragmentDefaultActions = listOf(StatelessStandardAction.PASS)
-            )
+                statelessFragmentDefaultActions = listOf(StatelessStandardAction.PASS))
 
         val firewall =
             NetworkFirewall(
@@ -68,8 +67,7 @@ internal class EgressNetworkFirewallRouterProvider(
                 vpc = vpc,
                 subnetMappings = routerSubnet,
                 firewallName = "Firewall",
-                firewallPolicy = firewallPolicy
-            )
+                firewallPolicy = firewallPolicy)
 
         val protectedSubnets =
             egressSubnets.flatMap { vpc.selectSubnets(it).subnets() }.map { it as Subnet }
@@ -92,8 +90,7 @@ internal class EgressNetworkFirewallRouterProvider(
                     endpointId = azEntry.value,
                     protectedSubnets =
                         protectedSubnets.filter { it.availabilityZone() == azEntry.key },
-                    ingressSubnets = ingress.filter { it.availabilityZone() == azEntry.key }
-                )
+                    ingressSubnets = ingress.filter { it.availabilityZone() == azEntry.key })
             }
         azRouteInfo.forEach { routeInfo ->
             routeInfo.protectedSubnets.forEach { protectedSubnet ->
@@ -119,9 +116,7 @@ internal class EgressNetworkFirewallRouterProvider(
                             mapOf(
                                 "DestinationCidrBlock" to vpc.vpcCidrBlock(),
                                 "RouteTableId" to routeTableId,
-                                "VpcEndpointId" to routeInfo.endpointId
-                            )
-                        )
+                                "VpcEndpointId" to routeInfo.endpointId))
                         physicalResourceId(PhysicalResourceId.of(routeTableId))
                     }
                     onUpdate {
@@ -131,9 +126,7 @@ internal class EgressNetworkFirewallRouterProvider(
                             mapOf(
                                 "DestinationCidrBlock" to vpc.vpcCidrBlock(),
                                 "RouteTableId" to routeTableId,
-                                "VpcEndpointId" to routeInfo.endpointId
-                            )
-                        )
+                                "VpcEndpointId" to routeInfo.endpointId))
                         physicalResourceId(PhysicalResourceId.of(routeTableId))
                     }
                     onDelete {
@@ -143,9 +136,7 @@ internal class EgressNetworkFirewallRouterProvider(
                             mapOf(
                                 "DestinationCidrBlock" to vpc.vpcCidrBlock(),
                                 "RouteTableId" to routeTableId,
-                                "LocalTarget" to true
-                            )
-                        )
+                                "LocalTarget" to true))
                         physicalResourceId(PhysicalResourceId.of(routeTableId))
                     }
                     installLatestAwsSdk(false)
@@ -156,10 +147,8 @@ internal class EgressNetworkFirewallRouterProvider(
                                     service("ec2")
                                     resource("route-table")
                                     resourceName(routeTableId)
-                                }
-                            )
-                        }
-                    )
+                                })
+                        })
                 }
             }
         }

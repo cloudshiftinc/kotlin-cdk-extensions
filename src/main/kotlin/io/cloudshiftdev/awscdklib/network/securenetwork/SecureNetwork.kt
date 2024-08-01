@@ -61,8 +61,7 @@ public class SecureNetwork(scope: Construct, id: String, block: (SecureNetworkBu
                 LogFormat.PKT_SRC_AWS_SERVICE,
                 LogFormat.PKT_DST_AWS_SERVICE,
                 LogFormat.FLOW_DIRECTION,
-                LogFormat.TRAFFIC_PATH
-            )
+                LogFormat.TRAFFIC_PATH)
         }
     }
 

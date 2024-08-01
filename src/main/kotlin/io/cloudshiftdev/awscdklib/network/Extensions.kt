@@ -20,6 +20,7 @@ public fun Vpc.attachInternetGateway(): CfnInternetGateway {
     }
     return igw
 }
+
 /*
 
 public fun Vpc.deleteDefaultNetworkAcls() {

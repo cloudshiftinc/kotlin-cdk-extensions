@@ -52,11 +52,9 @@ public class FirewallPolicy(
                     CfnFirewallPolicy.FirewallPolicyProperty {
                         statelessDefaultActions(statelessDefaultActions.map { it.value })
                         statelessFragmentDefaultActions(
-                            statelessFragmentDefaultActions.map { it.value }
-                        )
+                            statelessFragmentDefaultActions.map { it.value })
                         statefulDefaultActions(statefulDefaultActions.map { it.value })
-                    }
-                )
+                    })
             }
 
         firewallPolicyId = policy.attrFirewallPolicyId()

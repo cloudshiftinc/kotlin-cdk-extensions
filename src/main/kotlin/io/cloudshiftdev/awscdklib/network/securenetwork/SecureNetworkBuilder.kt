@@ -82,8 +82,7 @@ internal class SecureNetworkBuilderImpl : SecureNetworkBuilder {
             defaultInstanceTenancy = this.defaultInstanceTenancy,
             createInternetGateway = this.createInternetGateway,
             subnetGroups = subnetsBuilder.build(),
-            routerProviders = routersBuilder.build()
-        )
+            routerProviders = routersBuilder.build())
     }
 
     override fun availabilityZones(azs: List<String>) {
@@ -344,8 +343,7 @@ internal class NatGatewayRouterBuilderImpl : BaseNatRouterBuilder(), NatGatewayR
         return NatRouterProvider(
             routerSubnet = routerSubnet ?: SubnetPredicates.publicSubnets(),
             natGatewayCount = natGateways,
-            NatProvider.gateway(props)
-        )
+            NatProvider.gateway(props))
     }
 }
 
@@ -360,8 +358,7 @@ internal class NatInstanceRouterBuilderImpl : BaseNatRouterBuilder(), NatInstanc
         return NatRouterProvider(
             routerSubnet = routerSubnet ?: SubnetPredicates.publicSubnets(),
             natGatewayCount = natGateways,
-            NatProvider.instanceV2(props)
-        )
+            NatProvider.instanceV2(props))
     }
 }
 
@@ -371,10 +368,7 @@ internal class NetworkFirewallRouterBuilderImpl :
 
     fun build(): RouterProvider {
         return EgressNetworkFirewallRouterProvider(
-            routerSubnet ?: SubnetPredicates.privateSubnets(),
-            routableSubnets,
-            egressSubnets
-        )
+            routerSubnet ?: SubnetPredicates.privateSubnets(), routableSubnets, egressSubnets)
     }
 
     override fun egressSubnets(subnetSelections: List<SubnetSelection>) {
