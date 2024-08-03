@@ -4,6 +4,7 @@ import com.ncorti.ktfmt.gradle.tasks.KtfmtFormatTask
 import com.vanniktech.maven.publish.SonatypeHost
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /*
  * Copyright 2023 the original author or authors.
@@ -63,7 +64,16 @@ tasks.withType<AbstractArchiveTask>().configureEach {
 
 kotlin {
     explicitApi()
-    jvmToolchain(21)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "21"
+        freeCompilerArgs += listOf(
+            "-Xjsr305=strict",
+            "-Xjdk-release=21"
+        )
+    }
 }
 
 mavenPublishing {
