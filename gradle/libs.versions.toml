@@ -13,7 +13,7 @@ ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.19.0" }
 [libraries]
 cloudshift-kotlin-cdk-wrapper = { module = "io.cloudshiftdev.kotlin-cdk-wrapper:kotlin-cdk-wrapper", version = "0.8.1" }
 pearx-kasechange = { module = "net.pearx.kasechange:kasechange", version = "1.4.1" }
-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version = "1.6.3" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version = "1.7.1" }
 
 google-guava = { module = "com.google.guava:guava", version = "33.2.1-jre" }
 seancfoley-ipaddress = { module = "com.github.seancfoley:ipaddress", version = "5.5.0" }
