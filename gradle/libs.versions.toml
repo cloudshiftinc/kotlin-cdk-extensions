@@ -15,7 +15,7 @@ cloudshift-kotlin-cdk-wrapper = { module = "io.cloudshiftdev.kotlin-cdk-wrapper:
 pearx-kasechange = { module = "net.pearx.kasechange:kasechange", version = "1.4.1" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version = "1.6.3" }
 
-google-guava = { module = "com.google.guava:guava", version = "33.3.0-jre" }
+google-guava = { module = "com.google.guava:guava", version = "33.3.1-jre" }
 seancfoley-ipaddress = { module = "com.github.seancfoley:ipaddress", version = "5.5.1" }
 jayway-jsonpath= { module = "com.jayway.jsonpath:json-path", version = "2.9.0" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.16" }
