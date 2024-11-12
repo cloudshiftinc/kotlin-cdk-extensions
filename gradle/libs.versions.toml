@@ -8,7 +8,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.16.3" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version = "0.30.0" }
-ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.20.1" }
+ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.21.0" }
 
 [libraries]
 cloudshift-kotlin-cdk-wrapper = { module = "io.cloudshiftdev.kotlin-cdk-wrapper:kotlin-cdk-wrapper", version = "0.9.0" }
