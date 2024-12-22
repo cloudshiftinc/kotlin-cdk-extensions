@@ -44,7 +44,8 @@ class S3BucketTest : FunSpec() {
                         "DeletionPolicy": "Retain"
                     }
                     """
-                        .trimIndent())
+                        .trimIndent()
+                )
             }
         }
     }

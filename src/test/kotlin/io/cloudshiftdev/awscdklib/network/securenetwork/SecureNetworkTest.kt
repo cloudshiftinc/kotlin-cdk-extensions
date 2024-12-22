@@ -51,7 +51,8 @@ internal class SecureNetworkTest : FunSpec() {
                 resources.filterByType("AWS::EC2::NatGateway").shouldHaveSize(2)
 
                 ctx.shouldEqualJsonResource(
-                    "/cloudshift/awscdk/securevpc/SecureNetworkTest-simple.json")
+                    "/cloudshift/awscdk/securevpc/SecureNetworkTest-simple.json"
+                )
             }
         }
 
@@ -95,7 +96,8 @@ internal class SecureNetworkTest : FunSpec() {
                 resources.filterByType("AWS::EC2::NatGateway").shouldHaveSize(2)
 
                 ctx.shouldEqualJsonResource(
-                    "/cloudshift/awscdk/securevpc/SecureNetworkTest-NetworkFirewall.json")
+                    "/cloudshift/awscdk/securevpc/SecureNetworkTest-NetworkFirewall.json"
+                )
             }
         }
     }

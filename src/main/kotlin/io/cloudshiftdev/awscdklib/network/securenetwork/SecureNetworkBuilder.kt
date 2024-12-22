@@ -82,7 +82,8 @@ internal class SecureNetworkBuilderImpl : SecureNetworkBuilder {
             defaultInstanceTenancy = this.defaultInstanceTenancy,
             createInternetGateway = this.createInternetGateway,
             subnetGroups = subnetsBuilder.build(),
-            routerProviders = routersBuilder.build())
+            routerProviders = routersBuilder.build(),
+        )
     }
 
     override fun availabilityZones(azs: List<String>) {
@@ -153,7 +154,7 @@ internal data class SecureNetworkProps(
     val availabilityZones: List<String>,
     val createInternetGateway: Boolean,
     val subnetGroups: List<SubnetGroupProps>,
-    val routerProviders: List<RouterProvider>
+    val routerProviders: List<RouterProvider>,
 )
 
 @NetworkDslMarker
@@ -161,42 +162,42 @@ public interface SubnetsBuilder {
 
     public fun publicSubnetGroup(
         name: String = "Public",
-        block: (SubnetGroupBuilder).() -> Unit = {}
+        block: (SubnetGroupBuilder).() -> Unit = {},
     ) {
         subnetGroup(name, SubnetType.PUBLIC, block)
     }
 
     public fun publicSubnetGroup(
         name: SubnetGroupName,
-        block: (SubnetGroupBuilder).() -> Unit = {}
+        block: (SubnetGroupBuilder).() -> Unit = {},
     ) {
         subnetGroup(name, SubnetType.PUBLIC, block)
     }
 
     public fun privateSubnetGroup(
         name: String = "Private",
-        block: (SubnetGroupBuilder).() -> Unit = {}
+        block: (SubnetGroupBuilder).() -> Unit = {},
     ) {
         subnetGroup(name, SubnetType.PRIVATE_WITH_EGRESS, block)
     }
 
     public fun privateSubnetGroup(
         name: SubnetGroupName,
-        block: (SubnetGroupBuilder).() -> Unit = {}
+        block: (SubnetGroupBuilder).() -> Unit = {},
     ) {
         subnetGroup(name, SubnetType.PRIVATE_WITH_EGRESS, block)
     }
 
     public fun isolatedSubnetGroup(
         name: String = "Isolated",
-        block: (SubnetGroupBuilder).() -> Unit = {}
+        block: (SubnetGroupBuilder).() -> Unit = {},
     ) {
         subnetGroup(name, SubnetType.PRIVATE_ISOLATED, block)
     }
 
     public fun isolatedSubnetGroup(
         name: SubnetGroupName,
-        block: (SubnetGroupBuilder).() -> Unit = {}
+        block: (SubnetGroupBuilder).() -> Unit = {},
     ) {
         subnetGroup(name, SubnetType.PRIVATE_ISOLATED, block)
     }
@@ -204,13 +205,13 @@ public interface SubnetsBuilder {
     public fun subnetGroup(
         name: String,
         type: SubnetType,
-        block: (SubnetGroupBuilder).() -> Unit
+        block: (SubnetGroupBuilder).() -> Unit,
     ): Unit = subnetGroup(name.toSubnetGroupName(), type, block)
 
     public fun subnetGroup(
         name: SubnetGroupName,
         type: SubnetType,
-        block: (SubnetGroupBuilder).() -> Unit
+        block: (SubnetGroupBuilder).() -> Unit,
     )
 }
 
@@ -222,7 +223,7 @@ internal class SubnetsBuilderImpl : SubnetsBuilder {
     override fun subnetGroup(
         name: SubnetGroupName,
         type: SubnetType,
-        block: (SubnetGroupBuilder).() -> Unit
+        block: (SubnetGroupBuilder).() -> Unit,
     ) {
         val effectiveType =
             when (type) {
@@ -343,7 +344,8 @@ internal class NatGatewayRouterBuilderImpl : BaseNatRouterBuilder(), NatGatewayR
         return NatRouterProvider(
             routerSubnet = routerSubnet ?: SubnetPredicates.publicSubnets(),
             natGatewayCount = natGateways,
-            NatProvider.gateway(props))
+            NatProvider.gateway(props),
+        )
     }
 }
 
@@ -358,7 +360,8 @@ internal class NatInstanceRouterBuilderImpl : BaseNatRouterBuilder(), NatInstanc
         return NatRouterProvider(
             routerSubnet = routerSubnet ?: SubnetPredicates.publicSubnets(),
             natGatewayCount = natGateways,
-            NatProvider.instanceV2(props))
+            NatProvider.instanceV2(props),
+        )
     }
 }
 
@@ -368,7 +371,10 @@ internal class NetworkFirewallRouterBuilderImpl :
 
     fun build(): RouterProvider {
         return EgressNetworkFirewallRouterProvider(
-            routerSubnet ?: SubnetPredicates.privateSubnets(), routableSubnets, egressSubnets)
+            routerSubnet ?: SubnetPredicates.privateSubnets(),
+            routableSubnets,
+            egressSubnets,
+        )
     }
 
     override fun egressSubnets(subnetSelections: List<SubnetSelection>) {

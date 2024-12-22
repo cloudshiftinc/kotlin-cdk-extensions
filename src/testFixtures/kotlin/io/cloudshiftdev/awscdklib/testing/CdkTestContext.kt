@@ -6,7 +6,7 @@ data class CdkTestContext(val template: Template, val json: String, val stack: S
 
 fun CdkTestContext.shouldEqualJsonResource(
     resource: String,
-    block: (JsonCompareOptions).() -> Unit = {}
+    block: (JsonCompareOptions).() -> Unit = {},
 ) {
     json.shouldEqualJsonResource(resource) {
         ignore("\$.Resources.*.Properties.Code.S3Key")

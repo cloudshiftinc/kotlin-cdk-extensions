@@ -23,7 +23,7 @@ public fun Construct.uniqueId(): String = Names.uniqueId(this)
 
 public inline fun <reified T : CfnResource> Construct.addPropertyOverride(
     property: String,
-    value: String
+    value: String,
 ) {
     val resource = node().children().filterIsInstance<T>().first()
     resource.addPropertyOverride(property, value)
@@ -57,12 +57,12 @@ public fun resourceArn(scope: Construct, block: (ArnComponents.Builder).() -> Un
 
 public inline fun <reified T : Construct> Construct.withSingleton(
     id: String,
-    block: (String) -> T
+    block: (String) -> T,
 ): T = node().tryFindChild(id) as? T ?: block(id)
 
 public inline fun <reified T> Construct.withSingleton(
     predicate: (T) -> Boolean = { true },
-    block: () -> T
+    block: () -> T,
 ): T {
     return allChildren().filterIsInstance<T>().firstOrNull(predicate) ?: block()
 }

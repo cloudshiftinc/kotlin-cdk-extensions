@@ -12,5 +12,5 @@ data class Stack(
     @SerialName("RawResources") val resourceMap: Map<String, JsonElement>,
     @SerialName("Outputs")
     @Serializable(with = OutputTransformingSerializer::class)
-    val outputs: List<Output> = emptyList()
+    val outputs: List<Output> = emptyList(),
 )

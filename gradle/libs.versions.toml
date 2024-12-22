@@ -1,7 +1,7 @@
 # Reference: https://docs.gradle.org/current/userguide/platforms.html
 
 [versions]
-kotlin = "1.9.25"
+kotlin = "2.0.21"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -11,16 +11,16 @@ vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version = "0.3
 ktfmt = { id = "com.ncorti.ktfmt.gradle", version = "0.21.0" }
 
 [libraries]
-cloudshift-kotlin-cdk-wrapper = { module = "io.cloudshiftdev.kotlin-cdk-wrapper:kotlin-cdk-wrapper", version = "0.9.0" }
+cloudshift-kotlin-cdk-wrapper = { module = "io.cloudshiftdev.kotlin-cdk-wrapper:kotlin-cdk-wrapper", version = "0.10.0" }
 pearx-kasechange = { module = "net.pearx.kasechange:kasechange", version = "1.4.1" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version = "1.7.3" }
 
-google-guava = { module = "com.google.guava:guava", version = "33.3.1-jre" }
+google-guava = { module = "com.google.guava:guava", version = "33.4.0-jre" }
 seancfoley-ipaddress = { module = "com.github.seancfoley:ipaddress", version = "5.5.1" }
 jayway-jsonpath= { module = "com.jayway.jsonpath:json-path", version = "2.9.0" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.16" }
 
-oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version = "5.1.4" }
+oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version = "7.0.3" }
 
 
 ##### Testing libraries

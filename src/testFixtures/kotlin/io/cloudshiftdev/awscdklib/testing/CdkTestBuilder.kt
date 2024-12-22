@@ -36,7 +36,8 @@ fun Collection<*>.toJsonElement(): JsonElement = JsonArray(mapNotNull { it.toJso
 fun Map<*, *>.toJsonElement(): JsonElement =
     JsonObject(
         mapNotNull { (it.key as? String ?: return@mapNotNull null) to it.value.toJsonElement() }
-            .toMap())
+            .toMap()
+    )
 
 fun Any?.toJsonElement(): JsonElement =
     when (this) {

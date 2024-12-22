@@ -9,7 +9,9 @@ import io.cloudshiftdev.awscdklib.iam.PolicyStatementsBuilder
 public fun AwsCustomResource.Builder.policyStatements(block: (PolicyStatementsBuilder).() -> Unit) {
     policy(
         AwsCustomResourcePolicy.fromStatements(
-            io.cloudshiftdev.awscdklib.iam.policyStatements(block)))
+            io.cloudshiftdev.awscdklib.iam.policyStatements(block)
+        )
+    )
 }
 
 public fun AwsCustomResource.Builder.policyStatement(block: (PolicyStatement.Builder).() -> Unit) {
@@ -19,5 +21,7 @@ public fun AwsCustomResource.Builder.policyStatement(block: (PolicyStatement.Bui
 public fun AwsCustomResource.Builder.policyFromSdkCalls(vararg resources: String) {
     policy(
         AwsCustomResourcePolicy.fromSdkCalls(
-            SdkCallsPolicyOptions { resources(resources.toList()) }))
+            SdkCallsPolicyOptions { resources(resources.toList()) }
+        )
+    )
 }

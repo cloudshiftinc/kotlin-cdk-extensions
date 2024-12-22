@@ -20,7 +20,7 @@ data class Resource(
     @SerialName("DeletionPolicy") val deletionPolicy: String? = null,
     @SerialName("Tags") val tags: Map<String, String> = emptyMap(),
     @SerialName("Metadata") val metadata: Map<String, String> = emptyMap(),
-    @SerialName("DependsOn") val dependsOn: List<JsonElement> = emptyList()
+    @SerialName("DependsOn") val dependsOn: List<JsonElement> = emptyList(),
 ) {
     @kotlinx.serialization.Transient
     val properties: Map<String, CfnProperty> =

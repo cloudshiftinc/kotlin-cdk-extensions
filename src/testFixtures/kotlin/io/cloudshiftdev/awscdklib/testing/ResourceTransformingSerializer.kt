@@ -35,7 +35,8 @@ object ResourceTransformingSerializer : JsonTransformingSerializer<List<Resource
                                 tags.associate {
                                     it.jsonObject["Key"]!!.jsonPrimitive.content to
                                         it.jsonObject["Value"]!!
-                                })
+                                }
+                            )
                     }
                     val propsMap = props.toMutableMap()
                     propsMap.remove("Tags")

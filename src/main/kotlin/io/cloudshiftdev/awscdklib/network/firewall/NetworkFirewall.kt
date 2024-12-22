@@ -52,9 +52,11 @@ public class FirewallPolicy(
                     CfnFirewallPolicy.FirewallPolicyProperty {
                         statelessDefaultActions(statelessDefaultActions.map { it.value })
                         statelessFragmentDefaultActions(
-                            statelessFragmentDefaultActions.map { it.value })
+                            statelessFragmentDefaultActions.map { it.value }
+                        )
                         statefulDefaultActions(statefulDefaultActions.map { it.value })
-                    })
+                    }
+                )
             }
 
         firewallPolicyId = policy.attrFirewallPolicyId()
@@ -68,7 +70,7 @@ public class NetworkFirewall(
     vpc: Vpc,
     subnetMappings: SubnetSelection,
     firewallName: String,
-    firewallPolicy: FirewallPolicy
+    firewallPolicy: FirewallPolicy,
 ) : Construct(scope, id) {
     public val endpointIds: List<String>
     public val firewallArn: String

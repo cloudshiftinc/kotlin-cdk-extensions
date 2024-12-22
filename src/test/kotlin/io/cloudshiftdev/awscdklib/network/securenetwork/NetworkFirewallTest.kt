@@ -20,11 +20,7 @@ class NetworkFirewallTest :
             val ctx = testStack { stack ->
                 val vpc = Vpc(stack, "MyVpc") { ipAddresses(IpAddresses.cidr("10.200.0.0/20")) }
 
-                val firewallPolicy =
-                    FirewallPolicy(
-                        scope = vpc,
-                        id = "FirewallPolicy",
-                    )
+                val firewallPolicy = FirewallPolicy(scope = vpc, id = "FirewallPolicy")
 
                 val firewall =
                     NetworkFirewall(
@@ -33,7 +29,8 @@ class NetworkFirewallTest :
                         vpc = vpc,
                         subnetMappings = SubnetPredicates.publicSubnets(),
                         firewallName = "MyFirewall",
-                        firewallPolicy = firewallPolicy)
+                        firewallPolicy = firewallPolicy,
+                    )
             }
 
             val resources = ctx.stack.resources
@@ -74,7 +71,8 @@ class NetworkFirewallTest :
         }
       }
                } """
-                            .trimIndent())
+                            .trimIndent()
+                    )
                 }
                 resources.filterByType("AWS::EC2::InternetGateway").shouldBeSingleton()
                 resources
@@ -90,7 +88,8 @@ class NetworkFirewallTest :
                 resources.filterByType("AWS::EC2::NatGateway").shouldHaveSize(2)
 
                 ctx.shouldEqualJsonResource(
-                    "/cloudshift/awscdk/networkfirewall/NetworkFirewall-simple.json")
+                    "/cloudshift/awscdk/networkfirewall/NetworkFirewall-simple.json"
+                )
             }
         }
     })

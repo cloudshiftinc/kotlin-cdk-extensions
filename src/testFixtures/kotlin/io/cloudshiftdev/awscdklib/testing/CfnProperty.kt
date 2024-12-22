@@ -7,7 +7,7 @@ import kotlinx.serialization.serializer
 data class CfnProperty(
     val resource: Resource,
     val propertyName: String,
-    val jsonElement: JsonElement
+    val jsonElement: JsonElement,
 ) {
     val json: String
         get() {
