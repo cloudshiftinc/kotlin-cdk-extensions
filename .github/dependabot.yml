@@ -28,14 +28,13 @@ updates:
       - dependency-name: '*'
         update-types:
           - version-update:semver-major
+      - dependency-name: "org.jetbrains.kotlin*"
+        update-types:
+          - "version-update:semver-minor"
     groups:
-      gradle-patch-updates:
+      gradle-updates:
         update-types:
-          - patch
-      gradle-minor-updates:
-        exclude-patterns:
-          - org.jetbrains.kotlin*
-        update-types:
-          - minor
+          - "patch"
+          - "minor"
 
 
