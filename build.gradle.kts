@@ -48,30 +48,21 @@ dependencies {
     testRuntimeOnly(libs.slf4j.simple)
 }
 
-ktfmt {
-    kotlinLangStyle()
-}
+ktfmt { kotlinLangStyle() }
 
-java {
-    consistentResolution { useCompileClasspathVersions() }
-}
+java { consistentResolution { useCompileClasspathVersions() } }
 
 tasks.withType<AbstractArchiveTask>().configureEach {
     isPreserveFileTimestamps = false
     isReproducibleFileOrder = true
 }
 
-kotlin {
-    explicitApi()
-}
+kotlin { explicitApi() }
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_21
-        freeCompilerArgs.addAll( listOf(
-            "-Xjsr305=strict",
-            "-Xjdk-release=21"
-        ))
+        freeCompilerArgs.addAll(listOf("-Xjsr305=strict", "-Xjdk-release=21"))
     }
 }
 
@@ -100,7 +91,8 @@ mavenPublishing {
         }
         scm {
             connection = "scm:git:git://github.com/cloudshiftinc/kotlin-cdk-extensions.git"
-            developerConnection = "scm:git:https://github.com/cloudshiftinc/kotlin-cdk-extensions.git"
+            developerConnection =
+                "scm:git:https://github.com/cloudshiftinc/kotlin-cdk-extensions.git"
             url = "https://github.com/cloudshiftinc/kotlin-cdk-extensions"
         }
     }
@@ -108,57 +100,52 @@ mavenPublishing {
 
 testing {
     suites {
-        val test by getting(JvmTestSuite::class) {
-            useJUnitJupiter()
-            dependencies {
-                implementation(platform(libs.kotest.bom))
-                implementation(libs.kotest.assertions.core)
-                implementation(libs.kotest.assertions.json)
-                implementation(libs.kotest.runner.junit5)
-            }
-            targets {
-                all {
-                    testTask.configure {
-                        outputs.upToDateWhen { false }
-                        testLogging {
-                            events =
-                                setOf(
-                                    TestLogEvent.FAILED,
-                                    TestLogEvent.PASSED,
-                                    TestLogEvent.SKIPPED,
-                                    TestLogEvent.STANDARD_OUT,
-                                    TestLogEvent.STANDARD_ERROR
-                                )
-                            exceptionFormat = TestExceptionFormat.FULL
-                            showExceptions = true
-                            showCauses = true
-                            showStackTraces = true
+        val test by
+            getting(JvmTestSuite::class) {
+                useJUnitJupiter()
+                dependencies {
+                    implementation(platform(libs.kotest.bom))
+                    implementation(libs.kotest.assertions.core)
+                    implementation(libs.kotest.assertions.json)
+                    implementation(libs.kotest.runner.junit5)
+                }
+                targets {
+                    all {
+                        testTask.configure {
+                            outputs.upToDateWhen { false }
+                            testLogging {
+                                events =
+                                    setOf(
+                                        TestLogEvent.FAILED,
+                                        TestLogEvent.PASSED,
+                                        TestLogEvent.SKIPPED,
+                                        TestLogEvent.STANDARD_OUT,
+                                        TestLogEvent.STANDARD_ERROR,
+                                    )
+                                exceptionFormat = TestExceptionFormat.FULL
+                                showExceptions = true
+                                showCauses = true
+                                showStackTraces = true
+                            }
                         }
                     }
                 }
             }
-        }
     }
 }
 
-
 val ciBuild = System.getenv("CI") != null
 
-val precommit = tasks.register("precommit") {
-    group = "verification"
-    dependsOn("check", "ktfmtFormat", "apiDump")
-}
+val precommit =
+    tasks.register("precommit") {
+        group = "verification"
+        dependsOn("check", "ktfmtFormat", "apiDump")
+    }
 
 // only check formatting for CI builds
-tasks.withType<KtfmtCheckTask>().configureEach {
-    enabled = ciBuild
-}
+tasks.withType<KtfmtCheckTask>().configureEach { enabled = ciBuild }
 
 // always format for non-CI builds
-tasks.withType<KtfmtFormatTask>().configureEach {
-    enabled = !ciBuild
-}
+tasks.withType<KtfmtFormatTask>().configureEach { enabled = !ciBuild }
 
-tasks.named("apiCheck") {
-    mustRunAfter("apiDump")
-}
+tasks.named("apiCheck") { mustRunAfter("apiDump") }
