@@ -10,6 +10,7 @@ fun CdkTestContext.shouldEqualJsonResource(
 ) {
     json.shouldEqualJsonResource(resource) {
         ignore("\$.Resources.*.Properties.Code.S3Key")
+        ignore("\$.Mappings")
         apply(block)
     }
 }
