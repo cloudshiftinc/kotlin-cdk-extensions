@@ -67,7 +67,7 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 mavenPublishing {
-    publishToMavenCentral()
+    publishToMavenCentral(automaticRelease = true)
     signAllPublications()
 
     pom {
