@@ -22,7 +22,7 @@ pluginManagement {
     require(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
         "This build requires Gradle to be run with at least Java 17"
     }
-    repositories { maven("https://cache-redirector.jetbrains.com/plugins.gradle.org") }
+    repositories { gradlePluginPortal() }
 }
 
 plugins {
@@ -30,10 +30,9 @@ plugins {
     id("com.gradle.develocity") version "3.19.2"
 }
 
-include(":cdk-test")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories { maven("https://cache-redirector.jetbrains.com/repo1.maven.org/maven2") }
+    repositories { mavenCentral() }
 }
 
 develocity {
